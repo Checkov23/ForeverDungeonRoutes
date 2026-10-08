@@ -1,0 +1,69 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
+	<!-- Map pins of the route. Mixins live in MapOverlay.lua, OnLoad is called by the map canvas. -->
+	<Frame name="ForeverDungeonRoutesStopPinTemplate" mixin="ForeverDungeonRoutesStopPinMixin" enableMouse="true" virtual="true">
+		<Size x="24" y="24"/>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture parentKey="Glow" file="Interface\AddOns\ForeverDungeonRoutes\media\glow" alphaMode="ADD" hidden="true">
+					<Size x="46" y="46"/>
+					<Anchors>
+						<Anchor point="CENTER"/>
+					</Anchors>
+				</Texture>
+			</Layer>
+			<Layer level="ARTWORK">
+				<Texture parentKey="Fill" file="Interface\AddOns\ForeverDungeonRoutes\media\circle" setAllPoints="true"/>
+			</Layer>
+			<Layer level="OVERLAY" textureSubLevel="1">
+				<Texture parentKey="Ring" file="Interface\AddOns\ForeverDungeonRoutes\media\ring" setAllPoints="true"/>
+			</Layer>
+			<Layer level="OVERLAY" textureSubLevel="2">
+				<FontString parentKey="Label" inherits="GameFontNormal" justifyH="CENTER">
+					<Anchors>
+						<Anchor point="CENTER" x="0" y="0"/>
+					</Anchors>
+				</FontString>
+				<Texture parentKey="Check" file="Interface\AddOns\ForeverDungeonRoutes\media\check" hidden="true">
+					<Size x="18" y="18"/>
+					<Anchors>
+						<Anchor point="CENTER" x="8" y="-8"/>
+					</Anchors>
+				</Texture>
+			</Layer>
+		</Layers>
+	</Frame>
+
+	<Frame name="ForeverDungeonRoutesNotePinTemplate" mixin="ForeverDungeonRoutesNotePinMixin" enableMouse="true" virtual="true">
+		<Size x="20" y="20"/>
+		<Layers>
+			<Layer level="ARTWORK">
+				<Texture parentKey="Fill" file="Interface\AddOns\ForeverDungeonRoutes\media\diamond" setAllPoints="true"/>
+			</Layer>
+			<Layer level="OVERLAY">
+				<Texture parentKey="Edge" file="Interface\AddOns\ForeverDungeonRoutes\media\diamondring" setAllPoints="true"/>
+				<FontString parentKey="Label" inherits="GameFontHighlightSmall" justifyH="CENTER" text="!">
+					<Anchors>
+						<Anchor point="CENTER" x="0" y="0"/>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+	</Frame>
+
+	<Frame name="ForeverDungeonRoutesLinkPinTemplate" mixin="ForeverDungeonRoutesLinkPinMixin" enableMouse="true" virtual="true">
+		<Size x="20" y="20"/>
+		<Layers>
+			<Layer level="ARTWORK">
+				<Texture parentKey="Fill" file="Interface\AddOns\ForeverDungeonRoutes\media\square" setAllPoints="true"/>
+			</Layer>
+			<Layer level="OVERLAY">
+				<Texture parentKey="Edge" file="Interface\AddOns\ForeverDungeonRoutes\media\squarering" setAllPoints="true"/>
+				<FontString parentKey="Label" inherits="GameFontHighlightSmall" justifyH="CENTER">
+					<Anchors>
+						<Anchor point="CENTER" x="0" y="0"/>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+	</Frame>
+</Ui>
