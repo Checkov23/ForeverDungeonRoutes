@@ -251,6 +251,8 @@ local function openSettingsMenu(owner)
 			function() setting("showPlayer", not DR.db.showPlayer) end)
 		root:CreateCheckbox(L["Arrows on the route"], function() return DR.db.showArrows end,
 			function() setting("showArrows", not DR.db.showArrows) end)
+		root:CreateCheckbox(L["Tick off bosses automatically"], function() return DR.db.autoCheck end,
+			function() setting("autoCheck", not DR.db.autoCheck) end)
 		root:CreateCheckbox(L["Open automatically in dungeons"], function() return DR.db.autoOpen end,
 			function() setting("autoOpen", not DR.db.autoOpen) end)
 		local width = root:CreateButton(L["Line width"])
@@ -317,6 +319,9 @@ local function makeRow(index)
 			GameTooltip:AddLine(L["On another map level"] .. ": " .. DR:GetFloorName(self.floor), 0.7, 0.7, 0.7)
 		end
 		GameTooltip:AddLine(L["Click: mark as done  |  Shift-click: show on map"], 0.4, 0.8, 1, true)
+		if self.auto and DR.db.autoCheck then
+			GameTooltip:AddLine(L["Ticks itself off when the boss dies."], 0.6, 0.6, 0.6, true)
+		end
 		GameTooltip:Show()
 	end)
 	row:SetScript("OnLeave", function()
@@ -437,7 +442,8 @@ local function refreshSidebar()
 			local row = rows[i] or makeRow(i)
 			row.index = i
 			row.floor = stop.floor
-			row.stopName = (stop.name ~= "" and stop.name) or L["Boss"]
+			row.stopName = DR:GetStopName(stop)
+			row.auto = stop.encounters ~= nil
 			row.note = DR.LocText(stop, "note")
 			row.otherFloor = not DR.OnFloor(stop, shown.floor)
 			row:ClearAllPoints()

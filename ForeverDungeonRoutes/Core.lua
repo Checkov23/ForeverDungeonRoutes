@@ -10,6 +10,7 @@ local DB_DEFAULTS = {
 	showPlayer = true,  -- own position and group on the map, where the game reveals it
 	showStops = true,   -- stop list beside the map
 	autoOpen = false,   -- open the map when entering a dungeon
+	autoCheck = true,   -- tick bosses off when the game reports the kill
 	lineWidth = 4,
 	alpha = 1,
 	window = {},        -- point, relativePoint, x, y, width, height
@@ -106,7 +107,17 @@ local frame = CreateFrame("Frame")
 frame:RegisterEvent("ADDON_LOADED")
 frame:RegisterEvent("PLAYER_ENTERING_WORLD")
 frame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
-frame:SetScript("OnEvent", function(_, event, arg1)
+frame:RegisterEvent("ENCOUNTER_END")
+frame:RegisterEvent("BOSS_KILL")
+frame:SetScript("OnEvent", function(_, event, arg1, arg2, _, _, arg5)
+	if event == "ENCOUNTER_END" or event == "BOSS_KILL" then
+		-- ENCOUNTER_END: encounterID, name, difficulty, group size, success (1 = kill)
+		-- BOSS_KILL: encounterID, name
+		if DR.db and (event == "BOSS_KILL" or DR.Safe(arg5) == 1) then
+			DR:OnBossKilled(arg1, arg2)
+		end
+		return
+	end
 	if event == "ADDON_LOADED" then
 		if arg1 ~= ADDON then return end
 		ForeverDungeonRoutesDB = ForeverDungeonRoutesDB or {}
@@ -153,6 +164,14 @@ function DR:OnZoneChanged()
 		DR.hinted = true
 		DR:Print(L["Route map for %s: type /fdr or use the key binding."], DR:GetKeyName(key))
 	end
+end
+
+-- A boss died: tick it off in the route, unless the setting is off or the game keeps it secret.
+function DR:OnBossKilled(encounterID, encounterName)
+	encounterID, encounterName = DR.Safe(encounterID), DR.Safe(encounterName)
+	if not DR.db.autoCheck or type(encounterID) ~= "number" then return end
+	if type(encounterName) ~= "string" then encounterName = nil end
+	DR:MarkEncounterKilled(encounterID, encounterName)
 end
 
 function DR:ToggleWindow()

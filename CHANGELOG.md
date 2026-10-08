@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.5.0
+
+- Bosses tick themselves off: when the game reports a boss kill, its stop gets the checkmark. Rares
+  without a boss fight stay manual. Can be switched off behind the gear button.
+- Standard routes for the last three dungeons: Maraudon (purple and orange side, both to the
+  Princess), Temple of Atal'Hakkar and Scholomance. All 24 classic dungeons now have a route.
+- Boss names in the language of the game client, taken from the game's own boss list.
+- Editor: a stop named like a boss of the dungeon is linked to it; the stop menu has "Boss in the
+  game" to link it by hand. Shared routes keep the link.
+- Scholomance: the stairs between the map levels are clickable on the map.
+- Fixed boss names: Wolf Master Nandos, Grimlok, The Lost Dwarves.
+
 ## 0.4.0
 
 The map moves into its own window and no longer needs a map addon.

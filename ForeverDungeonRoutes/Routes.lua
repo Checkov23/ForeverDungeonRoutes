@@ -6,7 +6,8 @@ local L = DR.L
 --   builtin true for the routes that ship with the addon, they are read-only
 --   name    route name; built-in routes are shown as "Standard route" plus their variant name
 --   paths   { kind = "main"|"side", floor = uiMapID, t0, t1 (main only), title, pts = { x1, y1, x2, y2, ... } }
---   stops   { kind = "boss"|"rare"|"optional", floor, x, y, name, note, noteDE }
+--   stops   { kind = "boss"|"rare"|"optional", floor, x, y, name, nameDE, note, noteDE,
+--             encounters = { encounterID, ... } (the game's boss fights that tick the stop off) }
 --   notes   { floor, x, y, text, textDE }
 --   links   { floor, x, y, to = uiMapID, label }
 -- Coordinates are normalized to the dungeon map (0..1 across the map art).
@@ -270,6 +271,75 @@ function DR:GetStopLabels(route)
 	return labels
 end
 
+function DR:GetStopName(stop)
+	local name = DR.LocText(stop, "name")
+	if not name or name == "" then
+		return L["Boss"]
+	end
+	return name
+end
+
+-- Boss fights (encounters) ----------------------------------------------------------------
+
+-- The game's boss fights of a dungeon: { ids = { encounterID, ... }, name, nameDE } each.
+function DR:GetEncounters(key)
+	local dungeon = self:GetDungeon(key)
+	return dungeon and self.Encounters[dungeon.instanceID] or {}
+end
+
+local function plain(text)
+	return (text or ""):lower():gsub("[^%w]", "")
+end
+
+function DR:FindEncounterByName(key, name)
+	local wanted = plain(name)
+	if wanted == "" then return nil end
+	for _, encounter in ipairs(self:GetEncounters(key)) do
+		if plain(encounter.name) == wanted or plain(encounter.nameDE) == wanted then
+			return encounter
+		end
+	end
+	return nil
+end
+
+function DR:GetStopEncounter(key, stop)
+	if not stop.encounters then return nil end
+	for _, encounter in ipairs(self:GetEncounters(key)) do
+		for _, id in ipairs(encounter.ids) do
+			if id == stop.encounters[1] then return encounter end
+		end
+	end
+	return nil
+end
+
+local function stopMatches(stop, encounterID, encounterName)
+	if stop.encounters then
+		for _, id in ipairs(stop.encounters) do
+			if id == encounterID then return true end
+		end
+		return false
+	end
+	-- stops of own routes without a linked fight: the name decides
+	local wanted = plain(encounterName)
+	return wanted ~= "" and (plain(stop.name) == wanted or plain(stop.nameDE) == wanted)
+end
+
+-- The game reported a boss kill: tick off its stops in the active route of the current dungeon.
+-- Returns how many stops were ticked.
+function DR:MarkEncounterKilled(encounterID, encounterName)
+	local key = self.currentKey
+	local route = key and self:GetActiveRoute(key)
+	if not route then return 0 end
+	local count = 0
+	for i, stop in ipairs(route.stops) do
+		if stopMatches(stop, encounterID, encounterName) and not self:IsStopDone(key, route, i) then
+			self:SetStopDone(key, route, i, true)
+			count = count + 1
+		end
+	end
+	return count
+end
+
 -- The first floor of a route, so a freshly chosen route opens where it starts.
 function DR:GetRouteStartFloor(route)
 	if not route then return nil end
@@ -302,12 +372,12 @@ function DR:IsStopDone(key, route, index)
 end
 
 function DR:ToggleStopDone(key, route, index)
+	self:SetStopDone(key, route, index, not self:IsStopDone(key, route, index))
+end
+
+function DR:SetStopDone(key, route, index, done)
 	local progress = getProgress(key, route, true)
-	if progress.done[index] then
-		progress.done[index] = nil
-	else
-		progress.done[index] = true
-	end
+	progress.done[index] = done and true or nil
 	progress.time = time()
 	self:Fire("PROGRESS_CHANGED", key)
 end

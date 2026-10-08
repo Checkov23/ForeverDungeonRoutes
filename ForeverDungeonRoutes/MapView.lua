@@ -72,8 +72,9 @@ local function stopOnEnter(pin)
 	local stop = pin.stop
 	GameTooltip:SetOwner(pin, "ANCHOR_RIGHT")
 	local kindText = stop.kind == "rare" and L["Rare"] or stop.kind == "optional" and L["Optional"] or L["Boss"]
-	GameTooltip:SetText((stop.name ~= "" and stop.name) or kindText, 1, 0.82, 0)
-	if stop.name ~= "" then
+	local name = DR.LocText(stop, "name") or ""
+	GameTooltip:SetText(name ~= "" and name or kindText, 1, 0.82, 0)
+	if name ~= "" then
 		GameTooltip:AddLine(kindText, 0.7, 0.7, 0.7)
 	end
 	local note = DR.LocText(stop, "note")
@@ -84,6 +85,9 @@ local function stopOnEnter(pin)
 		GameTooltip:AddLine(L["Drag: move  |  Click: options  |  Right-click: delete"], 0.4, 0.8, 1, true)
 	else
 		GameTooltip:AddLine(L["Click: mark as done"], 0.4, 0.8, 1)
+		if stop.encounters and DR.db.autoCheck then
+			GameTooltip:AddLine(L["Ticks itself off when the boss dies."], 0.6, 0.6, 0.6, true)
+		end
 	end
 	GameTooltip:Show()
 	DR:Fire("STOP_HOVER", pin.index)

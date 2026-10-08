@@ -31,6 +31,14 @@ local function round(v)
 	return math.floor(v * 10000 + 0.5) / 10000
 end
 
+-- A stop named like one of the dungeon's boss fights is linked to it, so it ticks itself off.
+local function linkByName(key, stop, name)
+	local encounter = DR:FindEncounterByName(key, name)
+	if encounter then
+		stop.encounters = DR.DeepCopy(encounter.ids)
+	end
+end
+
 function Editor:IsActive()
 	return state ~= nil
 end
@@ -212,11 +220,13 @@ function Editor:OnMapClick(button, x, y)
 		return onPathClick(floor, button, x, y)
 	elseif tool == "stop" and button == "LeftButton" then
 		snapshot()
+		local editKey = state.key
 		local stop = { kind = "boss", floor = floor, x = round(x), y = round(y), name = "" }
 		table.insert(state.route.stops, stop)
 		changed()
 		DR.Dialog.AskLine(L["Name of the stop"], L["For example the boss name. Can be changed later."], "", function(name)
 			stop.name = name
+			linkByName(editKey, stop, name)
 			changed()
 		end)
 		return true
@@ -287,12 +297,16 @@ function Editor:OnStopClicked(pin, button)
 		return
 	end
 	local stop = stops[index]
+	local key = state.key
 	MenuUtil.CreateContextMenu(pin, function(_, root)
-		root:CreateTitle((stop.name ~= "" and stop.name) or L["Stop"])
+		local shown = DR.LocText(stop, "name") or ""
+		root:CreateTitle(shown ~= "" and shown or L["Stop"])
 		root:CreateButton(L["Rename"], function()
-			DR.Dialog.AskLine(L["Name of the stop"], nil, stop.name, function(name)
+			DR.Dialog.AskLine(L["Name of the stop"], nil, shown, function(name)
 				snapshot()
 				stop.name = name
+				stop.nameDE = nil
+				linkByName(key, stop, name)
 				changed()
 			end)
 		end)
@@ -312,6 +326,27 @@ function Editor:OnStopClicked(pin, button)
 				stop.kind = kind
 				changed()
 			end)
+		end
+		local fights = DR:GetEncounters(key)
+		if #fights > 0 then
+			local boss = root:CreateButton(L["Boss in the game"])
+			boss:CreateRadio(L["None (tick off by hand)"], function() return stop.encounters == nil end, function()
+				snapshot()
+				stop.encounters = nil
+				changed()
+			end)
+			for _, encounter in ipairs(fights) do
+				boss:CreateRadio(DR.LocText(encounter, "name"), function()
+					return stop.encounters ~= nil and stop.encounters[1] == encounter.ids[1]
+				end, function()
+					snapshot()
+					stop.encounters = DR.DeepCopy(encounter.ids)
+					if stop.name == "" then
+						stop.name, stop.nameDE = encounter.name, encounter.nameDE
+					end
+					changed()
+				end)
+			end
 		end
 		root:CreateDivider()
 		root:CreateButton(L["Move up in order"], function() moveStop(index, -1) end)

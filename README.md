@@ -8,14 +8,16 @@ routes in the spirit of Mythic Dungeon Tools.
 
 - Own map window with the game's dungeon map art. WoW: Forever has no dungeon maps of its own, but
   the art files are still in the game client; the addon draws them itself. No other addon needed.
-- Standard routes for 21 classic dungeons. The line color runs from the entrance to the last boss,
-  arrows show the walking direction, dashed lines mark side paths.
+- Standard routes for all 24 classic dungeons. The line color runs from the entrance to the last
+  boss, arrows show the walking direction, dashed lines mark side paths.
 - Numbered bosses in route order, rares (`R`), optional bosses (`+`) and notes (`!`) with keys,
   events and quest items. Blue squares switch to the next map level.
 - Your position as an arrow and your group as colored dots, where the game reveals them. Inside a
   dungeon the map follows you from level to level.
-- Stop list with checkmarks per character; "New run" clears them, an old run is cleared after
-  three hours.
+- Stop list with checkmarks per character. Bosses tick themselves off when the game reports the
+  kill; rares without a boss fight are ticked by hand. "New run" clears the checkmarks, an old run
+  is cleared after three hours.
+- Boss names in the language of your game client (from the game's own boss list).
 - Route editor: paths, side paths, stops and notes; drag to move, undo. Editing a standard route
   creates a copy.
 - Share routes as text (export and import).
@@ -34,14 +36,14 @@ routes in the spirit of Mythic Dungeon Tools.
 - Choose the dungeon and the map level in the header. Inside a dungeon the window opens on it.
 - Mouse wheel zooms, dragging moves the map, right-click zooms out. The crosshair button brings the
   map back to your position.
-- Click a boss on the map or in the list to tick it off. Shift-click a list entry to show it on the
-  map.
+- Bosses tick themselves off when they die. A click on a boss on the map or in the list ticks it
+  off by hand. Shift-click a list entry to show it on the map.
 - Click the route name to choose a route, create a new one, copy, rename, delete, export or import.
-- The gear button holds the settings: stop list, position and group, arrows, open automatically in
-  dungeons, line width, opacity.
+- The gear button holds the settings: stop list, position and group, arrows, tick off bosses
+  automatically, open automatically in dungeons, line width, opacity.
 
-Stratholme and Dire Maul North come with two standard routes each (living and undead side, full
-clear and tribute run).
+Stratholme, Maraudon and Dire Maul North come with two standard routes each (living and undead
+side, purple and orange side, full clear and tribute run).
 
 ## Own routes
 
@@ -50,13 +52,13 @@ While editing:
 
 - **Path / Side path**: left-click adds a point, right-click removes the last one, shift-click
   starts a new piece, ctrl-click selects an existing piece.
-- **Stop**: left-click places a stop. On a stop: click for options (rename, note, kind, order),
-  drag to move, right-click to delete.
+- **Stop**: left-click places a stop. On a stop: click for options (rename, note, kind, boss in the
+  game, order), drag to move, right-click to delete. A stop named like one of the dungeon's bosses
+  is linked to that boss and ticks itself off.
 - **Note**: left-click places a note. On a note: click to edit, drag to move, right-click to delete.
 - **Undo** reverts the last change, **Done** ends editing. Right-drag moves the map while editing.
 
-Dungeons without a standard route (Maraudon, Temple of Atal'Hakkar, Scholomance) work the same way:
-choose the dungeon and "New route".
+Your own routes work for every dungeon: choose the dungeon and "New route".
 
 ## Commands
 
@@ -67,8 +69,8 @@ data (helps with bug reports).
 
 Ragefire Chasm, The Deadmines, Wailing Caverns, Shadowfang Keep, Blackfathom Deeps, The Stockade,
 Razorfen Kraul, Gnomeregan, Scarlet Monastery (Graveyard, Library, Armory, Cathedral),
-Razorfen Downs, Uldaman, Zul'Farrak, Blackrock Depths, Lower Blackrock Spire, Dire Maul (East,
-West, North), Stratholme.
+Razorfen Downs, Uldaman, Zul'Farrak, Maraudon, Temple of Atal'Hakkar, Blackrock Depths,
+Lower Blackrock Spire, Dire Maul (East, West, North), Scholomance, Stratholme.
 
 ## How the map works
 
@@ -81,6 +83,8 @@ then shows no arrow and says so.
 
 The standard routes were traced from the dungeon walkthrough maps of aetherflask.com, which went
 offline in 2022 and are mirrored at [eintr.net](https://eintr.net/WoW/World-of-Warcraft-Classic-Dungeon-Walkthrough.html).
+For the Temple of Atal'Hakkar and parts of Scholomance those maps served as a guide for the boss
+order; the paths follow the corridors of the game's map. Boss names come from the game's boss list.
 
 ## License
 

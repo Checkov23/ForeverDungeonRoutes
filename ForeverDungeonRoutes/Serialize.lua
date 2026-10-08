@@ -5,7 +5,7 @@ local L = DR.L
 --   K <key>            dungeon key
 --   N <name>
 --   P <kind> <floor> <x,y,x,y,...> [title]
---   S <kind> <floor> <x> <y> <name> [note]
+--   S <kind> <floor> <x> <y> <name> [note] [encounterID,encounterID,...]
 --   O <floor> <x> <y> <text>                 (note)
 --   L <floor> <x> <y> <to> <label>           (link to another floor)
 -- Fields are tab separated, coordinates are integers 0..10000.
@@ -80,8 +80,12 @@ function DR:ExportRoute(key, route)
 		lines[#lines + 1] = table.concat({ "P", path.kind, tostring(path.floor), table.concat(nums, ","), clean(path.title) }, "\t")
 	end
 	for _, stop in ipairs(route.stops) do
+		local fights = {}
+		for i, id in ipairs(stop.encounters or {}) do
+			fights[i] = tostring(id)
+		end
 		lines[#lines + 1] = table.concat({ "S", stop.kind, tostring(stop.floor), int(stop.x), int(stop.y),
-			clean(stop.name), clean(self.LocText(stop, "note")) }, "\t")
+			clean(stop.name), clean(self.LocText(stop, "note")), table.concat(fights, ",") }, "\t")
 	end
 	for _, note in ipairs(route.notes) do
 		lines[#lines + 1] = table.concat({ "O", tostring(note.floor), int(note.x), int(note.y),
@@ -159,7 +163,14 @@ function DR:ImportRoute(text)
 			local floor, x, y = floorID(f[3]), coord(f[4]), coord(f[5])
 			if not VALID_STOP[f[2]] or not floor or not x or not y then return nil, L["The text is damaged or incomplete."] end
 			local note = f[7] ~= "" and f[7] or nil
-			table.insert(route.stops, { kind = f[2], floor = floor, x = x, y = y, name = f[6] or "", note = note })
+			local stop = { kind = f[2], floor = floor, x = x, y = y, name = f[6] or "", note = note }
+			for id in (f[8] or ""):gmatch("%d+") do
+				stop.encounters = stop.encounters or {}
+				if #stop.encounters < 8 then
+					table.insert(stop.encounters, tonumber(id))
+				end
+			end
+			table.insert(route.stops, stop)
 		elseif tag == "O" then
 			local floor, x, y = floorID(f[2]), coord(f[3]), coord(f[4])
 			if not floor or not x or not y then return nil, L["The text is damaged or incomplete."] end
@@ -184,6 +195,13 @@ function DR:ImportRoute(text)
 			if self:GetDungeonForFloor(list[i].floor) ~= dungeon then
 				table.remove(list, i)
 			end
+		end
+	end
+	-- names of the game's bosses come back in the player's language
+	for _, stop in ipairs(route.stops) do
+		local encounter = self:FindEncounterByName(key, stop.name)
+		if encounter and encounter.name == stop.name and encounter.nameDE ~= stop.name then
+			stop.nameDE = encounter.nameDE
 		end
 	end
 	if #route.paths == 0 and #route.stops == 0 and #route.notes == 0 then
