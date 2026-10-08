@@ -141,18 +141,17 @@ DR.DefaultRoutes["diremaul_north"] = {
   nameDE = "Alle Bosse",
   paths = {
     {kind="main", floor=235, t0=0, t1=1, pts={0.7186,0.9052,0.7163,0.8929,0.697,0.8817,0.6941,0.8772,0.6927,0.8713,0.6924,0.8343,0.6953,0.7786,0.6946,0.712,0.6924,0.6963,0.6879,0.6896,0.683,0.686,0.6589,0.681,0.6138,0.6808,0.6069,0.683,0.5808,0.7082,0.5725,0.7199,0.5686,0.7302,0.5659,0.7426,0.5631,0.7777,0.5594,0.7794,0.5497,0.7792,0.5352,0.7748,0.5261,0.7741,0.4863,0.779,0.3993,0.7801,0.3804,0.7825,0.3594,0.7802,0.3318,0.7801,0.3093,0.7767,0.298,0.7726,0.2901,0.7672,0.2818,0.7577,0.277,0.7476,0.2752,0.7406,0.2742,0.7247,0.2712,0.7044,0.269,0.6433,0.2669,0.6146,0.2669,0.5981,0.2637,0.5718,0.264,0.5683,0.2662,0.5715,0.2801,0.6115,0.2841,0.6309,0.2838,0.641,0.2853,0.6477,0.2964,0.6522,0.3099,0.6529,0.3159,0.6501,0.3191,0.6413,0.3204,0.6234,0.3214,0.5729,0.3124,0.3595,0.3133,0.318,0.3169,0.2851,0.3164,0.2648}},
-    {kind="main", floor=234, t0=0, t1=1, pts={0.7186,0.9052,0.7163,0.8929,0.697,0.8817,0.6941,0.8772,0.6927,0.8713,0.6924,0.8343,0.6953,0.7786,0.6946,0.712,0.6924,0.6963,0.6879,0.6896,0.683,0.686,0.6589,0.681,0.6138,0.6808,0.6069,0.683,0.5808,0.7082,0.5725,0.7199,0.5686,0.7302,0.5659,0.7426,0.5631,0.7777,0.5594,0.7794,0.5497,0.7792,0.5352,0.7748,0.5261,0.7741,0.4863,0.779,0.3993,0.7801,0.3804,0.7825,0.3594,0.7802,0.3318,0.7801,0.3093,0.7767,0.298,0.7726,0.2901,0.7672,0.2818,0.7577,0.277,0.7476,0.2752,0.7406,0.2742,0.7247,0.2712,0.7044,0.269,0.6433,0.2669,0.6146,0.2669,0.5981,0.2637,0.5718,0.264,0.5683,0.2662,0.5715,0.2801,0.6115,0.2841,0.6309,0.2838,0.641,0.2853,0.6477,0.2964,0.6522,0.3099,0.6529,0.3159,0.6501,0.3191,0.6413,0.3204,0.6234,0.3214,0.5729,0.3124,0.3595,0.3133,0.318,0.3169,0.2851,0.3164,0.2648}},
   },
   stops = {
-    {kind="boss", floor=235, x=0.6946, y=0.7571, name="Guard Mol'dar", alt={234}},
-    {kind="boss", floor=235, x=0.6078, y=0.6808, name="Stomper Kreeg", alt={234}},
-    {kind="boss", floor=235, x=0.495, y=0.7781, name="Guard Fengus", alt={234}},
-    {kind="boss", floor=235, x=0.2615, y=0.5566, name="Guard Slip'kik", alt={234}},
-    {kind="boss", floor=235, x=0.3174, y=0.4998, name="Captain Kromcrush", alt={234}},
-    {kind="boss", floor=235, x=0.3164, y=0.2648, name="King Gordok", alt={234}},
+    {kind="boss", floor=235, x=0.6946, y=0.7571, name="Guard Mol'dar"},
+    {kind="boss", floor=235, x=0.6078, y=0.6808, name="Stomper Kreeg"},
+    {kind="boss", floor=235, x=0.495, y=0.7781, name="Guard Fengus"},
+    {kind="boss", floor=235, x=0.2615, y=0.5566, name="Guard Slip'kik"},
+    {kind="boss", floor=235, x=0.3174, y=0.4998, name="Captain Kromcrush"},
+    {kind="boss", floor=235, x=0.3164, y=0.2648, name="King Gordok"},
   },
   notes = {
-    {floor=235, x=0.2894, y=0.5641, text="Knot Thimblejack", alt={234}, textDE="Knot Thimblejack"},
+    {floor=235, x=0.2894, y=0.5641, text="Knot Thimblejack", textDE="Knot Thimblejack"},
   },
   links = {
   },
@@ -165,18 +164,17 @@ DR.DefaultRoutes["diremaul_north"] = {
   nameDE = "Tributlauf",
   paths = {
     {kind="main", floor=235, t0=0, t1=1, pts={0.7186,0.9052,0.7073,0.9044,0.7051,0.8991,0.7015,0.8963,0.6925,0.9027,0.676,0.9004,0.6558,0.8847,0.6547,0.8824,0.6577,0.8768,0.655,0.8798,0.6485,0.8766,0.6421,0.8772,0.6176,0.8968,0.6085,0.8987,0.602,0.898,0.5976,0.894,0.5952,0.8876,0.5951,0.876,0.5978,0.8693,0.5929,0.8738,0.5813,0.8663,0.5767,0.8701,0.5692,0.8959,0.5624,0.9058,0.559,0.9088,0.5564,0.9087,0.5493,0.8999,0.5491,0.9041,0.5512,0.9106,0.5488,0.9145,0.5404,0.9136,0.5326,0.9035,0.5278,0.9019,0.5209,0.9052,0.5132,0.9155,0.5016,0.9185,0.4994,0.9147,0.4989,0.8967,0.4974,0.9121,0.4956,0.9152,0.4931,0.9166,0.4838,0.913,0.4756,0.9036,0.4711,0.9013,0.4656,0.9035,0.4606,0.9095,0.4522,0.916,0.4434,0.9163,0.4344,0.9101,0.429,0.9011,0.4285,0.8977,0.4237,0.8879,0.4259,0.8581,0.426,0.824,0.4243,0.8052,0.42,0.7943,0.3966,0.7909,0.2995,0.7838,0.2882,0.7777,0.279,0.7658,0.2715,0.7511,0.2695,0.7425,0.2698,0.6673,0.2669,0.6092,0.2687,0.5986,0.2812,0.5764,0.2836,0.5698,0.2828,0.5647,0.279,0.5613,0.272,0.5594,0.2682,0.5621,0.2675,0.5694,0.2701,0.5813,0.2828,0.6225,0.2841,0.6309,0.2841,0.6443,0.2853,0.6477,0.3002,0.6529,0.3124,0.6523,0.3169,0.6486,0.3196,0.638,0.3214,0.5729,0.3124,0.3595,0.3133,0.318,0.3169,0.2851,0.3164,0.2648}},
-    {kind="main", floor=234, t0=0, t1=1, pts={0.7186,0.9052,0.7073,0.9044,0.7051,0.8991,0.7015,0.8963,0.6925,0.9027,0.676,0.9004,0.6558,0.8847,0.6547,0.8824,0.6577,0.8768,0.655,0.8798,0.6485,0.8766,0.6421,0.8772,0.6176,0.8968,0.6085,0.8987,0.602,0.898,0.5976,0.894,0.5952,0.8876,0.5951,0.876,0.5978,0.8693,0.5929,0.8738,0.5813,0.8663,0.5767,0.8701,0.5692,0.8959,0.5624,0.9058,0.559,0.9088,0.5564,0.9087,0.5493,0.8999,0.5491,0.9041,0.5512,0.9106,0.5488,0.9145,0.5404,0.9136,0.5326,0.9035,0.5278,0.9019,0.5209,0.9052,0.5132,0.9155,0.5016,0.9185,0.4994,0.9147,0.4989,0.8967,0.4974,0.9121,0.4956,0.9152,0.4931,0.9166,0.4838,0.913,0.4756,0.9036,0.4711,0.9013,0.4656,0.9035,0.4606,0.9095,0.4522,0.916,0.4434,0.9163,0.4344,0.9101,0.429,0.9011,0.4285,0.8977,0.4237,0.8879,0.4259,0.8581,0.426,0.824,0.4243,0.8052,0.42,0.7943,0.3966,0.7909,0.2995,0.7838,0.2882,0.7777,0.279,0.7658,0.2715,0.7511,0.2695,0.7425,0.2698,0.6673,0.2669,0.6092,0.2687,0.5986,0.2812,0.5764,0.2836,0.5698,0.2828,0.5647,0.279,0.5613,0.272,0.5594,0.2682,0.5621,0.2675,0.5694,0.2701,0.5813,0.2828,0.6225,0.2841,0.6309,0.2841,0.6443,0.2853,0.6477,0.3002,0.6529,0.3124,0.6523,0.3169,0.6486,0.3196,0.638,0.3214,0.5729,0.3124,0.3595,0.3133,0.318,0.3169,0.2851,0.3164,0.2648}},
   },
   stops = {
-    {kind="optional", floor=235, x=0.2894, y=0.5641, name="Knot Thimblejack", alt={234}, note="Free him: he gives the ogre suit", noteDE="Befreien: gibt den Ogeranzug"},
-    {kind="optional", floor=235, x=0.2615, y=0.5566, name="Guard Slip'kik", alt={234}, note="Trap him with the ice trap, do not attack. Talk to him afterwards for a buff (spell crit)", noteDE="Mit der Eisfalle festsetzen, nicht angreifen. Danach ansprechen: Stärkung (Zauberkrit)"},
-    {kind="optional", floor=235, x=0.3174, y=0.4998, name="Captain Kromcrush", alt={234}, note="Talk to him while wearing the ogre suit, do not attack", noteDE="Im Ogeranzug ansprechen, nicht angreifen"},
-    {kind="boss", floor=235, x=0.3164, y=0.2648, name="King Gordok", alt={234}, note="Kill only him and the tribute is yours. Then talk to the guards for buffs.", noteDE="Nur ihn töten, dann gehört der Tribut dir. Danach die Wachen für Stärkungen ansprechen."},
+    {kind="optional", floor=235, x=0.2894, y=0.5641, name="Knot Thimblejack", note="Free him: he gives the ogre suit", noteDE="Befreien: gibt den Ogeranzug"},
+    {kind="optional", floor=235, x=0.2615, y=0.5566, name="Guard Slip'kik", note="Trap him with the ice trap, do not attack. Talk to him afterwards for a buff (spell crit)", noteDE="Mit der Eisfalle festsetzen, nicht angreifen. Danach ansprechen: Stärkung (Zauberkrit)"},
+    {kind="optional", floor=235, x=0.3174, y=0.4998, name="Captain Kromcrush", note="Talk to him while wearing the ogre suit, do not attack", noteDE="Im Ogeranzug ansprechen, nicht angreifen"},
+    {kind="boss", floor=235, x=0.3164, y=0.2648, name="King Gordok", note="Kill only him and the tribute is yours. Then talk to the guards for buffs.", noteDE="Nur ihn töten, dann gehört der Tribut dir. Danach die Wachen für Stärkungen ansprechen."},
   },
   notes = {
-    {floor=235, x=0.4292, y=0.9037, text="Tribute run: do not aggro any boss except King Gordok", alt={234}, textDE="Tributlauf: außer King Gordok keinen Boss angreifen"},
-    {floor=235, x=0.6946, y=0.7571, text="Guard Mol'dar: stamina buff (after the tribute run)", alt={234}, textDE="Guard Mol'dar: Stärkung Ausdauer (nach dem Tributlauf)"},
-    {floor=235, x=0.495, y=0.7781, text="Guard Fengus: attack power buff (after the tribute run)", alt={234}, textDE="Guard Fengus: Stärkung Angriffskraft (nach dem Tributlauf)"},
+    {floor=235, x=0.4292, y=0.9037, text="Tribute run: do not aggro any boss except King Gordok", textDE="Tributlauf: außer King Gordok keinen Boss angreifen"},
+    {floor=235, x=0.6946, y=0.7571, text="Guard Mol'dar: stamina buff (after the tribute run)", textDE="Guard Mol'dar: Stärkung Ausdauer (nach dem Tributlauf)"},
+    {floor=235, x=0.495, y=0.7781, text="Guard Fengus: attack power buff (after the tribute run)", textDE="Guard Fengus: Stärkung Angriffskraft (nach dem Tributlauf)"},
   },
   links = {
   },

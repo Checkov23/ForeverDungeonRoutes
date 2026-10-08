@@ -1,24 +1,25 @@
 ## Interface: 16001
 ## Title: Forever Dungeon Routes
-## Notes: Routes, boss order and notes for the classic dungeons on the world map. Create, edit and share your own routes.
-## Notes-deDE: Routen, Boss-Reihenfolge und Hinweise für die klassischen Dungeons auf der Weltkarte. Eigene Routen erstellen, bearbeiten und teilen.
+## Notes: Dungeon map with routes, boss order and notes for the classic dungeons, your position on the map. Create, edit and share your own routes.
+## Notes-deDE: Dungeonkarte mit Routen, Boss-Reihenfolge und Hinweisen für die klassischen Dungeons, mit deiner Position. Eigene Routen erstellen, bearbeiten und teilen.
 ## Author: Checkov23
-## Version: 0.3.0
+## Version: 0.4.0
 ## Category: Map
 ## Category-deDE: Karte
-## OptionalDeps: MapUtils
 ## SavedVariables: ForeverDungeonRoutesDB
 ## SavedVariablesPerCharacter: ForeverDungeonRoutesCharDB
 ## IconTexture: Interface\AddOns\ForeverDungeonRoutes\media\icon
+## AddonCompartmentFunc: ForeverDungeonRoutes_OnAddonCompartmentClick
 
 Locales.lua
 Core.lua
 Data\Dungeons.lua
+Data\Floors.lua
 Data\DefaultRoutes.lua
 Routes.lua
 Serialize.lua
-MapOverlay.lua
-Pins.xml
+Position.lua
 Dialogs.lua
-Panel.lua
+MapView.lua
 Editor.lua
+Window.lua

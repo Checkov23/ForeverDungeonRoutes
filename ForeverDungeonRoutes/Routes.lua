@@ -21,20 +21,12 @@ function DR.LocText(entry, field)
 	return entry[field]
 end
 
--- The world map can only show maps with art layers. In WoW Forever the dungeon art comes from
--- an addon such as MapUtils.
-function DR.MapHasArt(mapID)
-	if not mapID then return false end
-	local layers = C_Map.GetMapArtLayers(mapID)
-	return type(layers) == "table" and layers[1] ~= nil
-end
-
--- Stops and notes can also show on twin maps with the same art (alt = { uiMapID, ... }).
-function DR.OnFloor(entry, mapID)
-	if entry.floor == mapID then return true end
+-- Stops and notes can also show on twin floors with the same art (alt = { uiMapID, ... }).
+function DR.OnFloor(entry, floor)
+	if entry.floor == floor then return true end
 	if entry.alt then
-		for _, floor in ipairs(entry.alt) do
-			if floor == mapID then return true end
+		for _, other in ipairs(entry.alt) do
+			if other == floor then return true end
 		end
 	end
 	return false
@@ -54,80 +46,54 @@ function DR:GetDungeon(key)
 	return key and self.byKey[key]
 end
 
-function DR:GetDungeonForMap(mapID)
-	return mapID and self.byFloor[mapID]
+function DR:GetDungeonForFloor(floor)
+	return floor and self.byFloor[floor]
 end
 
--- Which route set belongs to this map? Built-in dungeons first, then floors the player has
--- visited inside an unknown dungeon, then routes made directly on this map.
-function DR:GetKeyForMap(mapID)
-	if not mapID then return nil end
-	local dungeon = self.byFloor[mapID]
-	if dungeon then return dungeon.key end
-	local learned = self.db.learnedFloors[mapID]
-	if learned then return learned end
-	local own = "map:" .. mapID
-	if self.db.routes[own] then return own end
-	return nil
+function DR:GetKeyForFloor(floor)
+	local dungeon = self:GetDungeonForFloor(floor)
+	return dungeon and dungeon.key
 end
 
-function DR:GetKeyForInstance(instanceID, mapID)
-	local key = self:GetKeyForMap(mapID)
-	if key then return key end
-	local found
+-- All dungeons of an instance (Scarlet Monastery and Dire Maul have several wings).
+function DR:GetDungeonsForInstance(instanceID)
+	local list = {}
+	if not instanceID then return list end
 	for _, dungeon in ipairs(self.Dungeons) do
 		if dungeon.instanceID == instanceID then
-			if found then
-				found = nil -- several wings share this instance, the floor decides
-				break
-			end
-			found = dungeon.key
+			table.insert(list, dungeon)
 		end
 	end
-	if found then return found end
-	if instanceID then return "instance:" .. instanceID end
-	return nil
-end
-
--- Key for a map that has no route set yet, used when the player starts a new route there.
-function DR:GetOrCreateKeyForMap(mapID)
-	local key = self:GetKeyForMap(mapID)
-	if key then return key end
-	local inInstance = IsInInstance()
-	local playerMap = C_Map.GetBestMapForUnit("player")
-	if inInstance and playerMap == mapID then
-		key = "instance:" .. select(8, GetInstanceInfo())
-		self.db.learnedFloors[mapID] = key
-		return key
-	end
-	return "map:" .. mapID
+	return list
 end
 
 function DR:GetKeyName(key)
-	if not key then return "" end
-	local dungeon = self.byKey[key]
+	local dungeon = self:GetDungeon(key)
 	if dungeon then
 		return (IS_DE and dungeon.nameDE) or dungeon.name
 	end
-	local instanceID = key:match("^instance:(%d+)$")
-	if instanceID then
-		local name = GetRealZoneText(tonumber(instanceID))
-		if name and name ~= "" then return name end
-	end
-	local mapID = key:match("^map:(%d+)$")
-	if mapID then
-		local info = C_Map.GetMapInfo(tonumber(mapID))
-		if info and info.name then return info.name end
-	end
-	return key
+	return key or ""
 end
 
-function DR:GetShownKey()
-	if WorldMapFrame and WorldMapFrame:IsShown() then
-		local key = self:GetKeyForMap(WorldMapFrame:GetMapID())
-		if key then return key end
+function DR:GetLevelText(key)
+	local dungeon = self:GetDungeon(key)
+	if dungeon and dungeon.levels then
+		return L["Level"] .. " " .. dungeon.levels[1] .. "-" .. dungeon.levels[2]
 	end
-	return self.currentKey
+	return nil
+end
+
+function DR:GetFloorName(floor)
+	local info = self.Floors[floor]
+	if info then
+		return (IS_DE and info.nameDE) or info.name
+	end
+	return tostring(floor)
+end
+
+function DR.FloorHasArt(floor)
+	local info = floor and DR.Floors[floor]
+	return info ~= nil and info.tiles ~= nil and #info.tiles == 12
 end
 
 -- Routes ----------------------------------------------------------------------------------
@@ -271,7 +237,7 @@ function DR:RecalcProgress(route)
 		if path.kind == "main" then
 			local len, pts = 0, path.pts
 			for j = 3, #pts - 1, 2 do
-				local dx, dy = pts[j] - pts[j - 2], (pts[j + 1] - pts[j - 1]) * (683 / 1024)
+				local dx, dy = pts[j] - pts[j - 2], (pts[j + 1] - pts[j - 1]) * (668 / 1002)
 				len = len + math.sqrt(dx * dx + dy * dy)
 			end
 			lengths[i] = len
@@ -302,6 +268,16 @@ function DR:GetStopLabels(route)
 		end
 	end
 	return labels
+end
+
+-- The first floor of a route, so a freshly chosen route opens where it starts.
+function DR:GetRouteStartFloor(route)
+	if not route then return nil end
+	for _, path in ipairs(route.paths) do
+		if path.kind == "main" then return path.floor end
+	end
+	local first = route.paths[1] or route.stops[1] or route.notes[1]
+	return first and first.floor
 end
 
 -- Progress (per character) ----------------------------------------------------------------

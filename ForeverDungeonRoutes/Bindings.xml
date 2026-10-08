@@ -1,0 +1,5 @@
+<Bindings>
+	<Binding name="FOREVERDUNGEONROUTES_TOGGLE" header="FOREVERDUNGEONROUTES" category="ADDONS">
+		ForeverDungeonRoutes:ToggleWindow()
+	</Binding>
+</Bindings>

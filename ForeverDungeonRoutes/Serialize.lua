@@ -2,7 +2,7 @@ local _, DR = ...
 local L = DR.L
 
 -- Export format: "!FDR1!" followed by base64 of a small line based text:
---   K <key>            route set (dungeon key, instance:<id> or map:<id>)
+--   K <key>            dungeon key
 --   N <name>
 --   P <kind> <floor> <x,y,x,y,...> [title]
 --   S <kind> <floor> <x> <y> <name> [note]
@@ -118,8 +118,7 @@ local function floorID(text)
 end
 
 local function validKey(key)
-	if DR:GetDungeon(key) then return true end
-	return key:match("^instance:%d+$") ~= nil or key:match("^map:%d+$") ~= nil
+	return DR:GetDungeon(key) ~= nil
 end
 
 -- Returns key, route or nil, error message.
@@ -177,6 +176,15 @@ function DR:ImportRoute(text)
 	end
 	if not key or not validKey(key) then
 		return nil, L["The text is damaged or incomplete."]
+	end
+	-- Only what lies on a floor of this dungeon can be shown.
+	local dungeon = self:GetDungeon(key)
+	for _, list in ipairs({ route.paths, route.stops, route.notes, route.links }) do
+		for i = #list, 1, -1 do
+			if self:GetDungeonForFloor(list[i].floor) ~= dungeon then
+				table.remove(list, i)
+			end
+		end
 	end
 	if #route.paths == 0 and #route.stops == 0 and #route.notes == 0 then
 		return nil, L["The route is empty."]

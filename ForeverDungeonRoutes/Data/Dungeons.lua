@@ -45,7 +45,7 @@ DR.Dungeons = {
 		name = "Lower Blackrock Spire", nameDE = "Untere Schwarzfelsspitze" },
 	{ key = "diremaul_west", instanceID = 429, floors = { 236, 237, 238 }, levels = { 58, 60 },
 		name = "Dire Maul: West", nameDE = "Düsterbruch: West" },
-	{ key = "diremaul_north", instanceID = 429, floors = { 234, 235 }, levels = { 58, 60 },
+	{ key = "diremaul_north", instanceID = 429, floors = { 235 }, levels = { 58, 60 },
 		name = "Dire Maul: North", nameDE = "Düsterbruch: Nord" },
 	{ key = "scholomance", instanceID = 289, floors = { 306, 307, 308, 309 }, levels = { 58, 60 },
 		name = "Scholomance", nameDE = "Scholomance" },

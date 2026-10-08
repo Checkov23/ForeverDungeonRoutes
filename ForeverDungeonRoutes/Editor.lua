@@ -1,7 +1,7 @@
 local _, DR = ...
 local L = DR.L
 
--- Route editor on the world map, in the spirit of MDT: click points for the path, place stops
+-- Route editor on the dungeon map, in the spirit of MDT: click points for the path, place stops
 -- and notes, drag them around, undo. Works on user routes only; the built-in route is copied
 -- first so it always stays available as the default.
 
@@ -11,6 +11,7 @@ DR.Editor = Editor
 local state -- nil while not editing
 local MAX_UNDO = 80
 local PICK_DISTANCE = 0.03
+local ASPECT = 668 / 1002
 
 local TOOLS = { "main", "side", "stop", "note" }
 local TOOL_LABEL = {
@@ -46,7 +47,7 @@ function Editor:GetTool()
 	return state and state.tool
 end
 
--- Dialog callbacks can arrive after editing ended (map closed meanwhile), so both helpers
+-- Dialog callbacks can arrive after editing ended (window closed meanwhile), so both helpers
 -- tolerate a missing state.
 local function changed()
 	if not state then
@@ -71,10 +72,10 @@ function Editor:Start(key, route)
 	if not key or not route or DR:IsBuiltIn(route) then return end
 	state = { key = key, route = route, tool = "main", undo = {} }
 	-- continue the last main piece on the shown floor
-	local mapID = WorldMapFrame:IsShown() and WorldMapFrame:GetMapID()
+	local _, floor = DR.Window:GetShown()
 	for i = #route.paths, 1, -1 do
 		local path = route.paths[i]
-		if path.kind == "main" and path.floor == mapID then
+		if path.kind == "main" and path.floor == floor then
 			state.pathIndex = i
 			break
 		end
@@ -133,35 +134,13 @@ end
 
 -- Map clicks --------------------------------------------------------------------------------
 
-local function isDungeonMap(mapID)
-	local info = C_Map.GetMapInfo(mapID)
-	return info ~= nil and info.mapType == Enum.UIMapType.Dungeon
-end
-
--- The shown map must belong to the route being edited. Unknown dungeon floors are adopted,
--- so a route for a new dungeon can span all its levels.
-local function mapBelongs(mapID)
-	local key = DR:GetKeyForMap(mapID)
-	if key == state.key then
-		return true
-	end
-	if not key and state.key:find("^instance:") and isDungeonMap(mapID) then
-		DR.db.learnedFloors[mapID] = state.key
-		return true
-	end
-	if not key and state.key == "map:" .. mapID then
-		return true
-	end
-	return false
-end
-
-local function nearestPath(mapID, x, y)
+local function nearestPath(floor, x, y)
 	local best, bestDist
 	for i, path in ipairs(state.route.paths) do
-		if path.floor == mapID then
+		if path.floor == floor then
 			local pts = path.pts
 			for j = 1, #pts - 1, 2 do
-				local dx, dy = pts[j] - x, (pts[j + 1] - y) * (683 / 1024)
+				local dx, dy = pts[j] - x, (pts[j + 1] - y) * ASPECT
 				local d = dx * dx + dy * dy
 				if not bestDist or d < bestDist then
 					best, bestDist = i, d
@@ -175,11 +154,11 @@ local function nearestPath(mapID, x, y)
 	return nil
 end
 
-local function onPathClick(mapID, button, x, y)
+local function onPathClick(floor, button, x, y)
 	local route = state.route
 	if button == "LeftButton" then
 		if IsControlKeyDown() then
-			local index = nearestPath(mapID, x, y)
+			local index = nearestPath(floor, x, y)
 			if index then
 				state.pathIndex = index
 				state.tool = route.paths[index].kind == "side" and "side" or "main"
@@ -190,8 +169,8 @@ local function onPathClick(mapID, button, x, y)
 		end
 		snapshot()
 		local path = state.pathIndex and route.paths[state.pathIndex]
-		if IsShiftKeyDown() or not path or path.floor ~= mapID or path.kind ~= state.tool then
-			path = { kind = state.tool, floor = mapID, pts = {} }
+		if IsShiftKeyDown() or not path or path.floor ~= floor or path.kind ~= state.tool then
+			path = { kind = state.tool, floor = floor, pts = {} }
 			table.insert(route.paths, path)
 			state.pathIndex = #route.paths
 		end
@@ -201,7 +180,7 @@ local function onPathClick(mapID, button, x, y)
 		return true
 	elseif button == "RightButton" then
 		local path = state.pathIndex and route.paths[state.pathIndex]
-		if path and path.floor == mapID and #path.pts >= 2 then
+		if path and path.floor == floor and #path.pts >= 2 then
 			snapshot()
 			table.remove(path.pts)
 			table.remove(path.pts)
@@ -216,20 +195,24 @@ local function onPathClick(mapID, button, x, y)
 	return false
 end
 
-local function onCanvasClick(map, button, x, y)
-	if not state or not x or not y then
+-- A click on the map (0..1 coordinates of the shown floor). Returns true when the editor used it.
+function Editor:OnMapClick(button, x, y)
+	if not state then
 		return false
 	end
-	local mapID = map:GetMapID()
-	if not mapBelongs(mapID) then
+	local key, floor = DR.Window:GetShown()
+	if key ~= state.key or not floor then
 		return false
+	end
+	if x < 0 or x > 1 or y < 0 or y > 1 then
+		return true
 	end
 	local tool = state.tool
 	if tool == "main" or tool == "side" then
-		return onPathClick(mapID, button, x, y)
+		return onPathClick(floor, button, x, y)
 	elseif tool == "stop" and button == "LeftButton" then
 		snapshot()
-		local stop = { kind = "boss", floor = mapID, x = round(x), y = round(y), name = "" }
+		local stop = { kind = "boss", floor = floor, x = round(x), y = round(y), name = "" }
 		table.insert(state.route.stops, stop)
 		changed()
 		DR.Dialog.AskLine(L["Name of the stop"], L["For example the boss name. Can be changed later."], "", function(name)
@@ -242,7 +225,7 @@ local function onCanvasClick(map, button, x, y)
 		DR.Dialog.AskLine(L["Note"], L["Text of the note:"], "", function(text)
 			if text == "" then return L["Please enter a text."] end
 			snapshot()
-			table.insert(route.notes, { floor = mapID, x = round(x), y = round(y), text = text })
+			table.insert(route.notes, { floor = floor, x = round(x), y = round(y), text = text })
 			changed()
 		end)
 		return true
@@ -261,12 +244,14 @@ function Editor:StartDrag(pin)
 		if not self.dragged and math.abs(cx - self.dragStartX) + math.abs(cy - self.dragStartY) < 6 then
 			return
 		end
+		local x, y = DR.MapView:GetCursorUV()
+		if not x then return end
 		if not self.dragged then
 			snapshot()
 			self.dragged = true
 		end
-		local x, y = self:GetMap():GetNormalizedCursorPosition()
-		self:SetPosition(x, y)
+		x, y = DR.Clamp(x, 0, 1), DR.Clamp(y, 0, 1)
+		DR.MapView:PlacePin(self, x, y)
 		local entry = self.stop or self.note
 		entry.x, entry.y = round(x), round(y)
 	end)
@@ -360,16 +345,16 @@ function Editor:OnNoteClicked(pin, button)
 	end)
 end
 
--- Toolbar in the panel ----------------------------------------------------------------------
+-- Toolbar in the stop list ----------------------------------------------------------------
 
 function Editor:BuildToolbar(parent)
 	local bar = CreateFrame("Frame", nil, parent)
 	bar:SetHeight(120)
 	bar.tools = {}
 	local previous
-	for i, tool in ipairs(TOOLS) do
+	for _, tool in ipairs(TOOLS) do
 		local b = CreateFrame("Button", nil, bar, "UIPanelButtonTemplate")
-		b:SetSize(50, 20)
+		b:SetSize(52, 20)
 		b:SetText(L[TOOL_LABEL[tool]])
 		b:GetFontString():SetFontObject(GameFontNormalSmall)
 		if previous then
@@ -388,7 +373,7 @@ function Editor:BuildToolbar(parent)
 	end
 	bar.Hint = bar:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
 	bar.Hint:SetPoint("TOPLEFT", 0, -26)
-	bar.Hint:SetPoint("RIGHT", 0, 0)
+	bar.Hint:SetPoint("TOPRIGHT", 0, -26)
 	bar.Hint:SetJustifyH("LEFT")
 	bar.Hint:SetSpacing(2)
 	bar.Hint:SetTextColor(0.75, 0.85, 1)
@@ -433,9 +418,10 @@ function Editor:BuildToolbar(parent)
 end
 
 function DR:InitEditor()
-	WorldMapFrame:AddCanvasClickHandler(onCanvasClick, 100)
-	WorldMapFrame:HookScript("OnHide", function()
-		if state then
+	-- Editing ends with the window or when another dungeon is shown.
+	self:On("WINDOW_HIDDEN", function() Editor:Stop() end)
+	self:On("SHOWN_CHANGED", function(key)
+		if state and state.key ~= key then
 			Editor:Stop()
 		end
 	end)

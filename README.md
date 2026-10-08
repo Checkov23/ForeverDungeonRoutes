@@ -1,31 +1,44 @@
 # Forever Dungeon Routes
 
-Routes, boss order and notes for the classic dungeons, drawn on the world map of
-**World of Warcraft: Forever**. Pick a ready route, tick off bosses during the run, or draw your
-own route on the map and share it as text.
+A dungeon map with routes for **World of Warcraft: Forever**. Ready routes for the classic dungeons,
+boss order and notes, your own position and your group on the map, and an editor for your own
+routes in the spirit of Mythic Dungeon Tools.
 
-## Requirements
+## Features
 
-WoW: Forever has no dungeon map art of its own. Forever Dungeon Routes draws on top of the dungeon
-maps that another addon provides, for example **MapUtils**. Without such an addon the routes cannot
-be shown, and the addon says so once when you enter a dungeon.
+- Own map window with the game's dungeon map art. WoW: Forever has no dungeon maps of its own, but
+  the art files are still in the game client; the addon draws them itself. No other addon needed.
+- Standard routes for 21 classic dungeons. The line color runs from the entrance to the last boss,
+  arrows show the walking direction, dashed lines mark side paths.
+- Numbered bosses in route order, rares (`R`), optional bosses (`+`) and notes (`!`) with keys,
+  events and quest items. Blue squares switch to the next map level.
+- Your position as an arrow and your group as colored dots, where the game reveals them. Inside a
+  dungeon the map follows you from level to level.
+- Stop list with checkmarks per character; "New run" clears them, an old run is cleared after
+  three hours.
+- Route editor: paths, side paths, stops and notes; drag to move, undo. Editing a standard route
+  creates a copy.
+- Share routes as text (export and import).
+- English and German.
 
 ## Install
 
 1. Download `ForeverDungeonRoutes-<version>.zip` from the [releases](../../releases).
 2. Unzip it into `World of Warcraft\<Forever folder>\Interface\AddOns\`. The folder must be named
    `ForeverDungeonRoutes`.
-3. Make sure MapUtils (or another addon with dungeon maps) is enabled.
 
 ## Use
 
-- Open the world map inside a dungeon, or browse to a dungeon map. The route appears as a line whose
-  color runs from the entrance to the last boss, with arrows in walking direction.
-- Numbered pins mark the bosses in route order, `R` marks rares, `+` optional bosses, `!` notes.
-  Blue squares switch to the next map level.
-- The panel in the top right corner lists the stops. Click a stop to tick it off, shift-click to
-  show it on the map. "New run" clears the checkmarks.
+- `/fdr` opens or closes the map. There is also a key binding (Key Bindings, section AddOns) and an
+  entry in the addon list at the minimap.
+- Choose the dungeon and the map level in the header. Inside a dungeon the window opens on it.
+- Mouse wheel zooms, dragging moves the map, right-click zooms out. The crosshair button brings the
+  map back to your position.
+- Click a boss on the map or in the list to tick it off. Shift-click a list entry to show it on the
+  map.
 - Click the route name to choose a route, create a new one, copy, rename, delete, export or import.
+- The gear button holds the settings: stop list, position and group, arrows, open automatically in
+  dungeons, line width, opacity.
 
 Stratholme and Dire Maul North come with two standard routes each (living and undead side, full
 clear and tribute run).
@@ -40,15 +53,15 @@ While editing:
 - **Stop**: left-click places a stop. On a stop: click for options (rename, note, kind, order),
   drag to move, right-click to delete.
 - **Note**: left-click places a note. On a note: click to edit, drag to move, right-click to delete.
-- **Undo** reverts the last change, **Done** ends editing.
+- **Undo** reverts the last change, **Done** ends editing. Right-drag moves the map while editing.
 
-Dungeons without a standard route, for example the new dungeons of WoW: Forever, work the same way:
-open the dungeon map and choose "New route".
+Dungeons without a standard route (Maraudon, Temple of Atal'Hakkar, Scholomance) work the same way:
+choose the dungeon and "New route".
 
 ## Commands
 
-`/fdr` toggles the routes on the map, `/fdr panel` the panel, `/fdr reset` clears the checkmarks,
-`/fdr map` prints the current map IDs.
+`/fdr` shows or hides the map, `/fdr reset` clears the checkmarks, `/fdr pos` prints the position
+data (helps with bug reports).
 
 ## Dungeons with a standard route
 
@@ -57,11 +70,17 @@ Razorfen Kraul, Gnomeregan, Scarlet Monastery (Graveyard, Library, Armory, Cathe
 Razorfen Downs, Uldaman, Zul'Farrak, Blackrock Depths, Lower Blackrock Spire, Dire Maul (East,
 West, North), Stratholme.
 
+## How the map works
+
+The addon ships no map art. It shows the game's own dungeon map files by their file IDs and
+converts world positions with the floor rectangles of Blizzard's map tables
+(`Data/Floors.lua`, generated). In restricted instances the game keeps positions secret; the map
+then shows no arrow and says so.
+
 ## Credits
 
 The standard routes were traced from the dungeon walkthrough maps of aetherflask.com, which went
 offline in 2022 and are mirrored at [eintr.net](https://eintr.net/WoW/World-of-Warcraft-Classic-Dungeon-Walkthrough.html).
-The addon ships no map art; the dungeon maps come from the map addon you use.
 
 ## License
 
