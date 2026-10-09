@@ -21,8 +21,8 @@ local TOOL_LABEL = {
 	note = "Note",
 }
 local TOOL_HINT = {
-	main = "Left-click: add a point  |  Right-click: remove the last point  |  Shift-click: start a new piece  |  Ctrl-click: select a piece",
-	side = "Left-click: add a point  |  Right-click: remove the last point  |  Shift-click: start a new piece  |  Ctrl-click: select a piece",
+	main = "Left-click: add a point\nRight-click: remove the last point\nShift-click: start a new piece\nCtrl-click: select a piece",
+	side = "Left-click: add a point\nRight-click: remove the last point\nShift-click: start a new piece\nCtrl-click: select a piece",
 	stop = "Left-click on the map: place a stop. On a stop: click for options, drag to move, right-click to delete.",
 	note = "Left-click on the map: place a note. On a note: click to edit, drag to move, right-click to delete.",
 }

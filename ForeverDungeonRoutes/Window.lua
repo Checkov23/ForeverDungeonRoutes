@@ -318,7 +318,7 @@ local function makeRow(index)
 		if self.otherFloor then
 			GameTooltip:AddLine(L["On another map level"] .. ": " .. DR:GetFloorName(self.floor), 0.7, 0.7, 0.7)
 		end
-		GameTooltip:AddLine(L["Click: mark as done  |  Shift-click: show on map"], 0.4, 0.8, 1, true)
+		GameTooltip:AddLine(L["Click: mark as done\nShift-click: show on map"], 0.4, 0.8, 1, true)
 		if self.auto and DR.db.autoCheck then
 			GameTooltip:AddLine(L["Ticks itself off when the boss dies."], 0.6, 0.6, 0.6, true)
 		end

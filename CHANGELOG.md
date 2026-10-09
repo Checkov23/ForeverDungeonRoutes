@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.1
+
+- Hints in the tooltips and in the editor toolbar stand on separate lines. They were separated by
+  the "|" character, which is a control character in WoW texts.
+- README: preview images of the map window.
+
 ## 0.5.0
 
 - Bosses tick themselves off: when the game reports a boss kill, its stop gets the checkmark. Rares

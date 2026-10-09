@@ -4,6 +4,17 @@ A dungeon map with routes for **World of Warcraft: Forever**. Ready routes for t
 boss order and notes, your own position and your group on the map, and an editor for your own
 routes in the spirit of Mythic Dungeon Tools.
 
+![Inside The Deadmines: your arrow and group on the map, the first boss ticked off](docs/screenshots/dungeon.png)
+
+| Browsing Blackrock Depths | Editing a copy of a standard route |
+|---|---|
+| ![Blackrock Depths, first map level, with the stop list](docs/screenshots/browse.png) | ![Stratholme in the route editor](docs/screenshots/editor.png) |
+
+These are preview images, not in-game screenshots: the addon's own code runs against a replica of
+the game's interface functions, and every frame, line and texture it creates is drawn with the map
+art from the game client. Fonts and buttons are close approximations. In-game screenshots will
+replace them.
+
 ## Features
 
 - Own map window with the game's dungeon map art. WoW: Forever has no dungeon maps of its own, but

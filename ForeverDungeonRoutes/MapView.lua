@@ -82,7 +82,7 @@ local function stopOnEnter(pin)
 		GameTooltip:AddLine(note, 1, 1, 1, true)
 	end
 	if editing(pin) then
-		GameTooltip:AddLine(L["Drag: move  |  Click: options  |  Right-click: delete"], 0.4, 0.8, 1, true)
+		GameTooltip:AddLine(L["Drag: move\nClick: options\nRight-click: delete"], 0.4, 0.8, 1, true)
 	else
 		GameTooltip:AddLine(L["Click: mark as done"], 0.4, 0.8, 1)
 		if stop.encounters and DR.db.autoCheck then
@@ -146,7 +146,7 @@ local function noteOnEnter(pin)
 	GameTooltip:SetText(L["Note"], 1, 0.82, 0)
 	GameTooltip:AddLine(DR.LocText(pin.note, "text") or "", 1, 1, 1, true)
 	if editing(pin) then
-		GameTooltip:AddLine(L["Drag: move  |  Click: edit text  |  Right-click: delete"], 0.4, 0.8, 1, true)
+		GameTooltip:AddLine(L["Drag: move\nClick: edit text\nRight-click: delete"], 0.4, 0.8, 1, true)
 	end
 	GameTooltip:Show()
 end
