@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.5.2
+
+- Share routes with your group in game: "Send to group" in the route menu or `/fdr send`. Group
+  members with the addon are asked whether to take the route over; a route they already have is
+  not added twice. Standard routes travel as a short hint, own routes in pieces of at most 255
+  characters. Sending waits while the game holds addon messages back (boss fights).
+- Imported routes (text or group) lose the "|" character in names and notes, so they cannot bring
+  colour codes, links or pictures along.
+
 ## 0.5.1
 
 - Hints in the tooltips and in the editor toolbar stand on separate lines. They were separated by

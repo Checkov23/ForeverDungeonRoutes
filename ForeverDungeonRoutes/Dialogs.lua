@@ -34,6 +34,12 @@ local function build()
 	f:SetClampedToScreen(true)
 	f:Hide()
 	table.insert(UISpecialFrames, "ForeverDungeonRoutesDialog")
+	-- routes from the group wait for the dialog; when it closes the next one may come
+	f:SetScript("OnHide", function()
+		if DR.Dialog.onHidden then
+			DR.Dialog.onHidden()
+		end
+	end)
 
 	f.Title = f:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 	f.Title:SetPoint("TOPLEFT", 14, -12)
@@ -169,6 +175,10 @@ local function open(opts)
 end
 
 DR.Dialog = {}
+
+function DR.Dialog.IsShown()
+	return dialog ~= nil and dialog:IsShown()
+end
 
 function DR.Dialog.AskLine(title, text, value, onAccept)
 	open({ mode = "single", title = title, text = text, value = value, onAccept = onAccept })

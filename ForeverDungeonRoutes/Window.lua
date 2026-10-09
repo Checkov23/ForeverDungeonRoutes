@@ -197,6 +197,8 @@ local function openRouteMenu(owner)
 				root:CreateButton(L["Delete route"], deleteRoute)
 			end
 			root:CreateDivider()
+			local send = root:CreateButton(L["Send to group"], function() DR.Share:SendRoute(key, current) end)
+			send:SetEnabled(DR.Share:Channel() ~= nil)
 			root:CreateButton(L["Export route"], exportRoute)
 		else
 			root:CreateDivider()

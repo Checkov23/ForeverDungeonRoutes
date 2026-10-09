@@ -184,6 +184,12 @@ SlashCmdList.FOREVERDUNGEONROUTES = function(input)
 	local cmd = strtrim(input or ""):lower()
 	if cmd == "" or cmd == "toggle" then
 		DR.Window:Toggle()
+	elseif cmd == "send" then
+		local key = DR.Window:GetShownKey() or DR.currentKey
+		local route = key and DR:GetActiveRoute(key)
+		if route then
+			DR.Share:SendRoute(key, route)
+		end
 	elseif cmd == "reset" then
 		local key = DR.Window:GetShownKey() or DR.currentKey
 		if key then
@@ -200,7 +206,7 @@ SlashCmdList.FOREVERDUNGEONROUTES = function(input)
 			type(z) == "number" and ("%.1f"):format(z) or "-",
 			tostring(key), tostring(floor), u and ("%.3f"):format(u) or "-", v and ("%.3f"):format(v) or "-")
 	else
-		DR:Print(L["Commands: /fdr (show or hide the map), /fdr reset (new run), /fdr pos (position check)"])
+		DR:Print(L["Commands: /fdr (show or hide the map), /fdr send (route to the group), /fdr reset (new run), /fdr pos (position check)"])
 	end
 end
 

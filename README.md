@@ -31,7 +31,8 @@ replace them.
 - Boss names in the language of your game client (from the game's own boss list).
 - Route editor: paths, side paths, stops and notes; drag to move, undo. Editing a standard route
   creates a copy.
-- Share routes as text (export and import).
+- Share routes with your group in game: everyone with the addon gets the route offered and takes it
+  over with one click. Or share them as text (export and import).
 - English and German.
 
 ## Install
@@ -50,6 +51,11 @@ replace them.
 - Bosses tick themselves off when they die. A click on a boss on the map or in the list ticks it
   off by hand. Shift-click a list entry to show it on the map.
 - Click the route name to choose a route, create a new one, copy, rename, delete, export or import.
+- "Send to group" in the same menu (or `/fdr send`) sends the active route to your party or raid.
+  Group members with the addon are asked whether to take it over; nothing changes without their
+  yes. A standard route travels as a short hint, an own route in small pieces (up to about half a
+  minute for the largest ones). During boss fights the game holds addon messages back; sending
+  then waits until the fight is over.
 - The gear button holds the settings: stop list, position and group, arrows, tick off bosses
   automatically, open automatically in dungeons, line width, opacity.
 
@@ -73,8 +79,8 @@ Your own routes work for every dungeon: choose the dungeon and "New route".
 
 ## Commands
 
-`/fdr` shows or hides the map, `/fdr reset` clears the checkmarks, `/fdr pos` prints the position
-data (helps with bug reports).
+`/fdr` shows or hides the map, `/fdr send` sends the active route to your group, `/fdr reset`
+clears the checkmarks, `/fdr pos` prints the position data (helps with bug reports).
 
 ## Dungeons with a standard route
 

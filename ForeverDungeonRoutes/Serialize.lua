@@ -104,7 +104,8 @@ local VALID_STOP = { boss = true, rare = true, optional = true }
 local function split(line)
 	local fields = {}
 	for field in (line .. "\t"):gmatch("([^\t]*)\t") do
-		fields[#fields + 1] = field
+		-- no | in imported text: it would start colour codes, links or pictures in WoW texts
+		fields[#fields + 1] = (field:gsub("|", ""))
 	end
 	return fields
 end
