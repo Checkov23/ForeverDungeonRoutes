@@ -3,7 +3,8 @@ local L = DR.L
 
 -- The route window, in the spirit of MDT: the dungeon map with the route on the left, the stops
 -- of the route on the right. Dungeon and floor are chosen in the header. Inside a dungeon the map
--- follows the player from floor to floor until a floor is chosen by hand.
+-- follows the run until a floor is chosen by hand: the game gives addons no position there, so
+-- the map shows the floor of the next boss that is still open.
 
 local HEADER_H = 36
 local SIDEBAR_W = 240
@@ -48,7 +49,7 @@ local function makeDropButton(parent, width)
 		self:SetBackdropBorderColor(1, 0.9, 0.6, 1)
 		if self.tooltip then
 			GameTooltip:SetOwner(self, "ANCHOR_BOTTOM")
-			GameTooltip:SetText(self.tooltip, 1, 1, 1, true)
+			GameTooltip:SetText(self.tooltip, 1, 1, 1, 1, true)
 			if self.tooltipExtra then
 				GameTooltip:AddLine(self.tooltipExtra, 0.7, 0.7, 0.7, true)
 			end
@@ -249,14 +250,14 @@ local function openSettingsMenu(owner)
 		root:CreateTitle(L["Settings"])
 		root:CreateCheckbox(L["Stop list beside the map"], function() return DR.db.showStops end,
 			function() setting("showStops", not DR.db.showStops) end)
-		root:CreateCheckbox(L["Show my position and group"], function() return DR.db.showPlayer end,
-			function() setting("showPlayer", not DR.db.showPlayer) end)
 		root:CreateCheckbox(L["Arrows on the route"], function() return DR.db.showArrows end,
 			function() setting("showArrows", not DR.db.showArrows) end)
 		root:CreateCheckbox(L["Tick off bosses automatically"], function() return DR.db.autoCheck end,
 			function() setting("autoCheck", not DR.db.autoCheck) end)
 		root:CreateCheckbox(L["Open automatically in dungeons"], function() return DR.db.autoOpen end,
 			function() setting("autoOpen", not DR.db.autoOpen) end)
+		root:CreateCheckbox(L["Button at the minimap"], function() return DR.db.minimapButton end,
+			function() setting("minimapButton", not DR.db.minimapButton) end)
 		local width = root:CreateButton(L["Line width"])
 		for _, w in ipairs({ 3, 4, 5, 6 }) do
 			width:CreateRadio(tostring(w), function() return DR.db.lineWidth == w end, function() setting("lineWidth", w) end)
@@ -398,7 +399,7 @@ local function buildSidebar()
 	sidebar.ResetButton:SetScript("OnClick", function() DR:ResetProgress(shown.key) end)
 	sidebar.ResetButton:SetScript("OnEnter", function(self)
 		GameTooltip:SetOwner(self, "ANCHOR_LEFT")
-		GameTooltip:SetText(L["Clears all checkmarks of this dungeon."], 1, 1, 1, true)
+		GameTooltip:SetText(L["Clears all checkmarks of this dungeon."], 1, 1, 1, 1, true)
 		GameTooltip:Show()
 	end)
 	sidebar.ResetButton:SetScript("OnLeave", GameTooltip_Hide)
@@ -628,8 +629,15 @@ function Window:Refresh()
 	end
 end
 
--- Shows a dungeon; without a floor inside the dungeon the player's floor, else where the route
--- starts.
+-- The floor of the next boss still open in the route of a dungeon.
+local function nextBossFloor(key)
+	local route = DR:GetActiveRoute(key)
+	local index = DR:GetNextStopIndex(key, route)
+	return index and route.stops[index].floor
+end
+
+-- Shows a dungeon; without a floor inside the dungeon the player's floor where the game reveals
+-- it, else the floor of the next open boss, else where the route starts.
 function Window:ShowDungeon(key, floor)
 	local dungeon = DR:GetDungeon(key)
 	if not dungeon then return end
@@ -640,7 +648,7 @@ function Window:ShowDungeon(key, floor)
 			-- the position showed another wing of the instance
 			return self:ShowDungeon(located)
 		end
-		floor = playerFloor
+		floor = playerFloor or nextBossFloor(key)
 	end
 	if not floor and not newKey then
 		floor = shown.floor
@@ -679,13 +687,23 @@ function Window:StepFloor(delta)
 	end
 end
 
--- Back to the player: their dungeon and floor, centered when zoomed in.
+-- Back to the run: the current dungeon on the floor of the next open boss (or the player's
+-- floor where the game reveals it), centered on it when zoomed in. The map follows again.
 function Window:FollowPlayer()
 	following = true
 	if not DR.currentKey then return end
 	self:ShowDungeon(DR.currentKey)
+	if view.zoom <= 1 then return end
 	local u, v = view:GetPlayerUV()
-	if u and view.zoom > 1 then
+	if not u then
+		local route = DR:GetActiveRoute(shown.key)
+		local index = DR:GetNextStopIndex(shown.key, route)
+		local stop = index and route.stops[index]
+		if stop and DR.OnFloor(stop, shown.floor) then
+			u, v = stop.x, stop.y
+		end
+	end
+	if u then
 		view:CenterOn(u, v)
 	end
 end
@@ -730,6 +748,16 @@ end
 
 DR:On("ROUTE_CHANGED", refreshIfShown)
 DR:On("PROGRESS_CHANGED", refreshIfShown)
+-- A boss was ticked off (by the kill or by hand): while the map follows the run it moves on to
+-- the floor of the next open boss, unless the game reveals the player's own floor.
+DR:On("PROGRESS_CHANGED", function(key)
+	if not Window:IsShown() or not following or key ~= DR.currentKey or shown.key ~= key then return end
+	if DR:GetUnitWorldPosition("player") then return end
+	local floor = nextBossFloor(key)
+	if floor then
+		Window:SelectFloor(floor)
+	end
+end)
 DR:On("EDITOR_CHANGED", function() refreshIfShown() end)
 DR:On("SETTINGS_CHANGED", function(key)
 	if not frame then return end

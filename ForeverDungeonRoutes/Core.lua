@@ -7,10 +7,12 @@ DR.version = (C_AddOns and C_AddOns.GetAddOnMetadata and C_AddOns.GetAddOnMetada
 
 local DB_DEFAULTS = {
 	showArrows = true,
-	showPlayer = true,  -- own position and group on the map, where the game reveals it
+	showPlayer = true,  -- own position and group on the map, where the game reveals it (not in dungeons)
 	showStops = true,   -- stop list beside the map
 	autoOpen = false,   -- open the map when entering a dungeon
 	autoCheck = true,   -- tick bosses off when the game reports the kill
+	minimapButton = true, -- round button at the minimap
+	minimapAngle = 225, -- where the button sits around the minimap, degrees
 	lineWidth = 4,
 	alpha = 1,
 	window = {},        -- point, relativePoint, x, y, width, height
@@ -131,6 +133,7 @@ frame:SetScript("OnEvent", function(_, event, arg1, arg2, _, _, arg5)
 		DR.cdb = ForeverDungeonRoutesCharDB
 		DR:BuildIndex()
 		DR:InitEditor()
+		DR:UpdateMinimapButton()
 		frame:UnregisterEvent("ADDON_LOADED")
 	elseif DR.db then
 		DR:OnZoneChanged()

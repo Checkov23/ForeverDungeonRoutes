@@ -326,9 +326,31 @@ end
 
 -- The game reported a boss kill: tick off its stops in the active route of the current dungeon.
 -- Returns how many stops were ticked.
+local function hasEncounter(route, encounterID, encounterName)
+	for _, stop in ipairs(route and route.stops or {}) do
+		if stopMatches(stop, encounterID, encounterName) then return true end
+	end
+	return false
+end
+
+-- A boss of the current dungeon died: tick its stop off. In instances with several wings
+-- (Scarlet Monastery, Dire Maul) a kill that belongs to another wing shows where the player
+-- is, since the game gives no position there: the current dungeon switches to that wing.
 function DR:MarkEncounterKilled(encounterID, encounterName)
 	local key = self.currentKey
-	local route = key and self:GetActiveRoute(key)
+	if not key then return 0 end
+	if not hasEncounter(self:GetActiveRoute(key), encounterID, encounterName) then
+		for _, wing in ipairs(self:GetDungeonsForInstance(self.currentInstanceID)) do
+			if wing.key ~= key and hasEncounter(self:GetActiveRoute(wing.key), encounterID, encounterName) then
+				key = wing.key
+				self.currentKey = key
+				self.db.wings[self.currentInstanceID] = key
+				self:Fire("DUNGEON_CHANGED", key)
+				break
+			end
+		end
+	end
+	local route = self:GetActiveRoute(key)
 	if not route then return 0 end
 	local count = 0
 	for i, stop in ipairs(route.stops) do

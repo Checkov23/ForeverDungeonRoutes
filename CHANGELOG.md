@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.5.3
+
+- Fixed a Lua error when the mouse rests on the route button or on "New run" (issue #1).
+- Button at the minimap: a click shows or hides the map, dragging moves it around the minimap.
+  It can be switched off behind the gear button.
+- WoW gives addons no position inside dungeons (since patch 7.1), so the arrow for you and your
+  group could never show there. Instead the map now follows your run: after a boss kill it shows
+  the level of the next open boss, and it opens there. The crosshair button shows the next open
+  boss. The setting "Show my position and group" and the hint on the map are gone.
+- Scarlet Monastery and Dire Maul: a boss kill tells which wing you are in.
+
 ## 0.5.2
 
 - Share routes with your group in game: "Send to group" in the route menu or `/fdr send`. Group

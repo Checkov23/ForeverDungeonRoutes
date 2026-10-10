@@ -2,7 +2,8 @@ local _, DR = ...
 local L = DR.L
 
 -- The dungeon map inside the window: the game's own map art, the route on top, stops, notes,
--- floor links, the own position and the group. The art comes in twelve tiles of 256 pixels
+-- floor links, and the own position and group where the game reveals them (not inside
+-- dungeons). The art comes in twelve tiles of 256 pixels
 -- (4 across, 3 down) of which the map uses the top left 1002 by 668 pixels; route coordinates
 -- are 0..1 across that part. Mouse wheel zooms, dragging pans.
 
@@ -308,11 +309,6 @@ function View:Create(parent)
 	self.message:SetPoint("CENTER")
 	self.message:SetText(L["The game has no map art for this floor."])
 	self.message:Hide()
-	self.status = frame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-	self.status:SetPoint("BOTTOMLEFT", 8, 8)
-	self.status:SetPoint("BOTTOMRIGHT", -40, 8)
-	self.status:SetJustifyH("LEFT")
-	self.status:SetTextColor(0.8, 0.8, 0.8)
 
 	local locate = CreateFrame("Button", nil, frame)
 	locate:SetSize(26, 26)
@@ -334,8 +330,8 @@ function View:Create(parent)
 	locate:SetScript("OnClick", function() DR.Window:FollowPlayer() end)
 	locate:SetScript("OnEnter", function(button)
 		GameTooltip:SetOwner(button, "ANCHOR_LEFT")
-		GameTooltip:SetText(L["Show my position"], 1, 1, 1)
-		GameTooltip:AddLine(L["The map follows you to the next floor again."], 0.7, 0.7, 0.7, true)
+		GameTooltip:SetText(L["Show the next boss"], 1, 1, 1)
+		GameTooltip:AddLine(L["The map follows your progress again."], 0.7, 0.7, 0.7, true)
 		GameTooltip:Show()
 	end)
 	locate:SetScript("OnLeave", GameTooltip_Hide)
@@ -792,11 +788,8 @@ function View:HighlightStop(index)
 end
 
 -- Own position and group ----------------------------------------------------------------------
-
-function View:SetStatus(text)
-	self.status:SetText(text or "")
-	self.status:SetShown(text ~= nil)
-end
+-- Inside dungeons the game gives addons no positions (since patch 7.1), so this usually shows
+-- nothing there; it stays for places where the game does reveal them.
 
 function View:HideGroup()
 	self.player:Hide()
@@ -810,17 +803,13 @@ function View:UpdateGroup()
 	self.locate:SetShown(inside)
 	if not inside or not DR.db.showPlayer then
 		self:HideGroup()
-		self:SetStatus(nil)
 		return
 	end
 	local _, floor, u, v = DR:LocatePlayer(self.floor)
 	if not floor then
 		self:HideGroup()
-		local x = DR:GetUnitWorldPosition("player")
-		self:SetStatus(not x and L["The game does not reveal your position here."] or nil)
 		return
 	end
-	self:SetStatus(nil)
 	if floor ~= self.floor then
 		if DR.Window:IsFollowing() then
 			DR.Window:SelectFloor(floor)

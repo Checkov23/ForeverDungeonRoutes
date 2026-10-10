@@ -4,7 +4,8 @@ local _, DR = ...
 -- its own, so the world position (UnitPosition) is converted with the floor rectangles from
 -- Data/Floors.lua. Floors of one dungeon often overlap in the world: the floor shown keeps the
 -- position as long as it lies on it and its route is not clearly farther away than another one's.
--- In restricted instances the game keeps positions secret; then nothing is shown.
+-- Inside dungeons the game gives addons no position (nil since patch 7.1, secret values under
+-- the Midnight rules); then nothing is shown and the window follows the boss kills instead.
 
 local MARGIN = 0.02      -- a position this far outside a floor still counts as on it
 local NEAR = 0.04        -- the shown floor stays while its route is this close (map widths)

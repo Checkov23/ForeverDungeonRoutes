@@ -1,10 +1,10 @@
 # Forever Dungeon Routes
 
 A dungeon map with routes for **World of Warcraft: Forever**. Ready routes for the classic dungeons,
-boss order and notes, your own position and your group on the map, and an editor for your own
-routes in the spirit of Mythic Dungeon Tools.
+boss order and notes, bosses that tick themselves off, and an editor for your own routes in the
+spirit of Mythic Dungeon Tools.
 
-![Inside The Deadmines: your arrow and group on the map, the first boss ticked off](docs/screenshots/dungeon.png)
+![Inside The Deadmines: the first boss ticked off by the kill, the next one glows](docs/screenshots/dungeon.png)
 
 | Browsing Blackrock Depths | Editing a copy of a standard route |
 |---|---|
@@ -23,8 +23,9 @@ replace them.
   boss, arrows show the walking direction, dashed lines mark side paths.
 - Numbered bosses in route order, rares (`R`), optional bosses (`+`) and notes (`!`) with keys,
   events and quest items. Blue squares switch to the next map level.
-- Your position as an arrow and your group as colored dots, where the game reveals them. Inside a
-  dungeon the map follows you from level to level.
+- Inside a dungeon the map follows your run: after a boss kill it shows the level of the next open
+  boss. WoW gives addons no position inside dungeons (since patch 7.1), so there is no arrow for
+  you or your group.
 - Stop list with checkmarks per character. Bosses tick themselves off when the game reports the
   kill; rares without a boss fight are ticked by hand. "New run" clears the checkmarks, an old run
   is cleared after three hours.
@@ -33,6 +34,7 @@ replace them.
   creates a copy.
 - Share routes with your group in game: everyone with the addon gets the route offered and takes it
   over with one click. Or share them as text (export and import).
+- Button at the minimap, slash command and key binding.
 - English and German.
 
 ## Install
@@ -43,11 +45,13 @@ replace them.
 
 ## Use
 
-- `/fdr` opens or closes the map. There is also a key binding (Key Bindings, section AddOns) and an
-  entry in the addon list at the minimap.
-- Choose the dungeon and the map level in the header. Inside a dungeon the window opens on it.
-- Mouse wheel zooms, dragging moves the map, right-click zooms out. The crosshair button brings the
-  map back to your position.
+- The button at the minimap or `/fdr` opens or closes the map. Drag the button to move it around
+  the minimap. There is also a key binding (Key Bindings, section AddOns).
+- Choose the dungeon and the map level in the header. Inside a dungeon the window opens on the
+  level of the next open boss.
+- Mouse wheel zooms, dragging moves the map, right-click zooms out. After you choose a level by
+  hand the map stays there; the crosshair button shows the next open boss and lets the map follow
+  your run again.
 - Bosses tick themselves off when they die. A click on a boss on the map or in the list ticks it
   off by hand. Shift-click a list entry to show it on the map.
 - Click the route name to choose a route, create a new one, copy, rename, delete, export or import.
@@ -56,8 +60,8 @@ replace them.
   yes. A standard route travels as a short hint, an own route in small pieces (up to about half a
   minute for the largest ones). During boss fights the game holds addon messages back; sending
   then waits until the fight is over.
-- The gear button holds the settings: stop list, position and group, arrows, tick off bosses
-  automatically, open automatically in dungeons, line width, opacity.
+- The gear button holds the settings: stop list, arrows, tick off bosses automatically, open
+  automatically in dungeons, button at the minimap, line width, opacity.
 
 Stratholme, Maraudon and Dire Maul North come with two standard routes each (living and undead
 side, purple and orange side, full clear and tribute run).
@@ -91,10 +95,10 @@ Lower Blackrock Spire, Dire Maul (East, West, North), Scholomance, Stratholme.
 
 ## How the map works
 
-The addon ships no map art. It shows the game's own dungeon map files by their file IDs and
-converts world positions with the floor rectangles of Blizzard's map tables
-(`Data/Floors.lua`, generated). In restricted instances the game keeps positions secret; the map
-then shows no arrow and says so.
+The addon ships no map art. It shows the game's own dungeon map files by their file IDs
+(`Data/Floors.lua`, generated from Blizzard's map tables). Inside dungeons the game gives addons
+no position, so the map follows the boss kills the game reports. In Scarlet Monastery and Dire
+Maul a kill also tells which wing you are in.
 
 ## Credits
 
