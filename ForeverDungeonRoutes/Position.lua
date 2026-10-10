@@ -12,11 +12,16 @@ local NEAR = 0.04        -- the shown floor stays while its route is this close 
 local SWITCH_GAP = 0.05  -- another floor wins only when its route is this much closer
 local ASPECT = 668 / 1002
 
--- UnitPosition returns the north coordinate first, then the west coordinate.
+-- UnitPosition returns the north coordinate first, then the west coordinate. Inside dungeons it
+-- returns nothing; for the player the minimap ping experiment (Ping.lua) may stand in.
 function DR:GetUnitWorldPosition(unit)
 	local x, y, _, instanceID = UnitPosition(unit)
 	x, y, instanceID = DR.Safe(x), DR.Safe(y), DR.Safe(instanceID)
 	if type(x) ~= "number" or type(y) ~= "number" then
+		if unit == "player" and DR.Ping then
+			local north, west = DR.Ping:Position()
+			if north then return north, west, DR.currentInstanceID end
+		end
 		return nil
 	end
 	return x, y, instanceID
@@ -28,6 +33,15 @@ function DR:WorldToFloor(floor, x, y)
 	if not rect then return nil end
 	local minX, minY, maxX, maxY = rect[1], rect[2], rect[3], rect[4]
 	return (maxY - y) / (maxY - minY), (maxX - x) / (maxX - minX)
+end
+
+-- The other way round: a point of the floor map in world coordinates (north, west).
+function DR:FloorToWorld(floor, u, v)
+	local info = self.Floors[floor]
+	local rect = info and info.world
+	if not rect then return nil end
+	local minX, minY, maxX, maxY = rect[1], rect[2], rect[3], rect[4]
+	return maxX - v * (maxX - minX), maxY - u * (maxY - minY)
 end
 
 local function inside(u, v)
@@ -147,7 +161,9 @@ end
 
 function DR:GetPlayerFacing()
 	local facing = DR.Safe(GetPlayerFacing())
-	if type(facing) ~= "number" then return nil end
+	if type(facing) ~= "number" then
+		return DR.Ping and DR.Ping:Facing() or nil
+	end
 	return facing
 end
 

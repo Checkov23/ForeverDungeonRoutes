@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.4
+
+- Experiment: your own position inside dungeons through a minimap ping. Off by default, switch
+  it on behind the gear button. When you enter a dungeon the addon pings the minimap once (your
+  group sees it) and then follows that ping, so your arrow walks with you. Ctrl-click on the map
+  sets your position by hand. If the game does not play along, the addon says so and stops.
+
 ## 0.5.3
 
 - Fixed a Lua error when the mouse rests on the route button or on "New run" (issue #1).

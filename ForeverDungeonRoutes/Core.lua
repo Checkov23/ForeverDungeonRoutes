@@ -13,6 +13,7 @@ local DB_DEFAULTS = {
 	autoCheck = true,   -- tick bosses off when the game reports the kill
 	minimapButton = true, -- round button at the minimap
 	minimapAngle = 225, -- where the button sits around the minimap, degrees
+	pingPosition = false, -- experiment: own position in dungeons through a minimap ping (Ping.lua)
 	lineWidth = 4,
 	alpha = 1,
 	window = {},        -- point, relativePoint, x, y, width, height
@@ -208,6 +209,9 @@ SlashCmdList.FOREVERDUNGEONROUTES = function(input)
 			tostring(mapInstance), x and ("%.1f"):format(x) or "-", y and ("%.1f"):format(y) or "-",
 			type(z) == "number" and ("%.1f"):format(z) or "-",
 			tostring(key), tostring(floor), u and ("%.3f"):format(u) or "-", v and ("%.3f"):format(v) or "-")
+		if DR.db.pingPosition then
+			DR:Print(DR.Ping:Describe())
+		end
 	else
 		DR:Print(L["Commands: /fdr (show or hide the map), /fdr send (route to the group), /fdr reset (new run), /fdr pos (position check)"])
 	end

@@ -455,6 +455,9 @@ function View:OnMouseUp(button)
 	if DR.Editor:OnMapClick(button, u, v) then return end
 	if button == "RightButton" then
 		self:ResetZoom()
+	elseif button == "LeftButton" and IsControlKeyDown() then
+		-- "I am here" for the minimap ping experiment
+		DR.Ping:SetHere(self.key, self.floor, u, v)
 	end
 end
 

@@ -258,6 +258,8 @@ local function openSettingsMenu(owner)
 			function() setting("autoOpen", not DR.db.autoOpen) end)
 		root:CreateCheckbox(L["Button at the minimap"], function() return DR.db.minimapButton end,
 			function() setting("minimapButton", not DR.db.minimapButton) end)
+		root:CreateCheckbox(L["Own position via minimap ping (experiment)"], function() return DR.db.pingPosition end,
+			function() setting("pingPosition", not DR.db.pingPosition) end)
 		local width = root:CreateButton(L["Line width"])
 		for _, w in ipairs({ 3, 4, 5, 6 }) do
 			width:CreateRadio(tostring(w), function() return DR.db.lineWidth == w end, function() setting("lineWidth", w) end)
