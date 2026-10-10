@@ -272,6 +272,8 @@ local function openSettingsMenu(owner)
 			DR.db.window = {}
 			restoreGeometry()
 		end)
+		root:CreateDivider()
+		root:CreateTitle(("Forever Dungeon Routes %s, \194\169 2026 Checkov23"):format(DR.version))
 	end)
 end
 
@@ -636,8 +638,19 @@ local function nextBossFloor(key)
 	return index and route.stops[index].floor
 end
 
+-- The floor of the room the game names as the player's place (the shown one if it has the room).
+local function roomFloor(key)
+	local room = key == DR.currentKey and DR.Room:Get()
+	if not room then return nil end
+	if shown.key == key and shown.floor and DR.Room:OnFloor(room, shown.floor) then
+		return shown.floor
+	end
+	return DR.Room:MainFloor(room)
+end
+
 -- Shows a dungeon; without a floor inside the dungeon the player's floor where the game reveals
--- it, else the floor of the next open boss, else where the route starts.
+-- it, else the floor of the room the player is in, else of the next open boss, else where the
+-- route starts.
 function Window:ShowDungeon(key, floor)
 	local dungeon = DR:GetDungeon(key)
 	if not dungeon then return end
@@ -648,7 +661,7 @@ function Window:ShowDungeon(key, floor)
 			-- the position showed another wing of the instance
 			return self:ShowDungeon(located)
 		end
-		floor = playerFloor or nextBossFloor(key)
+		floor = playerFloor or roomFloor(key) or nextBossFloor(key)
 	end
 	if not floor and not newKey then
 		floor = shown.floor
@@ -687,14 +700,19 @@ function Window:StepFloor(delta)
 	end
 end
 
--- Back to the run: the current dungeon on the floor of the next open boss (or the player's
--- floor where the game reveals it), centered on it when zoomed in. The map follows again.
+-- Back to where the player is: the current dungeon on the player's floor where the game reveals
+-- it, else the floor of the room the player is in, else of the next open boss; centered on it
+-- when zoomed in. The map follows again.
 function Window:FollowPlayer()
 	following = true
 	if not DR.currentKey then return end
 	self:ShowDungeon(DR.currentKey)
 	if view.zoom <= 1 then return end
 	local u, v = view:GetPlayerUV()
+	local room = DR.Room:Get()
+	if not u and room then
+		u, v = DR.Room:Center(room, shown.floor)
+	end
 	if not u then
 		local route = DR:GetActiveRoute(shown.key)
 		local index = DR:GetNextStopIndex(shown.key, route)
@@ -752,7 +770,7 @@ DR:On("PROGRESS_CHANGED", refreshIfShown)
 -- the floor of the next open boss, unless the game reveals the player's own floor.
 DR:On("PROGRESS_CHANGED", function(key)
 	if not Window:IsShown() or not following or key ~= DR.currentKey or shown.key ~= key then return end
-	if DR:GetUnitWorldPosition("player") then return end
+	if DR:GetUnitWorldPosition("player") or DR.Room:Get() then return end
 	local floor = nextBossFloor(key)
 	if floor then
 		Window:SelectFloor(floor)
@@ -774,6 +792,16 @@ DR:On("DUNGEON_CHANGED", function(key)
 		Window:ShowDungeon(key)
 	else
 		view:UpdateGroup()
+		view:UpdateRoom()
+	end
+end)
+-- The player walked into another named room: while the map follows, it shows the room's floor.
+DR:On("ROOM_CHANGED", function(room)
+	if not Window:IsShown() then return end
+	if room and following and shown.key == DR.currentKey and not DR.Room:OnFloor(room, shown.floor) then
+		Window:SelectFloor(DR.Room:MainFloor(room))
+	else
+		view:UpdateRoom()
 	end
 end)
 DR:On("STOP_HOVER", function(index)

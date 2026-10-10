@@ -209,10 +209,12 @@ SlashCmdList.FOREVERDUNGEONROUTES = function(input)
 		local x, y, mapInstance = DR:GetUnitWorldPosition("player")
 		local z = DR.Safe((select(3, UnitPosition("player"))))
 		local key, floor, u, v = DR:LocatePlayer()
-		DR:Print("instance %s/%s, world %s %s %s, dungeon %s, floor %s, map %s %s", tostring(instanceID),
-			tostring(mapInstance), x and ("%.1f"):format(x) or "-", y and ("%.1f"):format(y) or "-",
-			type(z) == "number" and ("%.1f"):format(z) or "-",
-			tostring(key), tostring(floor), u and ("%.3f"):format(u) or "-", v and ("%.3f"):format(v) or "-")
+		local subzone, room = DR.Safe(GetSubZoneText()), DR.Room:Get()
+		DR:Print("instance %s/%s, world %s %s %s, dungeon %s, floor %s, map %s %s, subzone \"%s\", room %s",
+			tostring(instanceID), tostring(mapInstance), x and ("%.1f"):format(x) or "-",
+			y and ("%.1f"):format(y) or "-", type(z) == "number" and ("%.1f"):format(z) or "-",
+			tostring(key), tostring(floor), u and ("%.3f"):format(u) or "-", v and ("%.3f"):format(v) or "-",
+			type(subzone) == "string" and subzone or "-", room and room.name or "-")
 	else
 		DR:Print(L["Commands: /fdr (show or hide the map), /fdr send (route to the group), /fdr reset (new run), /fdr pos (position check)"])
 	end

@@ -13,6 +13,8 @@ local MAX_ZOOM = 4
 local ZOOM_STEP = 1.25
 local DRAG_START = 5        -- pixels the mouse moves before a press becomes a pan
 local UPDATE_INTERVAL = 0.1 -- seconds between position updates
+local ROOM_ALPHA = 0.3      -- the room the player is in: lowest opacity of its pulsing glow
+local ROOM_PULSE = 0.2      -- ... and how much brighter it gets
 local MEDIA = "Interface\\AddOns\\ForeverDungeonRoutes\\media\\"
 
 DR.MAP_W, DR.MAP_H = MAP_W, MAP_H
@@ -309,6 +311,21 @@ function View:Create(parent)
 	self.message:SetPoint("CENTER")
 	self.message:SetText(L["The game has no map art for this floor."])
 	self.message:Hide()
+	-- room name in the lower left corner, above the map
+	local overlay = CreateFrame("Frame", nil, frame)
+	overlay:SetAllPoints()
+	overlay:SetFrameLevel(frame:GetFrameLevel() + 40)
+	self.status = overlay:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+	self.status:SetPoint("BOTTOMLEFT", 14, 13)
+	self.status:SetWordWrap(false)
+	self.status:SetTextColor(1, 0.86, 0.5)
+	self.status:Hide()
+	self.statusBack = overlay:CreateTexture(nil, "BACKGROUND")
+	self.statusBack:SetPoint("TOPLEFT", self.status, "TOPLEFT", -7, 5)
+	self.statusBack:SetPoint("BOTTOMRIGHT", self.status, "BOTTOMRIGHT", 7, -5)
+	self.statusBack:SetColorTexture(0.05, 0.05, 0.06, 0.85)
+	self.statusBack:Hide()
+	self.roomLines, self.numRoomLines = {}, 0
 
 	local locate = CreateFrame("Button", nil, frame)
 	locate:SetSize(26, 26)
@@ -330,8 +347,8 @@ function View:Create(parent)
 	locate:SetScript("OnClick", function() DR.Window:FollowPlayer() end)
 	locate:SetScript("OnEnter", function(button)
 		GameTooltip:SetOwner(button, "ANCHOR_LEFT")
-		GameTooltip:SetText(L["Show the next boss"], 1, 1, 1)
-		GameTooltip:AddLine(L["The map follows your progress again."], 0.7, 0.7, 0.7, true)
+		GameTooltip:SetText(L["Show where you are"], 1, 1, 1)
+		GameTooltip:AddLine(L["The room you are in, else the next open boss. The map follows you again."], 0.7, 0.7, 0.7, true)
 		GameTooltip:Show()
 	end)
 	locate:SetScript("OnLeave", GameTooltip_Hide)
@@ -478,6 +495,47 @@ function View:OnUpdate(elapsed)
 		self.elapsed = 0
 		self:UpdateGroup()
 	end
+	if self.numRoomLines > 0 then
+		self.pulse = (self.pulse or 0) + elapsed
+		local alpha = ROOM_ALPHA + ROOM_PULSE * (0.5 + 0.5 * math.sin(self.pulse * 3))
+		for i = 1, self.numRoomLines do
+			self.roomLines[i]:SetAlpha(alpha)
+		end
+	end
+end
+
+-- The room the player is in --------------------------------------------------------------------
+-- The game names the room (Room.lua); its parts light up on the map, its name stands below.
+
+function View:UpdateRoom()
+	for i = 1, self.numRoomLines do
+		self.roomLines[i]:Hide()
+	end
+	self.numRoomLines = 0
+	local room = self.key ~= nil and self.key == DR.currentKey and DR.Room:Get()
+	self.status:SetShown(room and true or false)
+	self.statusBack:SetShown(room and true or false)
+	if not room then return end
+	self.status:SetText(L["You are in: %s"]:format(DR.LocText(room, "name")))
+	for _, box in ipairs(room.boxes) do
+		if box[1] == self.floor then
+			self.numRoomLines = self.numRoomLines + 1
+			local line = self.roomLines[self.numRoomLines]
+			if not line then
+				line = self.canvas:CreateLine(nil, "BORDER")
+				line:SetColorTexture(1, 0.82, 0.35, 1)
+				self.roomLines[self.numRoomLines] = line
+			end
+			-- a box is a thick line through its middle: width along the line, height as thickness
+			local cx, cy = box[2] * MAP_W, box[3] * MAP_H
+			local dx, dy = math.cos(box[6]) * box[4] / 2, math.sin(box[6]) * box[4] / 2
+			line:SetStartPoint("TOPLEFT", self.canvas, cx - dx, -(cy - dy))
+			line:SetEndPoint("TOPLEFT", self.canvas, cx + dx, -(cy + dy))
+			line:SetThickness(box[5])
+			line:SetAlpha(ROOM_ALPHA)
+			line:Show()
+		end
+	end
 end
 
 -- Content -------------------------------------------------------------------------------------
@@ -509,6 +567,7 @@ function View:Refresh()
 	end
 	self:Layout()
 	self:UpdateGroup()
+	self:UpdateRoom()
 end
 
 function View:RequestRedraw()

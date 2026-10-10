@@ -4,7 +4,7 @@ A dungeon map with routes for **World of Warcraft: Forever**. Ready routes for t
 boss order and notes, bosses that tick themselves off, and an editor for your own routes in the
 spirit of Mythic Dungeon Tools.
 
-![Inside The Deadmines: the first boss ticked off by the kill, the next one glows](docs/screenshots/dungeon.png)
+![Inside The Deadmines: the first boss ticked off by the kill, the room you are in lights up](docs/screenshots/dungeon.png)
 
 | Browsing Blackrock Depths | Editing a copy of a standard route |
 |---|---|
@@ -23,9 +23,11 @@ replace them.
   boss, arrows show the walking direction, dashed lines mark side paths.
 - Numbered bosses in route order, rares (`R`), optional bosses (`+`) and notes (`!`) with keys,
   events and quest items. Blue squares switch to the next map level.
-- Inside a dungeon the map follows your run: after a boss kill it shows the level of the next open
-  boss. WoW gives addons no position inside dungeons (since patch 7.1), so there is no arrow for
-  you or your group.
+- Where you are, as well as the game allows: WoW gives addons no position inside dungeons (since
+  patch 7.1), so there is no arrow for you or your group. But the game names the room you are in
+  (the text above the minimap). The addon knows where these rooms lie: the room lights up on the
+  map, its name stands below, and the map follows you to its level. Between named rooms the map
+  follows your run: after a boss kill it shows the level of the next open boss.
 - Stop list with checkmarks per character. Bosses tick themselves off when the game reports the
   kill; rares without a boss fight are ticked by hand. "New run" clears the checkmarks, an old run
   is cleared after three hours.
@@ -48,10 +50,10 @@ replace them.
 - The button at the minimap or `/fdr` opens or closes the map. Drag the button to move it around
   the minimap. There is also a key binding (Key Bindings, section AddOns).
 - Choose the dungeon and the map level in the header. Inside a dungeon the window opens on the
-  level of the next open boss.
+  level of the room you are in, else of the next open boss.
 - Mouse wheel zooms, dragging moves the map, right-click zooms out. After you choose a level by
-  hand the map stays there; the crosshair button shows the next open boss and lets the map follow
-  your run again.
+  hand the map stays there; the crosshair button shows where you are (your room, else the next
+  open boss) and lets the map follow you again.
 - Bosses tick themselves off when they die. A click on a boss on the map or in the list ticks it
   off by hand. Shift-click a list entry to show it on the map.
 - Click the route name to choose a route, create a new one, copy, rename, delete, export or import.
@@ -84,7 +86,8 @@ Your own routes work for every dungeon: choose the dungeon and "New route".
 ## Commands
 
 `/fdr` shows or hides the map, `/fdr send` sends the active route to your group, `/fdr reset`
-clears the checkmarks, `/fdr pos` prints the position data (helps with bug reports).
+clears the checkmarks, `/fdr pos` prints the position data and the room the game reports (helps
+with bug reports).
 
 ## Dungeons with a standard route
 
@@ -97,8 +100,13 @@ Lower Blackrock Spire, Dire Maul (East, West, North), Scholomance, Stratholme.
 
 The addon ships no map art. It shows the game's own dungeon map files by their file IDs
 (`Data/Floors.lua`, generated from Blizzard's map tables). Inside dungeons the game gives addons
-no position, so the map follows the boss kills the game reports. In Scarlet Monastery and Dire
-Maul a kill also tells which wing you are in.
+no position, only the name of the room you are in. Where the rooms lie (`Data/Rooms.lua`) is
+generated from the game's building files: each named part of a dungeon building with its outline,
+placed on the map level where the game's own map shows it. Rooms come with all dungeons except
+Shadowfang Keep, The Stockade, Razorfen Kraul, Zul'Farrak and Dire Maul (there only the entrance
+of East and West); the game names no rooms there. Between rooms the map follows the boss kills the
+game reports. In Scarlet Monastery and Dire Maul a kill also tells which wing you are in, in
+Scarlet Monastery already the first room.
 
 ## Credits
 
@@ -109,4 +117,4 @@ order; the paths follow the corridors of the game's map. Boss names come from th
 
 ## License
 
-MIT, see [LICENSE](LICENSE).
+Copyright (c) 2026 Checkov23. MIT license, see [LICENSE](LICENSE).

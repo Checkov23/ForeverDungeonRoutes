@@ -3,7 +3,9 @@
 ## Notes: Dungeon map with routes, boss order and notes for the classic dungeons. Bosses tick themselves off. Create, edit and share your own routes.
 ## Notes-deDE: Dungeonkarte mit Routen, Boss-Reihenfolge und Hinweisen für die klassischen Dungeons. Bosse haken sich selbst ab. Eigene Routen erstellen, bearbeiten und teilen.
 ## Author: Checkov23
-## Version: 0.5.5
+## X-Copyright: Copyright (c) 2026 Checkov23
+## X-License: MIT
+## Version: 0.5.6
 ## Category: Map
 ## Category-deDE: Karte
 ## SavedVariables: ForeverDungeonRoutesDB
@@ -17,9 +19,11 @@ Data\Dungeons.lua
 Data\Floors.lua
 Data\Encounters.lua
 Data\DefaultRoutes.lua
+Data\Rooms.lua
 Routes.lua
 Serialize.lua
 Position.lua
+Room.lua
 Dialogs.lua
 Share.lua
 MapView.lua

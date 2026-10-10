@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.5.6
+
+- Where you are, as well as the game allows: inside dungeons WoW gives addons no position, but
+  it names the room you are in (the subzone, like the text above the minimap). The addon now
+  knows where these rooms lie, taken from the game's own building files: the room lights up on
+  the map, its name stands below ("You are in: Mast Room"), and the map follows you to its
+  level. Between named rooms and in dungeons without them the map follows your boss kills.
+- Rooms come with all dungeons except Shadowfang Keep, The Stockade, Razorfen Kraul, Zul'Farrak and
+  Dire Maul (there only the entrance of East and West): the game names no rooms there.
+- Scarlet Monastery: the first named room tells the wing, before the first boss.
+- The crosshair button shows where you are: your room, else the next open boss.
+- `/fdr pos` also prints the room text of the game and the room the addon recognized.
+
 ## 0.5.5
 
 - The minimap ping experiment of 0.5.4 is gone again. Inside dungeons WoW: Forever reports the
