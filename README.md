@@ -61,21 +61,10 @@ replace them.
   minute for the largest ones). During boss fights the game holds addon messages back; sending
   then waits until the fight is over.
 - The gear button holds the settings: stop list, arrows, tick off bosses automatically, open
-  automatically in dungeons, button at the minimap, own position via minimap ping (experiment),
-  line width, opacity.
+  automatically in dungeons, button at the minimap, line width, opacity.
 
 Stratholme, Maraudon and Dire Maul North come with two standard routes each (living and undead
 side, purple and orange side, full clear and tribute run).
-
-## Own position (experiment)
-
-WoW gives addons no position inside dungeons. As an experiment the addon can work out yours
-through a minimap ping: switch on "Own position via minimap ping (experiment)" behind the gear
-button. When you enter a dungeon, the addon pings the minimap once (your group sees and hears
-it) and from then on follows that ping to find where you stand; your arrow points the way you
-walk. The start is the entrance of the standard route, which can be some yards off: Ctrl-click
-on the map where you stand to correct it. It needs a minimap that does not rotate. If the game
-does not report the ping as needed, the addon says so and stops the experiment.
 
 ## Own routes
 

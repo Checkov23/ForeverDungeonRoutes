@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.5
+
+- The minimap ping experiment of 0.5.4 is gone again. Inside dungeons WoW: Forever reports the
+  position of a minimap ping as 0, 0, also for pings you click yourself, so it cannot show where
+  you stand. Its setting is removed from your saved settings. Inside dungeons the map follows
+  your boss kills as in 0.5.3.
+
 ## 0.5.4
 
 - Experiment: your own position inside dungeons through a minimap ping. Off by default, switch
