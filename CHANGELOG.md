@@ -12,6 +12,8 @@
 - Scarlet Monastery: the first named room tells the wing, before the first boss.
 - The crosshair button shows where you are: your room, else the next open boss.
 - `/fdr pos` also prints the room text of the game and the room the addon recognized.
+- Copyright: the settings menu ends with version and copyright, the download now contains the
+  license (LICENSE.txt).
 
 ## 0.5.5
 
