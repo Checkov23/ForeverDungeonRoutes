@@ -52,6 +52,8 @@ replace them.
 - Share routes with your group or your guild in game: everyone with the addon gets the route
   offered and takes it over with one click. Post the boss order in the group chat for players
   without the addon, or share routes as text (export and import).
+- Route list: players put their routes up for everyone, a click takes a route over. The list comes
+  from your guild, your parties and the server channel FDRoutes.
 - Button at the minimap, slash command and key binding.
 - English, German, French, Spanish, Portuguese, Russian, Korean and Chinese (simplified and
   traditional). Names of bosses, dungeons, map levels and rooms come from the game in the language
@@ -89,11 +91,19 @@ By hand:
   - "Post the boss order in the group chat": "Deadmines: 1 Rhahk'Zor, R Miner Johnson, 2 ...",
     as plain text for everyone. Outside a group only you see it.
   - "Export route": the route as text to copy.
+  - "In the route list" (own routes): the route goes in the route list, where every player with
+    the addon can take it over.
+- "Route list" in the same menu: the routes others put up for the shown dungeon, with their author
+  and number of stops. A click takes one over. "Refresh the list" asks your guild, your party and
+  the players in the chat channel FDRoutes; the addon joins this channel and hides it from your
+  chat. Blizzard lets addons send no hidden messages to a chat channel, so the request there is a
+  short visible line ("FDR:Q") that the addon hides, and the answers come by whisper. The route
+  itself comes by whisper from its author or from a player who took it over.
 - Above the stop list: the level of the dungeon in the colour of your level, the run time and your
   best time, and outside the dungeon its entrance. A click on the entrance sets the map pin.
 - The gear button holds the settings: stop list, arrows, tick off bosses automatically, open
-  automatically in dungeons, button at the minimap, small display in dungeons, line width,
-  opacity.
+  automatically in dungeons, button at the minimap, small display in dungeons, route list over the
+  server channel, line width, opacity.
 
 Stratholme, Maraudon and Dire Maul North come with two standard routes each (living and undead
 side, purple and orange side, full clear and tribute run).

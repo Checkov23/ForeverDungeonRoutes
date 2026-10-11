@@ -16,6 +16,9 @@ local DB_DEFAULTS = {
 	showTracker = false, -- small display of the run inside dungeons
 	tracker = {},       -- point, relativePoint, x, y of the small display
 	best = {},          -- [dungeonKey] = fastest run in seconds
+	list = {},          -- route list: [hash] = { key, name, author, stops, seen, holders = { player, ... }, text }
+	published = {},     -- own routes in the route list: [dungeonKey] = { [routeId] = true }
+	listChannel = true, -- route list also over the chat channel FDRoutes
 	lineWidth = 4,
 	alpha = 1,
 	window = {},        -- point, relativePoint, x, y, width, height

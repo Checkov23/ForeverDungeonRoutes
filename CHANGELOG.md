@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.5.10
+
+- Route list: put an own route in the list (route menu, "Share", "In the route list") and every
+  player with the addon can take it over with one click (route menu, "Route list"). The list
+  reaches your guild at once and every party you play in; "Refresh the list" also asks the players
+  in the chat channel FDRoutes, which the addon joins and hides from your chat (switch it off behind
+  the gear button).
+- The route itself comes by whisper from its author or from someone who took it over, so it stays
+  available while the author is offline.
+- Blizzard lets addons send no hidden messages to a chat channel; the request there is the short
+  line "FDR:Q", which the addon hides, and the answers come by whisper.
+
 ## 0.5.9
 
 - The four new dungeons of WoW: Forever: The Hall of Thanes, Ruins of Lordaeron, Excavation Site:

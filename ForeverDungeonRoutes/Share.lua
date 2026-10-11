@@ -61,7 +61,7 @@ local function pump()
 		C_Timer.After(RETRY_LOCKDOWN, pump)
 		return
 	end
-	local result = DR.Safe(C_ChatInfo.SendAddonMessage(PREFIX, item.text, item.channel))
+	local result = DR.Safe(C_ChatInfo.SendAddonMessage(item.prefix or PREFIX, item.text, item.channel, item.target))
 	if result == SUCCESS or result == true then
 		table.remove(queue, 1)
 		if item.done then
@@ -70,6 +70,13 @@ local function pump()
 		C_Timer.After(SEND_INTERVAL, pump)
 	elseif THROTTLE[result] or result == LOCKDOWN then
 		C_Timer.After(result == LOCKDOWN and RETRY_LOCKDOWN or RETRY_THROTTLE, pump)
+	elseif item.quiet then
+		-- the route list talks in the background: a whisper to someone gone offline only drops its messages
+		local target = item.target
+		for i = #queue, 1, -1 do
+			if queue[i].quiet and queue[i].target == target then table.remove(queue, i) end
+		end
+		C_Timer.After(SEND_INTERVAL, pump)
 	else
 		queue = {}
 		sending = false
@@ -77,14 +84,21 @@ local function pump()
 	end
 end
 
-local function enqueue(channel, texts, done)
+local function enqueue(channel, texts, done, prefix, target)
 	for i, text in ipairs(texts) do
-		queue[#queue + 1] = { channel = channel, text = text, done = i == #texts and done or nil }
+		queue[#queue + 1] = { channel = channel, text = text, done = i == #texts and done or nil,
+			prefix = prefix, target = target, quiet = prefix ~= nil }
 	end
 	if not sending then
 		sending = true
 		pump()
 	end
+end
+
+-- Addon messages of another part of the addon (the route list) through the same throttled queue;
+-- target is the player for "WHISPER". Failures there stay quiet.
+function Share:Queue(prefix, channel, texts, target)
+	enqueue(channel, texts, nil, prefix, target)
 end
 
 -- Sends a route to the group, or to the guild with channel "GUILD". Returns true when sending started.
@@ -185,6 +199,7 @@ local function isMe(sender)
 	local me = DR.Safe(UnitName("player"))
 	return me ~= nil and senderName(sender) == me
 end
+Share.SenderName, Share.IsMe = senderName, isMe
 
 local function showNextOffer()
 	if DR.Dialog.IsShown() then return end
@@ -226,6 +241,7 @@ local function sameRoute(key, text)
 	end
 	return nil
 end
+Share.SameRoute = sameRoute
 
 local function receivedRoute(sender, t)
 	local text = table.concat(t.pieces)

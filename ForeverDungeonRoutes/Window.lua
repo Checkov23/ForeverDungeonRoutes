@@ -206,10 +206,29 @@ local function openRouteMenu(owner)
 			guild:SetEnabled(DR.Share:InGuild())
 			share:CreateButton(L["Post the boss order in the group chat"], function() DR.Share:PostOrder(key, current) end)
 			share:CreateButton(L["Export route"], exportRoute)
+			if not DR:IsBuiltIn(current) then
+				share:CreateCheckbox(L["In the route list"], function() return DR.RouteList:IsPublished(key, current) end,
+					function() DR.RouteList:Publish(key, current, not DR.RouteList:IsPublished(key, current)) end)
+			end
 		else
 			root:CreateDivider()
 		end
 		root:CreateButton(L["Import route"], importRoute)
+		-- routes other players put in the route list, to take over with one click
+		local list = root:CreateButton(L["Route list"])
+		list:CreateButton(L["Refresh the list"], function() DR.RouteList:Refresh(key) end)
+		local entries = DR.RouteList:Entries(key)
+		if #entries == 0 then
+			local none = list:CreateButton(L["No routes from other players yet."])
+			none:SetEnabled(false)
+		else
+			list:CreateDivider()
+			for _, item in ipairs(entries) do
+				local e = item.entry
+				list:CreateButton(L["%s by %s, %d stops"]:format(e.name, DR.Share.SenderName(e.author), e.stops),
+					function() DR.RouteList:Fetch(item.hash) end)
+			end
+		end
 	end)
 end
 
@@ -270,6 +289,11 @@ local function openSettingsMenu(owner)
 			function() setting("minimapButton", not DR.db.minimapButton) end)
 		root:CreateCheckbox(L["Small display in dungeons"], function() return DR.db.showTracker end,
 			function() setting("showTracker", not DR.db.showTracker) end)
+		root:CreateCheckbox(L["Route list over the server channel"], function() return DR.db.listChannel end,
+			function()
+				setting("listChannel", not DR.db.listChannel)
+				DR.RouteList:SetChannel(DR.db.listChannel)
+			end)
 		local width = root:CreateButton(L["Line width"])
 		for _, w in ipairs({ 3, 4, 5, 6 }) do
 			width:CreateRadio(tostring(w), function() return DR.db.lineWidth == w end, function() setting("lineWidth", w) end)
