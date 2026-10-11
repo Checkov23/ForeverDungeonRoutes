@@ -17,7 +17,7 @@ local function roomNamed(text)
 	local found, foundKey, count = nil, nil, 0
 	for _, dungeon in ipairs(DR:GetDungeonsForInstance(DR.currentInstanceID)) do
 		for _, room in ipairs(DR.Rooms[dungeon.key] or {}) do
-			if room.name == text or room.nameDE == text then
+			if room.name == text or DR.LocText(room, "name") == text then
 				if dungeon.key == DR.currentKey then return room, dungeon.key end
 				found, foundKey, count = room, dungeon.key, count + 1
 				break

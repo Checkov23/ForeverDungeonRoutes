@@ -4,13 +4,13 @@ A dungeon map with routes for **World of Warcraft: Forever**. Ready routes for t
 boss order and notes, bosses that tick themselves off, and an editor for your own routes in the
 spirit of Mythic Dungeon Tools.
 
-![Inside The Deadmines: the first boss ticked off by the kill, the room you are in lights up](docs/screenshots/dungeon.png)
+![Inside The Deadmines: the first boss ticked off by the kill, the room you are in lights up, the run time counts](docs/screenshots/dungeon.png)
 
-| Browsing Blackrock Depths | Editing a copy of a standard route |
+| Browsing Blackrock Depths: level and entrance | Editing a copy of a standard route |
 |---|---|
-| ![Blackrock Depths, first map level, with the stop list](docs/screenshots/browse.png) | ![Stratholme in the route editor](docs/screenshots/editor.png) |
-| **Inside Blackrock Depths: the room lights up, the first bosses are ticked off** | **A group member sends a route** |
-| ![Blackrock Depths, Shadowforge City, The Grim Guzzler lit up](docs/screenshots/room.png) | ![Scholomance with the question whether to take over a route](docs/screenshots/share.png) |
+| ![Blackrock Depths, first map level, with the stop list and the entrance in Searing Gorge](docs/screenshots/browse.png) | ![Stratholme in the route editor](docs/screenshots/editor.png) |
+| **Inside Blackrock Depths: the room lights up, above the small display** | **A group member sends a route** |
+| ![Blackrock Depths, Shadowforge City, The Grim Guzzler lit up, the small display above the window](docs/screenshots/room.png) | ![Scholomance with the question whether to take over a route](docs/screenshots/share.png) |
 | **Scholomance: blue squares lead to the other map levels** | **German game client** |
 | ![Scholomance, The Upper Study](docs/screenshots/scholomance.png) | ![The Deadmines with German texts](docs/screenshots/german.png) |
 
@@ -35,13 +35,22 @@ replace them.
 - Stop list with checkmarks per character. Bosses tick themselves off when the game reports the
   kill; rares without a boss fight are ticked by hand. "New run" clears the checkmarks, an old run
   is cleared after three hours.
-- Boss names in the language of your game client (from the game's own boss list).
+- The way to the dungeon: outside, a click on "Entrance: <zone>" sets a map pin at the entrance that
+  the game tracks, so the arrow on the screen leads there.
+- Dungeons for your level: the dungeon list colours the names by your level, like quests.
+- Run time from entering the dungeon to the last boss, and your best time per dungeon.
+- Small display in dungeons (optional): dungeon, bosses down, run time, the next boss and your room
+  in a small box, for when the map stays closed.
 - Route editor: paths, side paths, stops and notes; drag to move, undo. Editing a standard route
   creates a copy.
-- Share routes with your group in game: everyone with the addon gets the route offered and takes it
-  over with one click. Or share them as text (export and import).
+- Share routes with your group or your guild in game: everyone with the addon gets the route
+  offered and takes it over with one click. Post the boss order in the group chat for players
+  without the addon, or share routes as text (export and import).
 - Button at the minimap, slash command and key binding.
-- English and German.
+- English, German, French, Spanish, Portuguese, Russian, Korean and Chinese (simplified and
+  traditional). Names of bosses, dungeons, map levels and rooms come from the game in the language
+  of your client; the translations of the addon's own texts are welcome to be corrected (issues).
+  Notes on the maps are English (German in the German client).
 
 ## Install
 
@@ -65,14 +74,20 @@ By hand:
   open boss) and lets the map follow you again.
 - Bosses tick themselves off when they die. A click on a boss on the map or in the list ticks it
   off by hand. Shift-click a list entry to show it on the map.
-- Click the route name to choose a route, create a new one, copy, rename, delete, export or import.
-- "Send to group" in the same menu (or `/fdr send`) sends the active route to your party or raid.
-  Group members with the addon are asked whether to take it over; nothing changes without their
-  yes. A standard route travels as a short hint, an own route in small pieces (up to about half a
-  minute for the largest ones). During boss fights the game holds addon messages back; sending
-  then waits until the fight is over.
+- Click the route name to choose a route, create a new one, copy, rename, delete or import. The
+  submenu "Share" holds the ways to pass a route on:
+  - "Send to group" (or `/fdr send`) and "Send to guild": players with the addon are asked whether
+    to take the route over; nothing changes without their yes. A standard route travels as a short
+    hint, an own route in small pieces (up to about half a minute for the largest ones). During
+    boss fights the game holds addon messages back; sending then waits until the fight is over.
+  - "Post the boss order in the group chat": "The Deadmines: 1 Rhahk'Zor, R Miner Johnson, 2 ...",
+    as plain text for everyone. Outside a group only you see it.
+  - "Export route": the route as text to copy.
+- Above the stop list: the level of the dungeon in the colour of your level, the run time and your
+  best time, and outside the dungeon its entrance. A click on the entrance sets the map pin.
 - The gear button holds the settings: stop list, arrows, tick off bosses automatically, open
-  automatically in dungeons, button at the minimap, line width, opacity.
+  automatically in dungeons, button at the minimap, small display in dungeons, line width,
+  opacity.
 
 Stratholme, Maraudon and Dire Maul North come with two standard routes each (living and undead
 side, purple and orange side, full clear and tribute run).
@@ -94,9 +109,9 @@ Your own routes work for every dungeon: choose the dungeon and "New route".
 
 ## Commands
 
-`/fdr` shows or hides the map, `/fdr send` sends the active route to your group, `/fdr reset`
-clears the checkmarks, `/fdr pos` prints the position data and the room the game reports (helps
-with bug reports).
+`/fdr` shows or hides the map, `/fdr send` sends the active route to your group, `/fdr way` sets the
+map pin at the entrance of the shown dungeon, `/fdr reset` clears the checkmarks and starts a new
+run, `/fdr pos` prints the position data and the room the game reports (helps with bug reports).
 
 ## Dungeons with a standard route
 
@@ -116,6 +131,9 @@ Shadowfang Keep, The Stockade, Razorfen Kraul, Zul'Farrak and Dire Maul (there o
 of East and West); the game names no rooms there. Between rooms the map follows the boss kills the
 game reports. In Scarlet Monastery and Dire Maul a kill also tells which wing you are in, in
 Scarlet Monastery already the first room.
+
+The entrances (`Data/Entrances.lua`) are WoW: Forever's own map points where it has them, else the
+positions of Blizzard's table of dungeon entrances, placed on Forever's zone maps.
 
 ## Credits
 

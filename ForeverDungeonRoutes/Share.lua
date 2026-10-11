@@ -1,9 +1,10 @@
 local _, DR = ...
 local L = DR.L
 
--- Sharing routes with the group in game, in the spirit of MDT. Own routes travel as their export
--- text, cut into addon messages of at most 255 characters; for a standard route a short hint is
--- enough, every group member with the addon has it. Nothing is taken over without asking.
+-- Sharing routes with the group or the guild in game, in the spirit of MDT. Own routes travel as
+-- their export text, cut into addon messages of at most 255 characters; for a standard route a
+-- short hint is enough, every player with the addon has it. Nothing is taken over without asking.
+-- The boss order can also go to the group chat as plain text, for players without the addon.
 --
 -- Messages (fields separated by tabs):
 --   S <key> <routeId>                     use this standard route
@@ -40,6 +41,10 @@ function Share:Channel()
 	if DR.Safe(IsInRaid()) then return "RAID" end
 	if DR.Safe(IsInGroup()) then return "PARTY" end
 	return nil
+end
+
+function Share:InGuild()
+	return IsInGuild ~= nil and DR.Safe(IsInGuild()) == true
 end
 
 local function inLockdown()
@@ -82,13 +87,22 @@ local function enqueue(channel, texts, done)
 	end
 end
 
--- Sends a route to the group. Returns true when sending started.
-function Share:SendRoute(key, route)
+-- Sends a route to the group, or to the guild with channel "GUILD". Returns true when sending started.
+function Share:SendRoute(key, route, channel)
 	if not key or not route then return false end
-	local channel = self:Channel()
-	if not channel then
-		DR:Print(L["You are not in a group."])
-		return false
+	local sent = L["Route sent to your group."]
+	if channel == "GUILD" then
+		if not self:InGuild() then
+			DR:Print(L["You are not in a guild."])
+			return false
+		end
+		sent = L["Route sent to your guild."]
+	else
+		channel = self:Channel()
+		if not channel then
+			DR:Print(L["You are not in a group."])
+			return false
+		end
 	end
 	if C_ChatInfo.AreOutgoingAddonChatMessagesRestricted and DR.Safe(C_ChatInfo.AreOutgoingAddonChatMessagesRestricted()) then
 		DR:Print(L["Sending failed."])
@@ -98,7 +112,7 @@ function Share:SendRoute(key, route)
 		DR:Print(L["Sending has to wait until the fight is over."])
 	end
 	if DR:IsBuiltIn(route) then
-		enqueue(channel, { table.concat({ "S", key, route.id }, "\t") }, L["Route sent to your group."])
+		enqueue(channel, { table.concat({ "S", key, route.id }, "\t") }, sent)
 		return true
 	end
 	local text = DR:ExportRoute(key, route)
@@ -109,8 +123,48 @@ function Share:SendRoute(key, route)
 	for i = 1, parts do
 		texts[#texts + 1] = table.concat({ "C", transfer, tostring(i), text:sub((i - 1) * PIECE + 1, i * PIECE) }, "\t")
 	end
-	DR:Print(L["Sending the route to your group (%d parts)."], parts)
-	enqueue(channel, texts, L["Route sent to your group."])
+	DR:Print(L["Sending the route (%d parts)."], parts)
+	enqueue(channel, texts, sent)
+	return true
+end
+
+-- The stops of a route as chat lines of at most 255 characters: "Dungeon: 1 Boss, R Rare, + Optional".
+function Share:OrderLines(key, route)
+	local labels = DR:GetStopLabels(route)
+	local head = DR:GetKeyName(key) .. ": "
+	local lines, line = {}, head
+	for i, stop in ipairs(route.stops) do
+		local piece = labels[i] .. " " .. DR:GetStopName(stop):gsub("|", "")
+		if line ~= head and #line + 2 + #piece > 250 then
+			lines[#lines + 1] = line
+			line = piece
+		else
+			line = line .. (line ~= head and ", " or "") .. piece
+		end
+	end
+	lines[#lines + 1] = line
+	return lines
+end
+
+-- Posts the boss order in the group chat; outside a group only the player sees it.
+function Share:PostOrder(key, route)
+	if not key or not route then return false end
+	local lines = self:OrderLines(key, route)
+	local channel = self:Channel()
+	if not channel then
+		DR:Print(L["Not in a group, only you see this:"])
+		for _, line in ipairs(lines) do
+			DR:Print(line)
+		end
+		return false
+	end
+	if inLockdown() then
+		DR:Print(L["Not possible during a boss fight."])
+		return false
+	end
+	for _, line in ipairs(lines) do
+		C_ChatInfo.SendChatMessage(line, channel)
+	end
 	return true
 end
 

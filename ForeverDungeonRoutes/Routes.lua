@@ -6,20 +6,54 @@ local L = DR.L
 --   builtin true for the routes that ship with the addon, they are read-only
 --   name    route name; built-in routes are shown as "Standard route" plus their variant name
 --   paths   { kind = "main"|"side", floor = uiMapID, t0, t1 (main only), title, pts = { x1, y1, x2, y2, ... } }
---   stops   { kind = "boss"|"rare"|"optional", floor, x, y, name, nameDE, note, noteDE,
+--   stops   { kind = "boss"|"rare"|"optional", floor, x, y, name, nameDE (nameFR, ...), note, noteDE,
 --             encounters = { encounterID, ... } (the game's boss fights that tick the stop off) }
 --   notes   { floor, x, y, text, textDE }
 --   links   { floor, x, y, to = uiMapID, label }
 -- Coordinates are normalized to the dungeon map (0..1 across the map art).
 
-local IS_DE = GetLocale() == "deDE"
+-- Texts come in the language of the game client: the English text in a field, the other languages
+-- in the same field with a suffix (nameDE, nameFR, ...). The game's own names (bosses, dungeons, map
+-- levels, rooms) exist in every language of the client, notes written for the routes in English and
+-- German.
+DR.LOCALE_SUFFIXES = { "DE", "FR", "ES", "PT", "RU", "KO", "CN", "TW" }
+local SUFFIX = ({ deDE = "DE", frFR = "FR", esES = "ES", esMX = "ES", ptBR = "PT", ruRU = "RU",
+	koKR = "KO", zhCN = "CN", zhTW = "TW" })[GetLocale()]
 
 function DR.LocText(entry, field)
-	if IS_DE then
-		local de = entry[field .. "DE"]
-		if de and de ~= "" then return de end
+	if SUFFIX then
+		local text = entry[field .. SUFFIX]
+		if text and text ~= "" then return text end
 	end
 	return entry[field]
+end
+
+-- Takes over a game name in all languages (source), or forgets the other languages (no source),
+-- for instance when the player renames a stop.
+function DR.SetNames(target, source, field)
+	field = field or "name"
+	if source then
+		target[field] = source[field]
+	end
+	for _, suffix in ipairs(DR.LOCALE_SUFFIXES) do
+		target[field .. suffix] = source and source[field .. suffix] or nil
+	end
+end
+
+-- Whether a text is one of the names of an entry, in any language, ignoring case, spaces and
+-- punctuation. Only ASCII signs are dropped: letters of other scripts (Cyrillic, Hangul, Chinese)
+-- are bytes above 127 in UTF-8 and stay.
+local function plain(text)
+	return ((text or ""):lower():gsub("[%s%p%c]", ""))
+end
+
+local function hasName(entry, wanted)
+	if wanted == "" then return false end
+	if plain(entry.name) == wanted then return true end
+	for _, suffix in ipairs(DR.LOCALE_SUFFIXES) do
+		if plain(entry["name" .. suffix]) == wanted then return true end
+	end
+	return false
 end
 
 -- Stops and notes can also show on twin floors with the same art (alt = { uiMapID, ... }).
@@ -71,9 +105,27 @@ end
 function DR:GetKeyName(key)
 	local dungeon = self:GetDungeon(key)
 	if dungeon then
-		return (IS_DE and dungeon.nameDE) or dungeon.name
+		return DR.LocText(dungeon, "name")
 	end
 	return key or ""
+end
+
+-- How a dungeon fits a character level, as a colour like quest difficulty (hex RRGGBB): red and
+-- orange below the range, green inside, light grey and grey above it.
+function DR:GetLevelColor(key, level)
+	local dungeon = self:GetDungeon(key)
+	if not dungeon or not dungeon.levels or type(level) ~= "number" or level < 1 then return nil end
+	local lo, hi = dungeon.levels[1], dungeon.levels[2]
+	if level < lo - 2 then return "ff4c4c" end
+	if level < lo then return "ff9933" end
+	if level <= hi then return "40d040" end
+	if level <= hi + 5 then return "d9d9d9" end
+	return "8c8c8c"
+end
+
+function DR.PlayerLevel()
+	local level = DR.Safe(UnitLevel("player"))
+	return type(level) == "number" and level or nil
 end
 
 function DR:GetLevelText(key)
@@ -87,7 +139,7 @@ end
 function DR:GetFloorName(floor)
 	local info = self.Floors[floor]
 	if info then
-		return (IS_DE and info.nameDE) or info.name
+		return DR.LocText(info, "name")
 	end
 	return tostring(floor)
 end
@@ -198,7 +250,7 @@ end
 function DR:CopyRoute(key, source)
 	local copy = self.DeepCopy(source)
 	copy.builtin = nil
-	copy.nameDE = nil
+	DR.SetNames(copy, nil)
 	copy.id = nextId()
 	copy.name = self:GetRouteName(source) .. " " .. L["(copy)"]
 	copy.created = time()
@@ -284,21 +336,16 @@ end
 
 -- Boss fights (encounters) ----------------------------------------------------------------
 
--- The game's boss fights of a dungeon: { ids = { encounterID, ... }, name, nameDE } each.
+-- The game's boss fights of a dungeon: { ids = { encounterID, ... }, name, nameDE, ... } each.
 function DR:GetEncounters(key)
 	local dungeon = self:GetDungeon(key)
 	return dungeon and self.Encounters[dungeon.instanceID] or {}
 end
 
-local function plain(text)
-	return (text or ""):lower():gsub("[^%w]", "")
-end
-
 function DR:FindEncounterByName(key, name)
 	local wanted = plain(name)
-	if wanted == "" then return nil end
 	for _, encounter in ipairs(self:GetEncounters(key)) do
-		if plain(encounter.name) == wanted or plain(encounter.nameDE) == wanted then
+		if hasName(encounter, wanted) then
 			return encounter
 		end
 	end
@@ -323,8 +370,7 @@ local function stopMatches(stop, encounterID, encounterName)
 		return false
 	end
 	-- stops of own routes without a linked fight: the name decides
-	local wanted = plain(encounterName)
-	return wanted ~= "" and (plain(stop.name) == wanted or plain(stop.nameDE) == wanted)
+	return hasName(stop, plain(encounterName))
 end
 
 -- The game reported a boss kill: tick off its stops in the active route of the current dungeon.
@@ -400,16 +446,72 @@ function DR:ToggleStopDone(key, route, index)
 	self:SetStopDone(key, route, index, not self:IsStopDone(key, route, index))
 end
 
+local function hasBoss(route)
+	for _, stop in ipairs(route.stops) do
+		if stop.kind == "boss" then return true end
+	end
+	return false
+end
+
+function DR.FormatDuration(seconds)
+	seconds = math.max(0, math.floor(seconds + 0.5))
+	local h, m, s = math.floor(seconds / 3600), math.floor(seconds / 60) % 60, seconds % 60
+	if h > 0 then
+		return ("%d:%02d:%02d"):format(h, m, s)
+	end
+	return ("%d:%02d"):format(m, s)
+end
+
+-- The last boss of a run fell: note the time and the best time of the dungeon.
+local function finishRun(key, progress)
+	progress.finished = time()
+	local duration = progress.finished - progress.started
+	local best = DR.db.best[key]
+	if duration > 0 and (not best or duration < best) then
+		DR.db.best[key] = duration
+		DR:Print(L["New best time for %s: %s"], DR:GetKeyName(key), DR.FormatDuration(duration))
+	else
+		DR:Print(L["%s done in %s."], DR:GetKeyName(key), DR.FormatDuration(duration))
+	end
+end
+
 function DR:SetStopDone(key, route, index, done)
 	local progress = getProgress(key, route, true)
 	progress.done[index] = done and true or nil
 	progress.time = time()
+	if not done then
+		progress.finished = nil
+	elseif progress.started and not progress.finished and hasBoss(route) and self:GetNextStopIndex(key, route) == nil then
+		finishRun(key, progress)
+	end
 	self:Fire("PROGRESS_CHANGED", key)
 end
 
 function DR:ResetProgress(key)
 	self.cdb.progress[key] = nil
 	self:Fire("PROGRESS_CHANGED", key)
+	if key == self.currentKey then
+		self:StartRun(key)
+	end
+end
+
+-- Runs: the clock starts when the player enters the dungeon (or starts a new run inside it) and
+-- stops at the last boss of the active route.
+function DR:StartRun(key)
+	local route = key and self:GetActiveRoute(key)
+	if not route then return end
+	local progress = getProgress(key, route, true)
+	if not progress.started then
+		progress.started = time()
+		self:Fire("PROGRESS_CHANGED", key)
+	end
+end
+
+-- Start, end (when finished) and best time of a dungeon's run, for the window and the small display.
+function DR:GetRunTimes(key)
+	local route = key and self:GetActiveRoute(key)
+	local progress = route and getProgress(key, route, false)
+	return progress and progress.started, progress and progress.finished, key and self.db.best[key]
 end
 
 function DR:GetNextStopIndex(key, route)

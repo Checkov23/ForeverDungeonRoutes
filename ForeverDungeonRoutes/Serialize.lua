@@ -201,8 +201,8 @@ function DR:ImportRoute(text)
 	-- names of the game's bosses come back in the player's language
 	for _, stop in ipairs(route.stops) do
 		local encounter = self:FindEncounterByName(key, stop.name)
-		if encounter and encounter.name == stop.name and encounter.nameDE ~= stop.name then
-			stop.nameDE = encounter.nameDE
+		if encounter and encounter.name == stop.name then
+			DR.SetNames(stop, encounter)
 		end
 	end
 	if #route.paths == 0 and #route.stops == 0 and #route.notes == 0 then

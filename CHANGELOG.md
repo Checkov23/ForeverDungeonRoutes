@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.5.7
+
+- The way to the dungeon: outside a dungeon its entrance stands above the stop list ("Entrance:
+  Westfall"). A click sets a map pin there that the game tracks, so the arrow on the screen leads
+  to the entrance. Also `/fdr way`. The positions come from the game: WoW: Forever's own map points
+  where it has them (Wailing Caverns, Uldaman, Maraudon, Temple, Scholomance), else Blizzard's table
+  of dungeon entrances.
+- Dungeons for your level: in the dungeon list the names are coloured by your level like quests
+  (red too high, orange a bit high, green fitting, grey easy), the level above the stop list too.
+- Run time: the clock starts when you enter the dungeon and stops at the last boss. The time and
+  your best time per dungeon stand above the stop list, and the chat tells a new best time.
+  "New run" starts the clock again.
+- Small display in dungeons (gear button, off by default): a small movable box with the dungeon,
+  bosses down, run time, the next boss and the room you are in, for when the map stays closed. A
+  click opens the map.
+- The route menu has a "Share" submenu: send to the group, send to the guild (new), post the boss
+  order in the group chat as plain text for players without the addon (new; outside a group only
+  you see it), export.
+- Seven more languages: French, Spanish, Portuguese, Russian, Korean and Chinese (simplified and
+  traditional). Names of bosses, dungeons, map levels and rooms come from the game in every
+  language; the addon's own texts are translated, corrections are welcome. Notes on the maps stay
+  English (German in the German client).
+- Boss names in Russian, Korean and Chinese link a stop to its boss and tick it off (letters
+  beyond the Latin alphabet were ignored when comparing names).
+
 ## 0.5.6
 
 - Where you are, as well as the game allows: inside dungeons WoW gives addons no position, but

@@ -305,7 +305,7 @@ function Editor:OnStopClicked(pin, button)
 			DR.Dialog.AskLine(L["Name of the stop"], nil, shown, function(name)
 				snapshot()
 				stop.name = name
-				stop.nameDE = nil
+				DR.SetNames(stop, nil)
 				linkByName(key, stop, name)
 				changed()
 			end)
@@ -342,7 +342,7 @@ function Editor:OnStopClicked(pin, button)
 					snapshot()
 					stop.encounters = DR.DeepCopy(encounter.ids)
 					if stop.name == "" then
-						stop.name, stop.nameDE = encounter.name, encounter.nameDE
+						DR.SetNames(stop, encounter)
 					end
 					changed()
 				end)

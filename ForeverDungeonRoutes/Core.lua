@@ -13,6 +13,9 @@ local DB_DEFAULTS = {
 	autoCheck = true,   -- tick bosses off when the game reports the kill
 	minimapButton = true, -- round button at the minimap
 	minimapAngle = 225, -- where the button sits around the minimap, degrees
+	showTracker = false, -- small display of the run inside dungeons
+	tracker = {},       -- point, relativePoint, x, y of the small display
+	best = {},          -- [dungeonKey] = fastest run in seconds
 	lineWidth = 4,
 	alpha = 1,
 	window = {},        -- point, relativePoint, x, y, width, height
@@ -23,7 +26,8 @@ local DB_DEFAULTS = {
 }
 
 local CHAR_DEFAULTS = {
-	progress = {},      -- [dungeonKey] = { routeId = id, done = { [stopIndex] = true }, time = epoch }
+	progress = {},      -- [dungeonKey] = { routeId = id, done = { [stopIndex] = true }, time = epoch,
+	                    --   started = epoch (entered), finished = epoch (last boss) }
 }
 
 -- Settings of 0.3.0 that are gone since the addon draws its own map, and of the minimap ping
@@ -166,6 +170,7 @@ function DR:OnZoneChanged()
 		DR:Fire("PROGRESS_CHANGED", key)
 	end
 	if key == previous then return end
+	DR:StartRun(key)
 	if DR.db.autoOpen then
 		DR.Window:Open(key)
 	elseif not DR.hinted and not DR.Window:IsShown() then
@@ -198,6 +203,8 @@ SlashCmdList.FOREVERDUNGEONROUTES = function(input)
 		if route then
 			DR.Share:SendRoute(key, route)
 		end
+	elseif cmd == "way" then
+		DR:SetEntranceWaypoint(DR.Window:GetShownKey() or DR.currentKey)
 	elseif cmd == "reset" then
 		local key = DR.Window:GetShownKey() or DR.currentKey
 		if key then
@@ -216,7 +223,7 @@ SlashCmdList.FOREVERDUNGEONROUTES = function(input)
 			tostring(key), tostring(floor), u and ("%.3f"):format(u) or "-", v and ("%.3f"):format(v) or "-",
 			type(subzone) == "string" and subzone or "-", room and room.name or "-")
 	else
-		DR:Print(L["Commands: /fdr (show or hide the map), /fdr send (route to the group), /fdr reset (new run), /fdr pos (position check)"])
+		DR:Print(L["Commands: /fdr (show or hide the map), /fdr send (route to the group), /fdr way (waypoint to the entrance), /fdr reset (new run), /fdr pos (position check)"])
 	end
 end
 

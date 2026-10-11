@@ -11,6 +11,7 @@ local SIDEBAR_W = 240
 local PAD = 10
 local ROW_HEIGHT = 18
 local MIN_W, MIN_H = 520, 320
+local ROUTE_Y, LIST_Y = -30, -60 -- route choice and stop list below the level, time and entrance lines
 local DEFAULT_W, DEFAULT_H = 900, 480
 local MEDIA = "Interface\\AddOns\\ForeverDungeonRoutes\\media\\"
 
@@ -112,8 +113,8 @@ local function layout()
 		map:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -(SIDEBAR_W + PAD), PAD)
 		frame.RouteButton:SetParent(sidebar)
 		frame.RouteButton:SetFrameLevel(sidebar:GetFrameLevel() + 2)
-		frame.RouteButton:SetPoint("TOPLEFT", sidebar, "TOPLEFT", 0, -16)
-		frame.RouteButton:SetPoint("TOPRIGHT", sidebar, "TOPRIGHT", 0, -16)
+		frame.RouteButton:SetPoint("TOPLEFT", sidebar, "TOPLEFT", 0, ROUTE_Y)
+		frame.RouteButton:SetPoint("TOPRIGHT", sidebar, "TOPRIGHT", 0, ROUTE_Y)
 	else
 		sidebar:Hide()
 		map:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -PAD, PAD)
@@ -198,9 +199,13 @@ local function openRouteMenu(owner)
 				root:CreateButton(L["Delete route"], deleteRoute)
 			end
 			root:CreateDivider()
-			local send = root:CreateButton(L["Send to group"], function() DR.Share:SendRoute(key, current) end)
+			local share = root:CreateButton(L["Share"])
+			local send = share:CreateButton(L["Send to group"], function() DR.Share:SendRoute(key, current) end)
 			send:SetEnabled(DR.Share:Channel() ~= nil)
-			root:CreateButton(L["Export route"], exportRoute)
+			local guild = share:CreateButton(L["Send to guild"], function() DR.Share:SendRoute(key, current, "GUILD") end)
+			guild:SetEnabled(DR.Share:InGuild())
+			share:CreateButton(L["Post the boss order in the group chat"], function() DR.Share:PostOrder(key, current) end)
+			share:CreateButton(L["Export route"], exportRoute)
 		else
 			root:CreateDivider()
 		end
@@ -210,10 +215,15 @@ end
 
 local function openDungeonMenu(owner)
 	MenuUtil.CreateContextMenu(owner, function(_, root)
-		root:CreateTitle(L["Dungeons"])
+		local level = DR.PlayerLevel()
+		root:CreateTitle(level and L["Dungeons (level %d)"]:format(level) or L["Dungeons"])
 		for _, dungeon in ipairs(DR.Dungeons) do
 			local key = dungeon.key
 			local text = DR:GetKeyName(key)
+			local color = DR:GetLevelColor(key, level)
+			if color then
+				text = "|cff" .. color .. text .. "|r"
+			end
 			if dungeon.levels then
 				text = text .. "  |cff8c8c8c" .. dungeon.levels[1] .. "-" .. dungeon.levels[2] .. "|r"
 			end
@@ -258,6 +268,8 @@ local function openSettingsMenu(owner)
 			function() setting("autoOpen", not DR.db.autoOpen) end)
 		root:CreateCheckbox(L["Button at the minimap"], function() return DR.db.minimapButton end,
 			function() setting("minimapButton", not DR.db.minimapButton) end)
+		root:CreateCheckbox(L["Small display in dungeons"], function() return DR.db.showTracker end,
+			function() setting("showTracker", not DR.db.showTracker) end)
 		local width = root:CreateButton(L["Line width"])
 		for _, w in ipairs({ 3, 4, 5, 6 }) do
 			width:CreateRadio(tostring(w), function() return DR.db.lineWidth == w end, function() setting("lineWidth", w) end)
@@ -352,12 +364,43 @@ local function buildSidebar()
 
 	sidebar.Level = sidebar:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
 	sidebar.Level:SetPoint("TOPLEFT", 2, 0)
-	sidebar.Level:SetPoint("TOPRIGHT", 0, 0)
 	sidebar.Level:SetJustifyH("LEFT")
+	-- run time and best time on the level line
+	sidebar.Time = sidebar:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
+	sidebar.Time:SetPoint("TOPRIGHT", 0, 0)
+	sidebar.Time:SetJustifyH("RIGHT")
+	sidebar.Level:SetPoint("TOPRIGHT", sidebar.Time, "TOPLEFT", -6, 0)
+	local ticker = 0
+	sidebar:SetScript("OnUpdate", function(_, elapsed)
+		ticker = ticker + elapsed
+		if ticker >= 1 then
+			ticker = 0
+			Window:UpdateTime()
+		end
+	end)
+	-- the way to the entrance, outside the dungeon
+	local entrance = CreateFrame("Button", nil, sidebar)
+	entrance:SetPoint("TOPLEFT", 2, -14)
+	entrance:SetHeight(14)
+	entrance.Text = entrance:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+	entrance.Text:SetPoint("LEFT")
+	entrance.Text:SetTextColor(0.45, 0.78, 1)
+	entrance:SetScript("OnClick", function() DR:SetEntranceWaypoint(shown.key) end)
+	entrance:SetScript("OnEnter", function(self)
+		self.Text:SetTextColor(0.7, 0.9, 1)
+		GameTooltip:SetOwner(self, "ANCHOR_LEFT")
+		GameTooltip:SetText(L["Click: set a waypoint to the entrance"], 1, 1, 1, 1, true)
+		GameTooltip:Show()
+	end)
+	entrance:SetScript("OnLeave", function(self)
+		self.Text:SetTextColor(0.45, 0.78, 1)
+		GameTooltip:Hide()
+	end)
+	sidebar.Entrance = entrance
 
 	-- the stops scroll when the window is too small for all of them
 	local scroll = CreateFrame("ScrollFrame", nil, sidebar)
-	scroll:SetPoint("TOPLEFT", sidebar, "TOPLEFT", 0, -46)
+	scroll:SetPoint("TOPLEFT", sidebar, "TOPLEFT", 0, LIST_Y)
 	scroll:EnableMouseWheel(true)
 	scroll:SetScript("OnMouseWheel", function(self, delta)
 		local range = self:GetVerticalScrollRange()
@@ -421,7 +464,15 @@ local function refreshSidebar()
 	local key = shown.key
 	local route = DR:GetActiveRoute(key)
 	local editing = DR.Editor:IsEditing(key, route)
-	sidebar.Level:SetText(DR:GetLevelText(key) or "")
+	local levelText = DR:GetLevelText(key) or ""
+	local color = DR:GetLevelColor(key, DR.PlayerLevel())
+	sidebar.Level:SetText(color and ("|cff" .. color .. levelText .. "|r") or levelText)
+	local zone = DR:GetEntranceZone(key)
+	local inside = key == DR.currentKey
+	sidebar.Entrance.Text:SetText(zone and L["Entrance: %s"]:format(zone) or "")
+	sidebar.Entrance:SetWidth(sidebar.Entrance.Text:GetStringWidth() + 4)
+	sidebar.Entrance:SetShown(zone ~= nil and not inside)
+	Window:UpdateTime()
 	for _, row in ipairs(rows) do
 		row:Hide()
 	end
@@ -631,6 +682,20 @@ function Window:Refresh()
 	end
 end
 
+-- Run time while a run is on (or how long it took), and the best time of the shown dungeon.
+function Window:UpdateTime()
+	if not sidebar or not sidebar:IsVisible() then return end
+	local started, finished, best = DR:GetRunTimes(shown.key)
+	local parts = {}
+	if started then
+		parts[#parts + 1] = L["Run %s"]:format(DR.FormatDuration((finished or time()) - started))
+	end
+	if best then
+		parts[#parts + 1] = L["Best %s"]:format(DR.FormatDuration(best))
+	end
+	sidebar.Time:SetText(table.concat(parts, "  "))
+end
+
 -- The floor of the next boss still open in the route of a dungeon.
 local function nextBossFloor(key)
 	local route = DR:GetActiveRoute(key)
@@ -748,6 +813,8 @@ function Window:Open(key, floor)
 	frame:Show()
 	frame:Raise()
 	view:Layout()
+	-- the sidebar is visible only now, so the run time can be filled in
+	self:UpdateTime()
 end
 
 function Window:Toggle()
