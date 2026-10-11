@@ -54,8 +54,8 @@ replace them.
 
 ## Install
 
-On [CurseForge](https://www.curseforge.com/wow/addons/forever-dungeon-routes): the files there are
-Beta files, so allow Beta for this addon in the CurseForge app to get the updates.
+On [CurseForge](https://www.curseforge.com/wow/addons/forever-dungeon-routes), or with the CurseForge
+app: search for "Forever Dungeon Routes".
 
 By hand:
 
