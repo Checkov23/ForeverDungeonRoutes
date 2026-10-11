@@ -92,9 +92,12 @@ function DR:GetFloorName(floor)
 	return tostring(floor)
 end
 
+-- Map art of a floor: the game's 12 tiles, or for a floor the game has no art for a picture in the
+-- addon folder (image = { file, right, bottom }: path below the addon folder and the used part of the
+-- texture), drawn by someone named in credit.
 function DR.FloorHasArt(floor)
 	local info = floor and DR.Floors[floor]
-	return info ~= nil and info.tiles ~= nil and #info.tiles == 12
+	return info ~= nil and ((info.tiles ~= nil and #info.tiles == 12) or info.image ~= nil)
 end
 
 -- Routes ----------------------------------------------------------------------------------

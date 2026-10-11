@@ -15,7 +15,8 @@ local DRAG_START = 5        -- pixels the mouse moves before a press becomes a p
 local UPDATE_INTERVAL = 0.1 -- seconds between position updates
 local ROOM_ALPHA = 0.3      -- the room the player is in: lowest opacity of its pulsing glow
 local ROOM_PULSE = 0.2      -- ... and how much brighter it gets
-local MEDIA = "Interface\\AddOns\\ForeverDungeonRoutes\\media\\"
+local ADDON_PATH = "Interface\\AddOns\\ForeverDungeonRoutes\\"
+local MEDIA = ADDON_PATH .. "media\\"
 
 DR.MAP_W, DR.MAP_H = MAP_W, MAP_H
 
@@ -291,6 +292,10 @@ function View:Create(parent)
 		tile:SetTexCoord(0, w / TILE, 0, h / TILE)
 		self.tiles[i] = tile
 	end
+	-- a picture of the whole floor where the game has no map art (floor.image)
+	self.picture = canvas:CreateTexture(nil, "BACKGROUND")
+	self.picture:SetAllPoints(canvas)
+	self.picture:Hide()
 
 	self.layer = CreateFrame("Frame", nil, canvas)
 	self.layer:SetAllPoints(canvas)
@@ -326,6 +331,17 @@ function View:Create(parent)
 	self.statusBack:SetColorTexture(0.05, 0.05, 0.06, 0.85)
 	self.statusBack:Hide()
 	self.roomLines, self.numRoomLines = {}, 0
+	-- who drew a picture floor, in the upper right corner
+	self.credit = overlay:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+	self.credit:SetPoint("TOPRIGHT", -14, -13)
+	self.credit:SetWordWrap(false)
+	self.credit:SetTextColor(0.85, 0.85, 0.85)
+	self.credit:Hide()
+	self.creditBack = overlay:CreateTexture(nil, "BACKGROUND")
+	self.creditBack:SetPoint("TOPLEFT", self.credit, "TOPLEFT", -7, 5)
+	self.creditBack:SetPoint("BOTTOMRIGHT", self.credit, "BOTTOMRIGHT", 7, -5)
+	self.creditBack:SetColorTexture(0.05, 0.05, 0.06, 0.85)
+	self.creditBack:Hide()
 
 	local locate = CreateFrame("Button", nil, frame)
 	locate:SetSize(26, 26)
@@ -546,14 +562,26 @@ function View:SetFloor(key, floor)
 		self.zoom = 1
 		local info = DR.Floors[floor]
 		local hasArt = DR.FloorHasArt(floor)
+		local picture = hasArt and info.image
 		for i, tile in ipairs(self.tiles) do
-			if hasArt then
+			if hasArt and not picture then
 				tile:SetTexture(info.tiles[i], nil, nil, "TRILINEAR")
 				tile:Show()
 			else
 				tile:Hide()
 			end
 		end
+		if picture then
+			self.picture:SetTexture(ADDON_PATH .. picture.file, nil, nil, "TRILINEAR")
+			self.picture:SetTexCoord(0, picture.right or 1, 0, picture.bottom or 1)
+		end
+		self.picture:SetShown(picture and true or false)
+		local credit = hasArt and info.credit
+		if credit then
+			self.credit:SetText(L["Map: %s"]:format(credit))
+		end
+		self.credit:SetShown(credit and true or false)
+		self.creditBack:SetShown(credit and true or false)
 		self.message:SetShown(floor ~= nil and not hasArt)
 	end
 	self:Refresh()

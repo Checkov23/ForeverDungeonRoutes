@@ -52,6 +52,7 @@ L["Left-click: add a point\nRight-click: remove the last point\nShift-click: sta
 L["Level"] = "Stufe"
 L["Line width"] = "Linienbreite"
 L["Map level"] = "Kartenebene"
+L["Map: %s"] = "Karte: %s"
 L["Move down in order"] = "In der Reihenfolge nach unten"
 L["Move up in order"] = "In der Reihenfolge nach oben"
 L["My route"] = "Meine Route"
