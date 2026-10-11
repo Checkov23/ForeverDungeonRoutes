@@ -9,6 +9,10 @@ spirit of Mythic Dungeon Tools.
 | Browsing Blackrock Depths | Editing a copy of a standard route |
 |---|---|
 | ![Blackrock Depths, first map level, with the stop list](docs/screenshots/browse.png) | ![Stratholme in the route editor](docs/screenshots/editor.png) |
+| **Inside Blackrock Depths: the room lights up, the first bosses are ticked off** | **A group member sends a route** |
+| ![Blackrock Depths, Shadowforge City, The Grim Guzzler lit up](docs/screenshots/room.png) | ![Scholomance with the question whether to take over a route](docs/screenshots/share.png) |
+| **Scholomance: blue squares lead to the other map levels** | **German game client** |
+| ![Scholomance, The Upper Study](docs/screenshots/scholomance.png) | ![The Deadmines with German texts](docs/screenshots/german.png) |
 
 These are preview images, not in-game screenshots: the addon's own code runs against a replica of
 the game's interface functions, and every frame, line and texture it creates is drawn with the map
