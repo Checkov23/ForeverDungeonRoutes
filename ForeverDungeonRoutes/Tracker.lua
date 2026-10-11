@@ -110,7 +110,13 @@ function Tracker:Update()
 	if not frame then build() end
 	frame.Title:SetText(DR:GetKeyName(key))
 	local index = DR:GetNextStopIndex(key, route)
-	frame.Next:SetText(index and L["Next: %s"]:format(DR:GetStopName(route.stops[index])) or L["All bosses down"])
+	local nextStop = index and route.stops[index]
+	local nextRoom = nextStop and nextStop.floor and DR.Room:At(key, nextStop.floor, nextStop.x, nextStop.y)
+	if nextRoom then
+		frame.Next:SetText(L["Next: %s (%s)"]:format(DR:GetStopName(nextStop), DR.LocText(nextRoom, "name")))
+	else
+		frame.Next:SetText(nextStop and L["Next: %s"]:format(DR:GetStopName(nextStop)) or L["All bosses down"])
+	end
 	local room = DR.Room:Get()
 	frame.Room:SetText(room and L["Room: %s"]:format(DR.LocText(room, "name")) or "")
 	frame.Room:SetShown(room ~= nil)

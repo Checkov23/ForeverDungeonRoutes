@@ -256,6 +256,7 @@ function DR:CopyRoute(key, source)
 	copy.created = time()
 	copy.basedOn = source.source or source.basedOn
 	copy.source = nil
+	copy.likes, copy.listHash, copy.listAuthor = nil, nil, nil -- a copy is a route of its own
 	return store(key, copy)
 end
 
@@ -442,8 +443,11 @@ function DR:IsStopDone(key, route, index)
 	return progress ~= nil and progress.done[index] == true
 end
 
+-- A click on a stop: the group hears of it as well (Group.lua), bosses that die tick off everywhere anyway.
 function DR:ToggleStopDone(key, route, index)
-	self:SetStopDone(key, route, index, not self:IsStopDone(key, route, index))
+	local done = not self:IsStopDone(key, route, index)
+	self:SetStopDone(key, route, index, done)
+	self:Fire("STOP_DONE_BY_HAND", key, route, index, done)
 end
 
 local function hasBoss(route)
@@ -462,10 +466,16 @@ function DR.FormatDuration(seconds)
 	return ("%d:%02d"):format(m, s)
 end
 
--- The last boss of a run fell: note the time and the best time of the dungeon.
+local MAX_RUNS = 10 -- runs kept per dungeon (tooltip of the run time)
+
+-- The last boss of a run fell: note the time, the run and the best time of the dungeon.
 local function finishRun(key, progress)
 	progress.finished = time()
 	local duration = progress.finished - progress.started
+	local route = DR:GetActiveRoute(key)
+	DR.db.runs[key] = DR.db.runs[key] or {}
+	table.insert(DR.db.runs[key], 1, { time = duration, date = progress.finished, route = route and DR:GetRouteName(route) })
+	while #DR.db.runs[key] > MAX_RUNS do table.remove(DR.db.runs[key]) end
 	local best = DR.db.best[key]
 	if duration > 0 and (not best or duration < best) then
 		DR.db.best[key] = duration
@@ -490,6 +500,7 @@ end
 function DR:ResetProgress(key)
 	self.cdb.progress[key] = nil
 	self:Fire("PROGRESS_CHANGED", key)
+	self:Fire("RUN_RESET", key)
 	if key == self.currentKey then
 		self:StartRun(key)
 	end

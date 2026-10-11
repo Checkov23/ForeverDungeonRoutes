@@ -12,10 +12,12 @@ local L = DR.L
 -- it (its author, or someone who took it over and so can hand it on), once someone takes it over.
 --
 -- Addon messages (prefix FDRList, fields separated by tabs):
---   L <key> <hash> <stops> <author> <name>   a route in the list
+--   L <key> <hash> <stops> <author> <name> <likes>   a route in the list (likes: as its author counts them)
 --   Q [<key>]                                 which routes do you have (of this dungeon)?
 --   G <hash>                                  send me this route (whisper)
 --   T <hash> <index> <parts> <piece>          a piece of its export text (whisper)
+--   V <hash>                                  I recommend your route (whisper to its author)
+--   A <hash>                                  recommendation received (the author's answer)
 -- In the channel the line "FDR:Q" (optionally followed by a dungeon key) asks everyone there.
 
 local PREFIX = "FDRList"
@@ -75,12 +77,25 @@ local function me()
 	return name
 end
 
+-- Whispers of the list can go to players who went offline since. The game then prints "No player
+-- named ... is currently playing", which would only puzzle here (see the filter below).
+local whispered = {} -- [player] = time of the last whisper
+
 local function send(channel, texts, target)
+	if channel == "WHISPER" and target then whispered[target] = time() end
 	DR.Share:Queue(PREFIX, channel, texts, target)
 end
 
-local function entryMessage(key, hash, stops, author, name)
-	return table.concat({ "L", key, hash, tostring(stops), clean(author, 48), clean(name, 50) }, "\t")
+local function entryMessage(key, hash, stops, author, name, likes)
+	return table.concat({ "L", key, hash, tostring(stops), clean(author, 48), clean(name, 50), tostring(likes or 0) }, "\t")
+end
+
+-- Recommendations of an own route: the author's addon counts them, at the route itself, so they
+-- stay when the author improves the route.
+local function likesOf(route)
+	local n = 0
+	for _ in pairs(route.likes or {}) do n = n + 1 end
+	return n
 end
 
 -- Own routes in the list (of one dungeon or all): { key, route, text, hash }.
@@ -108,7 +123,7 @@ local function offerable(key, ownOnly)
 	local texts = {}
 	for _, p in ipairs(published(key)) do
 		if #texts >= ANSWER_ENTRIES then break end
-		texts[#texts + 1] = entryMessage(p.key, p.hash, #p.route.stops, me(), DR:GetRouteName(p.route))
+		texts[#texts + 1] = entryMessage(p.key, p.hash, #p.route.stops, me(), DR:GetRouteName(p.route), likesOf(p.route))
 	end
 	if ownOnly then return texts end
 	local cached = {}
@@ -119,7 +134,7 @@ local function offerable(key, ownOnly)
 	for _, hash in ipairs(cached) do
 		if #texts >= ANSWER_ENTRIES then break end
 		local e = DR.db.list[hash]
-		texts[#texts + 1] = entryMessage(e.key, hash, e.stops, e.author, e.name)
+		texts[#texts + 1] = entryMessage(e.key, hash, e.stops, e.author, e.name, e.likes)
 	end
 	return texts
 end
@@ -152,7 +167,8 @@ function List:Publish(key, route, on)
 	DR.db.published[key][route.id] = on and true or nil
 	local name = DR:GetRouteName(route)
 	if on then
-		local message = entryMessage(key, List.Hash(DR:ExportRoute(key, route)), #route.stops, me(), name)
+		local hash = List.Hash(DR:ExportRoute(key, route))
+		local message = entryMessage(key, hash, #route.stops, me(), name, likesOf(route))
 		if DR.Share:InGuild() then send("GUILD", { message }) end
 		local group = DR.Share:Channel()
 		if group then send(group, { message }) end
@@ -167,11 +183,17 @@ end
 function List:Entries(key)
 	local own = {}
 	for _, p in ipairs(published(key)) do own[p.hash] = true end
-	local out = {}
+	local out, myself = {}, me()
 	for hash, e in pairs(DR.db.list) do
-		if e.key == key and not own[hash] then out[#out + 1] = { hash = hash, entry = e } end
+		-- not the own ones, also not those taken out of the list again that others still hand on
+		if e.key == key and not own[hash] and e.author ~= myself then out[#out + 1] = { hash = hash, entry = e } end
 	end
-	table.sort(out, function(a, b) return (a.entry.seen or 0) > (b.entry.seen or 0) end)
+	-- recommended routes first, then the newest
+	table.sort(out, function(a, b)
+		local la, lb = a.entry.likes or 0, b.entry.likes or 0
+		if la ~= lb then return la > lb end
+		return (a.entry.seen or 0) > (b.entry.seen or 0)
+	end)
 	return out
 end
 
@@ -223,12 +245,28 @@ end
 local function filter(_, _, _, _, _, channelName, _, _, _, _, baseName)
 	return isOurChannel(channelName, baseName)
 end
+-- "No player named ... is currently playing" right after a whisper of the list
+local function offlineFilter(_, _, text)
+	text = DR.Safe(text)
+	if type(text) ~= "string" or type(ERR_CHAT_PLAYER_NOT_FOUND_S) ~= "string" then return false end
+	local now = time()
+	for player, at in pairs(whispered) do
+		if now - at > 30 then
+			whispered[player] = nil
+		elseif text == ERR_CHAT_PLAYER_NOT_FOUND_S:format(player)
+			or text == ERR_CHAT_PLAYER_NOT_FOUND_S:format((player:match("^[^-]+"))) then
+			return true
+		end
+	end
+	return false
+end
 local addFilter = (ChatFrameUtil and ChatFrameUtil.AddMessageEventFilter) or ChatFrame_AddMessageEventFilter
 if addFilter then
 	for _, event in ipairs({ "CHAT_MSG_CHANNEL", "CHAT_MSG_CHANNEL_NOTICE", "CHAT_MSG_CHANNEL_NOTICE_USER",
 		"CHAT_MSG_CHANNEL_JOIN", "CHAT_MSG_CHANNEL_LEAVE" }) do
 		addFilter(event, filter)
 	end
+	addFilter("CHAT_MSG_SYSTEM", offlineFilter)
 end
 
 -- Asking and answering ------------------------------------------------------------------------
@@ -271,6 +309,15 @@ local function learn(sender, f)
 	e.key, e.stops, e.seen = key, math.floor(stops), time()
 	e.author = clean(f[5] ~= nil and f[5] ~= "" and f[5] or sender, 48)
 	e.name = clean(f[6] ~= nil and f[6] ~= "" and f[6] or "?", 50)
+	-- the author's own count is right; a count handed on by others only fills a gap
+	local likes = tonumber(f[7])
+	if likes and likes >= 0 and likes < 100000 and (sender == e.author or not e.likes) then
+		e.likes = math.floor(likes)
+	end
+	-- a recommendation the author has not confirmed yet: once more, now that the author is here
+	if sender == e.author and DR.db.liked[hash] == "sent" then
+		send("WHISPER", { "V\t" .. hash }, sender)
+	end
 	for i = #e.holders, 1, -1 do
 		if e.holders[i] == sender then table.remove(e.holders, i) end
 	end
@@ -313,9 +360,11 @@ local function takeOver(hash, text, from)
 	e.text = text -- so this addon can hand it on as well
 	local existing = DR.Share.SameRoute(key, text)
 	if existing then
+		existing.listHash, existing.listAuthor = hash, e.author
 		DR:SetActiveRoute(key, existing.id)
 		DR:Print(L["You already have this route; it is now active."])
 	else
+		route.listHash, route.listAuthor = hash, e.author
 		DR:AddImportedRoute(key, route)
 		DR:Print(L["Route from %s taken over: %s"], DR.Share.SenderName(e.author or from or "?"), DR:GetRouteName(route))
 	end
@@ -384,6 +433,31 @@ local function piece(sender, f)
 	end
 end
 
+-- Recommending -------------------------------------------------------------------------------------
+
+-- Recommends a route taken over from the list, once: the author's addon counts it.
+function List:Recommend(route)
+	local hash, author = route and route.listHash, route and route.listAuthor
+	if not hash or not author or DR.db.liked[hash] then return end
+	DR.db.liked[hash] = "sent"
+	local e = DR.db.list[hash]
+	if e then e.likes = (e.likes or 0) + 1 end
+	send("WHISPER", { "V\t" .. hash }, author)
+	DR:Print(L["Recommended. %s gets it when online."], DR.Share.SenderName(author))
+	DR:Fire("ROUTE_LIST_CHANGED", e and e.key)
+end
+
+local function recommended(sender, hash)
+	for _, p in ipairs(published()) do
+		if p.hash == hash then
+			p.route.likes = p.route.likes or {}
+			p.route.likes[sender] = true
+			send("WHISPER", { "A\t" .. hash }, sender)
+			return
+		end
+	end
+end
+
 -- Messages ----------------------------------------------------------------------------------------
 
 function List:OnMessage(prefix, text, channel, sender)
@@ -403,6 +477,10 @@ function List:OnMessage(prefix, text, channel, sender)
 		serve(sender, f[2] or "")
 	elseif f[1] == "T" and channel == "WHISPER" then
 		piece(sender, f)
+	elseif f[1] == "V" and channel == "WHISPER" then
+		recommended(sender, f[2] or "")
+	elseif f[1] == "A" and channel == "WHISPER" and DR.db.liked[f[2] or ""] then
+		DR.db.liked[f[2]] = "done"
 	end
 end
 
@@ -446,7 +524,7 @@ local function loggedIn()
 		local texts = {}
 		for _, p in ipairs(published()) do
 			if #texts >= ANSWER_ENTRIES then break end
-			texts[#texts + 1] = entryMessage(p.key, p.hash, #p.route.stops, me(), DR:GetRouteName(p.route))
+			texts[#texts + 1] = entryMessage(p.key, p.hash, #p.route.stops, me(), DR:GetRouteName(p.route), likesOf(p.route))
 		end
 		if #texts > 0 then send("GUILD", texts) end
 	end

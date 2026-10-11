@@ -68,6 +68,22 @@ function Room:Center(room, floor)
 	return su / sum, sv / sum
 end
 
+-- The room at a point of a floor (map coordinates 0..1), if a room lies there.
+function Room:At(key, floor, x, y)
+	for _, room in ipairs(DR.Rooms[key] or {}) do
+		for _, box in ipairs(room.boxes) do
+			if box[1] == floor then
+				local dx, dy = (x - box[2]) * DR.MAP_W, (y - box[3]) * DR.MAP_H
+				local c, s = math.cos(box[6]), math.sin(box[6])
+				if math.abs(dx * c + dy * s) <= box[4] / 2 and math.abs(-dx * s + dy * c) <= box[5] / 2 then
+					return room
+				end
+			end
+		end
+	end
+	return nil
+end
+
 -- Reads the subzone. A room of another wing of the instance tells the wing.
 function Room:Update()
 	local room, key

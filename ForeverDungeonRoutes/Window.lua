@@ -189,6 +189,11 @@ local function openRouteMenu(owner)
 		end
 		root:CreateDivider()
 		root:CreateButton(L["New route"], newRoute)
+		local recorded = root:CreateButton(L["Route from the last run"], function()
+			local route = DR.Recorder:Build(key)
+			if route then DR.Window:Open(key, DR:GetRouteStartFloor(route)) end
+		end)
+		recorded:SetEnabled(DR.Recorder:CanBuild(key))
 		if current then
 			root:CreateButton(L["Copy route"], function()
 				local copy = DR:CopyRoute(key, current)
@@ -210,6 +215,13 @@ local function openRouteMenu(owner)
 				share:CreateCheckbox(L["In the route list"], function() return DR.RouteList:IsPublished(key, current) end,
 					function() DR.RouteList:Publish(key, current, not DR.RouteList:IsPublished(key, current)) end)
 			end
+			if current.listHash then
+				-- taken over from the route list: one recommendation for its author
+				local liked = DR.db.liked[current.listHash]
+				local recommend = root:CreateButton(liked and L["Recommended"] or L["Recommend this route"],
+					function() DR.RouteList:Recommend(current) end)
+				recommend:SetEnabled(not liked)
+			end
 		else
 			root:CreateDivider()
 		end
@@ -225,8 +237,10 @@ local function openRouteMenu(owner)
 			list:CreateDivider()
 			for _, item in ipairs(entries) do
 				local e = item.entry
-				list:CreateButton(L["%s by %s, %d stops"]:format(e.name, DR.Share.SenderName(e.author), e.stops),
-					function() DR.RouteList:Fetch(item.hash) end)
+				local label = (e.likes or 0) > 0
+					and L["%s by %s, %d stops, recommendations: %d"]:format(e.name, DR.Share.SenderName(e.author), e.stops, e.likes)
+					or L["%s by %s, %d stops"]:format(e.name, DR.Share.SenderName(e.author), e.stops)
+				list:CreateButton(label, function() DR.RouteList:Fetch(item.hash) end)
 			end
 		end
 	end)
@@ -298,6 +312,11 @@ local function openSettingsMenu(owner)
 		for _, w in ipairs({ 3, 4, 5, 6 }) do
 			width:CreateRadio(tostring(w), function() return DR.db.lineWidth == w end, function() setting("lineWidth", w) end)
 		end
+		local size = root:CreateButton(L["Text size of the stop list"])
+		for _, scale in ipairs({ 0.9, 1, 1.15, 1.3 }) do
+			size:CreateRadio(math.floor(scale * 100 + 0.5) .. "%", function() return DR.db.listScale == scale end,
+				function() setting("listScale", scale) end)
+		end
 		local opacity = root:CreateButton(L["Opacity"])
 		for _, a in ipairs({ 1, 0.85, 0.7, 0.55 }) do
 			opacity:CreateRadio(math.floor(a * 100 + 0.5) .. "%", function() return DR.db.alpha == a end,
@@ -359,7 +378,7 @@ local function makeRow(index)
 		if self.otherFloor then
 			GameTooltip:AddLine(L["On another map level"] .. ": " .. DR:GetFloorName(self.floor), 0.7, 0.7, 0.7)
 		end
-		GameTooltip:AddLine(L["Click: mark as done\nShift-click: show on map"], 0.4, 0.8, 1, true)
+		GameTooltip:AddLine(L["Click: mark as done\nShift-click: show on map\nAlt-click: show to the group"], 0.4, 0.8, 1, true)
 		if self.auto and DR.db.autoCheck then
 			GameTooltip:AddLine(L["Ticks itself off when the boss dies."], 0.6, 0.6, 0.6, true)
 		end
@@ -370,7 +389,9 @@ local function makeRow(index)
 		GameTooltip:Hide()
 	end)
 	row:SetScript("OnClick", function(self, button)
-		if IsShiftKeyDown() or button == "RightButton" then
+		if IsAltKeyDown() and button == "LeftButton" then
+			DR.Group:ShowStop(shown.key, DR:GetActiveRoute(shown.key), self.index)
+		elseif IsShiftKeyDown() or button == "RightButton" then
 			Window:FocusStop(self.index)
 		else
 			DR:ToggleStopDone(shown.key, DR:GetActiveRoute(shown.key), self.index)
@@ -394,6 +415,24 @@ local function buildSidebar()
 	sidebar.Time:SetPoint("TOPRIGHT", 0, 0)
 	sidebar.Time:SetJustifyH("RIGHT")
 	sidebar.Level:SetPoint("TOPRIGHT", sidebar.Time, "TOPLEFT", -6, 0)
+	-- the last runs of the dungeon when the mouse rests on the times
+	local timeHover = CreateFrame("Frame", nil, sidebar)
+	timeHover:SetPoint("TOPLEFT", sidebar.Time, "TOPLEFT", -2, 2)
+	timeHover:SetPoint("BOTTOMRIGHT", sidebar.Time, "BOTTOMRIGHT", 2, -2)
+	timeHover:SetMouseMotionEnabled(true) -- the tooltip only, clicks go through
+	timeHover:SetScript("OnEnter", function(self)
+		local runs = shown.key and DR.db.runs[shown.key]
+		if not runs or #runs == 0 then return end
+		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMLEFT")
+		GameTooltip:SetText(L["Last runs"], 1, 1, 1)
+		for _, run in ipairs(runs) do
+			GameTooltip:AddDoubleLine(date("%Y-%m-%d", run.date) .. "  " .. (run.route or ""), DR.FormatDuration(run.time),
+				0.8, 0.8, 0.8, 1, 0.82, 0)
+		end
+		GameTooltip:Show()
+	end)
+	timeHover:SetScript("OnLeave", GameTooltip_Hide)
+	sidebar.TimeHover = timeHover
 	local ticker = 0
 	sidebar:SetScript("OnUpdate", function(_, elapsed)
 		ticker = ticker + elapsed
@@ -432,8 +471,9 @@ local function buildSidebar()
 	end)
 	local list = CreateFrame("Frame", nil, scroll)
 	list:SetSize(SIDEBAR_W - PAD, 10)
+	list:SetScale(DR.db.listScale or 1)
 	scroll:SetScrollChild(list)
-	scroll:SetScript("OnSizeChanged", function(_, width) list:SetWidth(width) end)
+	scroll:SetScript("OnSizeChanged", function(_, width) list:SetWidth(width / list:GetScale()) end)
 	sidebar.Scroll, sidebar.List = scroll, list
 
 	sidebar.Empty = list:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
@@ -874,6 +914,9 @@ DR:On("SETTINGS_CHANGED", function(key)
 		frame:SetAlpha(DR.db.alpha)
 	elseif key == "showStops" then
 		layout()
+	elseif key == "listScale" then
+		sidebar.List:SetScale(DR.db.listScale)
+		sidebar.List:SetWidth(sidebar.Scroll:GetWidth() / DR.db.listScale)
 	end
 	refreshIfShown()
 end)

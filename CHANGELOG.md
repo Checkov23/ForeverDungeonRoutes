@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.5.11
+
+- Your group on the map: the rooms the game names for the others in your group (with the addon)
+  light up blue, with their names. A stop ticked by hand (a rare, say) is ticked for the whole
+  group.
+- Show a stop to your group: Alt-click it on the map or in the stop list. A ring marks it on the
+  map of everyone in the group for half a minute, and their chat names it.
+- Route from the last run: the addon notes the rooms and bosses of your run. "Route from the last
+  run" in the route menu turns them into an own route, the bosses where they fell and the path
+  through the rooms in the order of the run. A first route for a dungeon without a standard route,
+  without drawing; the editor refines it.
+- Recommend a route of the route list: a route you took over from the list can be recommended once
+  (route menu). The list shows recommended routes first, with their number; the author's addon
+  counts them, and they stay when the author improves the route.
+- Last runs: the mouse on the run time above the stop list shows your last ten runs of the dungeon.
+- The small display names the room of the next boss, where the game names one.
+- Right-click on the minimap button: show or hide the map, the small display and the route list
+  channel, without opening the window.
+- Text size of the stop list (gear button).
+
 ## 0.5.10
 
 - Route list: put an own route in the list (route menu, "Share", "In the route list") and every

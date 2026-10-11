@@ -19,6 +19,9 @@ local DB_DEFAULTS = {
 	list = {},          -- route list: [hash] = { key, name, author, stops, seen, holders = { player, ... }, text }
 	published = {},     -- own routes in the route list: [dungeonKey] = { [routeId] = true }
 	listChannel = true, -- route list also over the chat channel FDRoutes
+	liked = {},         -- routes of the list this player recommended: [hash] = "sent" or "done"
+	runs = {},          -- last runs: [dungeonKey] = { { time = seconds, date = epoch, route = name }, ... }
+	listScale = 1,      -- text size of the stop list
 	lineWidth = 4,
 	alpha = 1,
 	window = {},        -- point, relativePoint, x, y, width, height
@@ -185,8 +188,10 @@ end
 -- A boss died: tick it off in the route, unless the setting is off or the game keeps it secret.
 function DR:OnBossKilled(encounterID, encounterName)
 	encounterID, encounterName = DR.Safe(encounterID), DR.Safe(encounterName)
-	if not DR.db.autoCheck or type(encounterID) ~= "number" then return end
+	if type(encounterID) ~= "number" then return end
 	if type(encounterName) ~= "string" then encounterName = nil end
+	DR:Fire("BOSS_KILLED", encounterID, encounterName)
+	if not DR.db.autoCheck then return end
 	DR:MarkEncounterKilled(encounterID, encounterName)
 end
 

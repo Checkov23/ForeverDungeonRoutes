@@ -39,23 +39,27 @@ replace them.
   (the text above the minimap). The addon knows where these rooms lie: the room lights up on the
   map, its name stands below, and the map follows you to its level. Between named rooms the map
   follows your run: after a boss kill it shows the level of the next open boss.
+- Your group on the map: the rooms of the others in your group light up blue with their names
+  (players with the addon). Ticks by hand reach the whole group, and Alt-click shows a stop to all.
 - Stop list with checkmarks per character. Bosses tick themselves off when the game reports the
   kill; rares without a boss fight are ticked by hand. "New run" clears the checkmarks, an old run
   is cleared after three hours.
 - The way to the dungeon: outside, a click on "Entrance: <zone>" sets a map pin at the entrance that
   the game tracks, so the arrow on the screen leads there.
 - Dungeons for your level: the dungeon list colours the names by your level, like quests.
-- Run time from entering the dungeon to the last boss, and your best time per dungeon.
-- Small display in dungeons (optional): dungeon, bosses down, run time, the next boss and your room
-  in a small box, for when the map stays closed.
+- Run time from entering the dungeon to the last boss, your best time and your last runs per
+  dungeon.
+- Small display in dungeons (optional): dungeon, bosses down, run time, the next boss with its room
+  and your room in a small box, for when the map stays closed.
+- Route from the last run: the addon notes where the bosses fell; one click makes a route of it.
 - Route editor: paths, side paths, stops and notes; drag to move, undo. Editing a standard route
   creates a copy.
 - Share routes with your group or your guild in game: everyone with the addon gets the route
   offered and takes it over with one click. Post the boss order in the group chat for players
   without the addon, or share routes as text (export and import).
-- Route list: players put their routes up for everyone, a click takes a route over. The list comes
-  from your guild, your parties and the server channel FDRoutes.
-- Button at the minimap, slash command and key binding.
+- Route list: players put their routes up for everyone, a click takes a route over, and good routes
+  get recommended. The list comes from your guild, your parties and the server channel FDRoutes.
+- Button at the minimap (right-click for a few switches), slash command and key binding.
 - English, German, French, Spanish, Portuguese, Russian, Korean and Chinese (simplified and
   traditional). Names of bosses, dungeons, map levels and rooms come from the game in the language
   of your client; the translations of the addon's own texts are welcome to be corrected (issues).
@@ -75,16 +79,22 @@ By hand:
 ## Use
 
 - The button at the minimap or `/fdr` opens or closes the map. Drag the button to move it around
-  the minimap. There is also a key binding (Key Bindings, section AddOns).
+  the minimap; right-click it for the small display and the route list channel. There is also a
+  key binding (Key Bindings, section AddOns).
 - Choose the dungeon and the map level in the header. Inside a dungeon the window opens on the
   level of the room you are in, else of the next open boss.
 - Mouse wheel zooms, dragging moves the map, right-click zooms out. After you choose a level by
   hand the map stays there; the crosshair button shows where you are (your room, else the next
   open boss) and lets the map follow you again.
 - Bosses tick themselves off when they die. A click on a boss on the map or in the list ticks it
-  off by hand. Shift-click a list entry to show it on the map.
-- Click the route name to choose a route, create a new one, copy, rename, delete or import. The
-  submenu "Share" holds the ways to pass a route on:
+  off by hand, for your whole group. Shift-click a list entry to show it on the map, Alt-click a
+  stop to show it to your group (a ring on their map for half a minute).
+- In a group, the rooms the game names for the others light up blue on the map, with their names.
+  This needs the addon on their side too.
+- Click the route name to choose a route, create a new one, copy, rename, delete or import.
+  "Route from the last run" makes an own route of your last run in this dungeon: the bosses where
+  they fell (in the middle of the room the game named, else where the standard route has them) and
+  the path through the rooms. The submenu "Share" holds the ways to pass a route on:
   - "Send to group" (or `/fdr send`) and "Send to guild": players with the addon are asked whether
     to take the route over; nothing changes without their yes. A standard route travels as a short
     hint, an own route in small pieces (up to about half a minute for the largest ones). During
@@ -95,16 +105,19 @@ By hand:
   - "In the route list" (own routes): the route goes in the route list, where every player with
     the addon can take it over.
 - "Route list" in the same menu: the routes others put up for the shown dungeon, with their author
-  and number of stops. A click takes one over. "Refresh the list" asks your guild, your party and
+  and number of stops, recommended ones first. A click takes one over; a route taken over from
+  the list can be recommended once ("Recommend this route" in the route menu), and its author's
+  addon counts it. "Refresh the list" asks your guild, your party and
   the players in the chat channel FDRoutes; the addon joins this channel and hides it from your
   chat. Blizzard lets addons send no hidden messages to a chat channel, so the request there is a
   short visible line ("FDR:Q") that the addon hides, and the answers come by whisper. The route
   itself comes by whisper from its author or from a player who took it over.
 - Above the stop list: the level of the dungeon in the colour of your level, the run time and your
-  best time, and outside the dungeon its entrance. A click on the entrance sets the map pin.
+  best time (the mouse on them shows your last ten runs), and outside the dungeon its entrance. A
+  click on the entrance sets the map pin.
 - The gear button holds the settings: stop list, arrows, tick off bosses automatically, open
   automatically in dungeons, button at the minimap, small display in dungeons, route list over the
-  server channel, line width, opacity.
+  server channel, line width, text size of the stop list, opacity.
 
 Stratholme, Maraudon and Dire Maul North come with two standard routes each (living and undead
 side, purple and orange side, full clear and tribute run).

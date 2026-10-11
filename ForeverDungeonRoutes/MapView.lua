@@ -31,6 +31,9 @@ local CASING_COLOR = { 0.05, 0.04, 0.03, 0.78 }
 local ARROW_COLOR = { 0.06, 0.05, 0.03, 0.92 }
 local EDIT_DOT_COLOR = { 1.00, 1.00, 1.00, 0.95 }
 
+local MEMBER_COLOR = { 0.45, 0.78, 1.00 } -- rooms of the others in the group
+local MEMBER_ALPHA = 0.28
+
 local KIND_STYLE = {
 	boss = { ring = { 0.95, 0.76, 0.31 }, text = { 1.00, 0.91, 0.66 } },
 	rare = { ring = { 0.89, 0.87, 0.82 }, text = { 0.89, 0.87, 0.82 } },
@@ -88,7 +91,7 @@ local function stopOnEnter(pin)
 	if editing(pin) then
 		GameTooltip:AddLine(L["Drag: move\nClick: options\nRight-click: delete"], 0.4, 0.8, 1, true)
 	else
-		GameTooltip:AddLine(L["Click: mark as done"], 0.4, 0.8, 1)
+		GameTooltip:AddLine(L["Click: mark as done\nAlt-click: show to the group"], 0.4, 0.8, 1, true)
 		if stop.encounters and DR.db.autoCheck then
 			GameTooltip:AddLine(L["Ticks itself off when the boss dies."], 0.6, 0.6, 0.6, true)
 		end
@@ -109,6 +112,8 @@ local function stopOnClick(pin, button)
 	end
 	if editing(pin) then
 		DR.Editor:OnStopClicked(pin, button)
+	elseif button == "LeftButton" and IsAltKeyDown() then
+		DR.Group:ShowStop(View.key, pin.route, pin.index)
 	elseif button == "LeftButton" then
 		DR:ToggleStopDone(View.key, pin.route, pin.index)
 	end
@@ -331,6 +336,11 @@ function View:Create(parent)
 	self.statusBack:SetColorTexture(0.05, 0.05, 0.06, 0.85)
 	self.statusBack:Hide()
 	self.roomLines, self.numRoomLines = {}, 0
+	-- rooms of the others in the group with their names, and a stop someone shows to the group
+	self.memberLines, self.numMemberLines, self.memberLabels = {}, 0, {}
+	self.ping = createMarker(self, 44, 21)
+	self.ping.Dot:Hide()
+	self.ping.Ring:SetVertexColor(MEMBER_COLOR[1], MEMBER_COLOR[2], MEMBER_COLOR[3], 1)
 	-- who drew a picture floor, in the upper right corner
 	self.credit = overlay:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
 	self.credit:SetPoint("TOPRIGHT", -14, -13)
@@ -382,6 +392,8 @@ function View:Create(parent)
 	self.elapsed = 0
 
 	DR:On("HIGHLIGHT_STOP", function(index) View:HighlightStop(index) end)
+	DR:On("GROUP_ROOMS_CHANGED", function() View:UpdateMembers() end)
+	DR:On("GROUP_STOP_SHOWN", function() View:UpdatePing() end)
 	return frame
 end
 
@@ -511,6 +523,15 @@ function View:OnUpdate(elapsed)
 		self.elapsed = 0
 		self:UpdateGroup()
 	end
+	if self.ping:IsShown() then
+		self.pingPulse = (self.pingPulse or 0) + elapsed
+		local k = 0.5 + 0.5 * math.sin(self.pingPulse * 5)
+		self.ping.Ring:SetSize(26 + 16 * k, 26 + 16 * k)
+		self.ping.Ring:SetAlpha(0.55 + 0.45 * k)
+		if not DR.Group:GetShownStop() then
+			self.ping:Hide()
+		end
+	end
 	if self.numRoomLines > 0 then
 		self.pulse = (self.pulse or 0) + elapsed
 		local alpha = ROOM_ALPHA + ROOM_PULSE * (0.5 + 0.5 * math.sin(self.pulse * 3))
@@ -596,6 +617,83 @@ function View:Refresh()
 	self:Layout()
 	self:UpdateGroup()
 	self:UpdateRoom()
+	self:UpdateMembers()
+	self:UpdatePing()
+end
+
+-- The others in the group ----------------------------------------------------------------------
+-- Every addon in the group tells the room its player is in (Group.lua); those rooms light up in
+-- blue with the names, as far as the game names rooms there.
+
+local function createLabel(view)
+	local label = CreateFrame("Frame", nil, view.canvas)
+	label:SetSize(10, 10)
+	label:SetFrameLevel(view.canvas:GetFrameLevel() + 18)
+	label:EnableMouse(false)
+	label.Text = label:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+	label.Text:SetPoint("CENTER")
+	label.Text:SetTextColor(MEMBER_COLOR[1], MEMBER_COLOR[2], MEMBER_COLOR[3])
+	label.Back = label:CreateTexture(nil, "BACKGROUND")
+	label.Back:SetPoint("TOPLEFT", label.Text, "TOPLEFT", -5, 3)
+	label.Back:SetPoint("BOTTOMRIGHT", label.Text, "BOTTOMRIGHT", 5, -3)
+	label.Back:SetColorTexture(0.05, 0.05, 0.06, 0.82)
+	label:Hide()
+	return label
+end
+
+function View:UpdateMembers()
+	if not self.memberLines then return end
+	for i = 1, self.numMemberLines do
+		self.memberLines[i]:Hide()
+	end
+	self.numMemberLines = 0
+	for _, label in ipairs(self.memberLabels) do
+		label:Hide()
+	end
+	if not self.key or not self.floor then return end
+	for i, entry in ipairs(DR.Group:RoomsOn(self.key, self.floor)) do
+		for _, box in ipairs(entry.room.boxes) do
+			if box[1] == self.floor then
+				self.numMemberLines = self.numMemberLines + 1
+				local line = self.memberLines[self.numMemberLines]
+				if not line then
+					line = self.canvas:CreateLine(nil, "BORDER")
+					line:SetColorTexture(MEMBER_COLOR[1], MEMBER_COLOR[2], MEMBER_COLOR[3], 1)
+					self.memberLines[self.numMemberLines] = line
+				end
+				local cx, cy = box[2] * MAP_W, box[3] * MAP_H
+				local dx, dy = math.cos(box[6]) * box[4] / 2, math.sin(box[6]) * box[4] / 2
+				line:SetStartPoint("TOPLEFT", self.canvas, cx - dx, -(cy - dy))
+				line:SetEndPoint("TOPLEFT", self.canvas, cx + dx, -(cy + dy))
+				line:SetThickness(box[5])
+				line:SetAlpha(MEMBER_ALPHA)
+				line:Show()
+			end
+		end
+		local u, v = DR.Room:Center(entry.room, self.floor)
+		if u then
+			local label = self.memberLabels[i]
+			if not label then
+				label = createLabel(self)
+				self.memberLabels[i] = label
+			end
+			label.Text:SetText(table.concat(entry.names, ", "))
+			label:Show()
+			self:PlacePin(label, u, v)
+		end
+	end
+end
+
+-- A stop someone showed to the group: a pulsing ring while it lasts.
+function View:UpdatePing()
+	if not self.ping then return end
+	local shownStop = DR.Group:GetShownStop()
+	if shownStop and shownStop.key == self.key and shownStop.floor == self.floor then
+		self.ping:Show()
+		self:PlacePin(self.ping, shownStop.x, shownStop.y)
+	else
+		self.ping:Hide()
+	end
 end
 
 function View:RequestRedraw()
@@ -794,6 +892,14 @@ function View:PlaceAllPins()
 		if dot:IsShown() and dot.u then
 			self:PlacePin(dot, dot.u, dot.v)
 		end
+	end
+	for _, label in ipairs(self.memberLabels or {}) do
+		if label:IsShown() and label.u then
+			self:PlacePin(label, label.u, label.v)
+		end
+	end
+	if self.ping and self.ping:IsShown() and self.ping.u then
+		self:PlacePin(self.ping, self.ping.u, self.ping.v)
 	end
 end
 
