@@ -1,8 +1,9 @@
 # Forever Dungeon Routes
 
-A dungeon map with routes for **World of Warcraft: Forever**. Ready routes for the classic dungeons,
-boss order and notes, bosses that tick themselves off, and an editor for your own routes in the
-spirit of Mythic Dungeon Tools.
+A dungeon map with routes for **World of Warcraft: Forever**, for all 28 dungeons: ready routes for
+the 24 classic dungeons, own maps for the 4 new Forever dungeons, boss order and notes, bosses that
+tick themselves off, an editor for your own routes in the spirit of Mythic Dungeon Tools, and a
+route list where players put up their routes for everyone.
 
 ![Inside the Deadmines: the first boss ticked off by the kill, the room you are in lights up, the run time counts](docs/screenshots/dungeon.png)
 
