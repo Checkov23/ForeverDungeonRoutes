@@ -4,7 +4,7 @@ A dungeon map with routes for **World of Warcraft: Forever**. Ready routes for t
 boss order and notes, bosses that tick themselves off, and an editor for your own routes in the
 spirit of Mythic Dungeon Tools.
 
-![Inside The Deadmines: the first boss ticked off by the kill, the room you are in lights up, the run time counts](docs/screenshots/dungeon.png)
+![Inside the Deadmines: the first boss ticked off by the kill, the room you are in lights up, the run time counts](docs/screenshots/dungeon.png)
 
 | Browsing Blackrock Depths: level and entrance | Editing a copy of a standard route |
 |---|---|
@@ -12,7 +12,7 @@ spirit of Mythic Dungeon Tools.
 | **Inside Blackrock Depths: the room lights up, above the small display** | **A group member sends a route** |
 | ![Blackrock Depths, Shadowforge City, The Grim Guzzler lit up, the small display above the window](docs/screenshots/room.png) | ![Scholomance with the question whether to take over a route](docs/screenshots/share.png) |
 | **Scholomance: blue squares lead to the other map levels** | **German game client** |
-| ![Scholomance, The Upper Study](docs/screenshots/scholomance.png) | ![The Deadmines with German texts](docs/screenshots/german.png) |
+| ![Scholomance, The Upper Study](docs/screenshots/scholomance.png) | ![The Deadmines with German texts (Todesminen)](docs/screenshots/german.png) |
 
 These are preview images, not in-game screenshots: the addon's own code runs against a replica of
 the game's interface functions, and every frame, line and texture it creates is drawn with the map
@@ -80,7 +80,7 @@ By hand:
     to take the route over; nothing changes without their yes. A standard route travels as a short
     hint, an own route in small pieces (up to about half a minute for the largest ones). During
     boss fights the game holds addon messages back; sending then waits until the fight is over.
-  - "Post the boss order in the group chat": "The Deadmines: 1 Rhahk'Zor, R Miner Johnson, 2 ...",
+  - "Post the boss order in the group chat": "Deadmines: 1 Rhahk'Zor, R Miner Johnson, 2 ...",
     as plain text for everyone. Outside a group only you see it.
   - "Export route": the route as text to copy.
 - Above the stop list: the level of the dungeon in the colour of your level, the run time and your
@@ -115,9 +115,9 @@ run, `/fdr pos` prints the position data and the room the game reports (helps wi
 
 ## Dungeons with a standard route
 
-Ragefire Chasm, The Deadmines, Wailing Caverns, Shadowfang Keep, Blackfathom Deeps, The Stockade,
+Ragefire Chasm, Deadmines, Wailing Caverns, Shadowfang Keep, Blackfathom Deeps, Stormwind Stockade,
 Razorfen Kraul, Gnomeregan, Scarlet Monastery (Graveyard, Library, Armory, Cathedral),
-Razorfen Downs, Uldaman, Zul'Farrak, Maraudon, Temple of Atal'Hakkar, Blackrock Depths,
+Razorfen Downs, Uldaman, Zul'Farrak, Maraudon, Sunken Temple, Blackrock Depths,
 Lower Blackrock Spire, Dire Maul (East, West, North), Scholomance, Stratholme.
 
 ## How the map works
@@ -127,7 +127,7 @@ The addon ships no map art. It shows the game's own dungeon map files by their f
 no position, only the name of the room you are in. Where the rooms lie (`Data/Rooms.lua`) is
 generated from the game's building files: each named part of a dungeon building with its outline,
 placed on the map level where the game's own map shows it. Rooms come with all dungeons except
-Shadowfang Keep, The Stockade, Razorfen Kraul, Zul'Farrak and Dire Maul (there only the entrance
+Shadowfang Keep, Stormwind Stockade, Razorfen Kraul, Zul'Farrak and Dire Maul (there only the entrance
 of East and West); the game names no rooms there. Between rooms the map follows the boss kills the
 game reports. In Scarlet Monastery and Dire Maul a kill also tells which wing you are in, in
 Scarlet Monastery already the first room.
@@ -139,7 +139,7 @@ positions of Blizzard's table of dungeon entrances, placed on Forever's zone map
 
 The standard routes were traced from the dungeon walkthrough maps of aetherflask.com, which went
 offline in 2022 and are mirrored at [eintr.net](https://eintr.net/WoW/World-of-Warcraft-Classic-Dungeon-Walkthrough.html).
-For the Temple of Atal'Hakkar and parts of Scholomance those maps served as a guide for the boss
+For the Sunken Temple and parts of Scholomance those maps served as a guide for the boss
 order; the paths follow the corridors of the game's map. Boss names come from the game's boss list.
 
 ## License

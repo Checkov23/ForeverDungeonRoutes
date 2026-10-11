@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.5.8
+
+- Dungeon names as WoW: Forever names its zones, the text you see when you enter: Deadmines,
+  Stormwind Stockade, Sunken Temple; in German Todesminen, Blackrocktiefen, Burg Shadowfang,
+  Ragefireabgrund, Blackfathom-Tiefe, Verlies von Stormwind, Kral and Hügel von Razorfen,
+  Versunkener Tempel. The other languages used the game's names already. A map level named after
+  its dungeon carries the same name.
+- Lower Blackrock Spire: the game has one zone for both spires; the name adds "Lower" like the
+  game's group finder does.
+
 ## 0.5.7
 
 - The way to the dungeon: outside a dungeon its entrance stands above the stop list ("Entrance:
