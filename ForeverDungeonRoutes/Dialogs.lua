@@ -4,24 +4,11 @@ local L = DR.L
 -- One small dialog for everything that needs text: rename, new stop/note, export, import,
 -- confirmation. Built from plain frames so it does not depend on optional templates.
 
-local BACKDROP = {
-	bgFile = "Interface\\Buttons\\WHITE8X8",
-	edgeFile = "Interface\\Buttons\\WHITE8X8",
-	edgeSize = 1,
-}
-
-local function styleBox(frame, alpha)
-	frame:SetBackdrop(BACKDROP)
-	frame:SetBackdropColor(0.07, 0.07, 0.08, alpha or 0.96)
-	frame:SetBackdropBorderColor(0.76, 0.66, 0.47, 0.9)
-end
-DR.StyleBox = styleBox
-
 local dialog
 
 local function build()
 	local f = CreateFrame("Frame", "ForeverDungeonRoutesDialog", UIParent, "BackdropTemplate")
-	styleBox(f)
+	DR.StyleBox(f)
 	f:SetFrameStrata("DIALOG")
 	f:SetToplevel(true)
 	f:SetSize(420, 150)
@@ -45,17 +32,18 @@ local function build()
 	f.Title:SetPoint("TOPLEFT", 14, -12)
 	f.Title:SetPoint("TOPRIGHT", -14, -12)
 	f.Title:SetJustifyH("LEFT")
+	DR.ThemeText(f.Title, "title")
 
 	f.Text = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
 	f.Text:SetPoint("TOPLEFT", f.Title, "BOTTOMLEFT", 0, -8)
 	f.Text:SetPoint("TOPRIGHT", f.Title, "BOTTOMRIGHT", 0, -8)
 	f.Text:SetJustifyH("LEFT")
 	f.Text:SetSpacing(2)
+	DR.ThemeText(f.Text, "text")
 
 	-- single line input
 	local single = CreateFrame("EditBox", nil, f, "BackdropTemplate")
-	styleBox(single, 1)
-	single:SetBackdropColor(0, 0, 0, 0.6)
+	DR.StyleBox(single, 1, "input")
 	single:SetFontObject(ChatFontNormal)
 	single:SetTextInsets(6, 6, 0, 0)
 	single:SetHeight(24)
@@ -67,8 +55,7 @@ local function build()
 
 	-- multi line text with scrolling
 	local scroll = CreateFrame("ScrollFrame", nil, f, "BackdropTemplate")
-	styleBox(scroll, 1)
-	scroll:SetBackdropColor(0, 0, 0, 0.6)
+	DR.StyleBox(scroll, 1, "input")
 	scroll:EnableMouseWheel(true)
 	local multi = CreateFrame("EditBox", nil, scroll)
 	multi:SetMultiLine(true)

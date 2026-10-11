@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.12
+
+- Window styles behind the gear button ("Window style"): Dark (as before), Parchment (light like the
+  map art, with dark text) and Classic (the game's gold dialog frame, fields like its tooltips). The
+  style applies at once to the map window, the small display and the dialogs.
+
 ## 0.5.11
 
 - Your group on the map: the rooms the game names for the others in your group (with the addon)

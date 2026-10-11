@@ -35,19 +35,20 @@ end
 
 local function makeDropButton(parent, width)
 	local b = CreateFrame("Button", nil, parent, "BackdropTemplate")
-	DR.StyleBox(b, 1)
-	b:SetBackdropColor(0.12, 0.11, 0.1, 1)
+	DR.StyleBox(b, 1, "field")
 	b:SetSize(width, 22)
 	b.Text = b:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
 	b.Text:SetPoint("LEFT", 8, 0)
 	b.Text:SetPoint("RIGHT", -18, 0)
 	b.Text:SetJustifyH("LEFT")
 	b.Text:SetWordWrap(false)
+	DR.ThemeText(b.Text, "fieldText")
 	b.Arrow = b:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
 	b.Arrow:SetPoint("RIGHT", -6, 0)
 	b.Arrow:SetText("v")
+	DR.ThemeText(b.Arrow, "arrow")
 	b:SetScript("OnEnter", function(self)
-		self:SetBackdropBorderColor(1, 0.9, 0.6, 1)
+		DR.HoverBox(self, true)
 		if self.tooltip then
 			GameTooltip:SetOwner(self, "ANCHOR_BOTTOM")
 			GameTooltip:SetText(self.tooltip, 1, 1, 1, 1, true)
@@ -58,7 +59,7 @@ local function makeDropButton(parent, width)
 		end
 	end)
 	b:SetScript("OnLeave", function(self)
-		self:SetBackdropBorderColor(0.76, 0.66, 0.47, 0.9)
+		DR.HoverBox(self, false)
 		GameTooltip:Hide()
 	end)
 	return b
@@ -70,9 +71,15 @@ local function makeIconButton(parent, texture, size)
 	b.Icon = b:CreateTexture(nil, "ARTWORK")
 	b.Icon:SetTexture(MEDIA .. texture)
 	b.Icon:SetAllPoints()
-	b.Icon:SetVertexColor(0.76, 0.66, 0.47)
-	b:SetScript("OnEnter", function(self) self.Icon:SetVertexColor(1, 0.9, 0.6) end)
-	b:SetScript("OnLeave", function(self) self.Icon:SetVertexColor(0.76, 0.66, 0.47) end)
+	DR.ThemeIcon(b.Icon, "icon")
+	b:SetScript("OnEnter", function(self)
+		local c = DR.Theme().iconHover
+		self.Icon:SetVertexColor(c[1], c[2], c[3])
+	end)
+	b:SetScript("OnLeave", function(self)
+		local c = DR.Theme().icon
+		self.Icon:SetVertexColor(c[1], c[2], c[3])
+	end)
 	return b
 end
 
@@ -317,6 +324,11 @@ local function openSettingsMenu(owner)
 			size:CreateRadio(math.floor(scale * 100 + 0.5) .. "%", function() return DR.db.listScale == scale end,
 				function() setting("listScale", scale) end)
 		end
+		local style = root:CreateButton(L["Window style"])
+		for _, theme in ipairs(DR.THEMES) do
+			style:CreateRadio(DR.ThemeName(theme), function() return DR.Theme() == theme end,
+				function() DR:SetTheme(theme.key) end)
+		end
 		local opacity = root:CreateButton(L["Opacity"])
 		for _, a in ipairs({ 1, 0.85, 0.7, 0.55 }) do
 			opacity:CreateRadio(math.floor(a * 100 + 0.5) .. "%", function() return DR.db.alpha == a end,
@@ -340,10 +352,8 @@ local function makeRow(index)
 	row:RegisterForClicks("LeftButtonUp", "RightButtonUp")
 	row.Highlight = row:CreateTexture(nil, "HIGHLIGHT")
 	row.Highlight:SetAllPoints()
-	row.Highlight:SetColorTexture(1, 0.85, 0.5, 0.12)
 	row.Hover = row:CreateTexture(nil, "BACKGROUND")
 	row.Hover:SetAllPoints()
-	row.Hover:SetColorTexture(1, 0.85, 0.5, 0.12)
 	row.Hover:Hide()
 
 	row.Badge = row:CreateTexture(nil, "ARTWORK")
@@ -352,10 +362,10 @@ local function makeRow(index)
 	row.Badge:SetPoint("LEFT", 2, 0)
 	row.BadgeFill = row:CreateTexture(nil, "BACKGROUND", nil, 1)
 	row.BadgeFill:SetTexture(MEDIA .. "circle")
-	row.BadgeFill:SetVertexColor(0.06, 0.05, 0.04, 0.95)
 	row.BadgeFill:SetAllPoints(row.Badge)
 	row.Number = row:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
 	row.Number:SetPoint("CENTER", row.Badge, "CENTER", 0, 0)
+	DR.ThemeText(row.Number)
 
 	row.Check = row:CreateTexture(nil, "OVERLAY")
 	row.Check:SetTexture(MEDIA .. "check")
@@ -367,6 +377,7 @@ local function makeRow(index)
 	row.Name:SetPoint("RIGHT", row.Check, "LEFT", -4, 0)
 	row.Name:SetJustifyH("LEFT")
 	row.Name:SetWordWrap(false)
+	DR.ThemeText(row.Name)
 
 	row:SetScript("OnEnter", function(self)
 		DR:Fire("HIGHLIGHT_STOP", self.index)
@@ -410,10 +421,12 @@ local function buildSidebar()
 	sidebar.Level = sidebar:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
 	sidebar.Level:SetPoint("TOPLEFT", 2, 0)
 	sidebar.Level:SetJustifyH("LEFT")
+	DR.ThemeText(sidebar.Level, "muted")
 	-- run time and best time on the level line
 	sidebar.Time = sidebar:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
 	sidebar.Time:SetPoint("TOPRIGHT", 0, 0)
 	sidebar.Time:SetJustifyH("RIGHT")
+	DR.ThemeText(sidebar.Time, "muted")
 	sidebar.Level:SetPoint("TOPRIGHT", sidebar.Time, "TOPLEFT", -6, 0)
 	-- the last runs of the dungeon when the mouse rests on the times
 	local timeHover = CreateFrame("Frame", nil, sidebar)
@@ -447,16 +460,18 @@ local function buildSidebar()
 	entrance:SetHeight(14)
 	entrance.Text = entrance:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
 	entrance.Text:SetPoint("LEFT")
-	entrance.Text:SetTextColor(0.45, 0.78, 1)
+	DR.ThemeText(entrance.Text, "link")
 	entrance:SetScript("OnClick", function() DR:SetEntranceWaypoint(shown.key) end)
 	entrance:SetScript("OnEnter", function(self)
-		self.Text:SetTextColor(0.7, 0.9, 1)
+		local c = DR.Theme().linkHover
+		self.Text:SetTextColor(c[1], c[2], c[3])
 		GameTooltip:SetOwner(self, "ANCHOR_LEFT")
 		GameTooltip:SetText(L["Click: set a waypoint to the entrance"], 1, 1, 1, 1, true)
 		GameTooltip:Show()
 	end)
 	entrance:SetScript("OnLeave", function(self)
-		self.Text:SetTextColor(0.45, 0.78, 1)
+		local c = DR.Theme().link
+		self.Text:SetTextColor(c[1], c[2], c[3])
 		GameTooltip:Hide()
 	end)
 	sidebar.Entrance = entrance
@@ -480,6 +495,7 @@ local function buildSidebar()
 	sidebar.Empty:SetPoint("TOPLEFT", 0, -2)
 	sidebar.Empty:SetPoint("TOPRIGHT", 0, -2)
 	sidebar.Empty:SetJustifyH("LEFT")
+	DR.ThemeText(sidebar.Empty, "muted")
 	sidebar.Empty:SetSpacing(2)
 
 	-- buttons under the list
@@ -558,6 +574,7 @@ local function refreshSidebar()
 	else
 		local labels = DR:GetStopLabels(route)
 		local nextIndex = DR:GetNextStopIndex(key, route)
+		local theme = DR.Theme()
 		for i, stop in ipairs(route.stops) do
 			local row = rows[i] or makeRow(i)
 			row.index = i
@@ -573,23 +590,15 @@ local function refreshSidebar()
 			row.Name:SetText(row.stopName)
 			local done = DR:IsStopDone(key, route, i)
 			row.Check:SetShown(done)
-			local r, g, b = 0.95, 0.76, 0.31
-			if stop.kind == "rare" then
-				r, g, b = 0.89, 0.87, 0.82
-			elseif stop.kind == "optional" then
-				r, g, b = 0.62, 0.78, 0.95
-			end
-			row.Badge:SetVertexColor(r, g, b)
-			row.Number:SetTextColor(r, g, b)
-			if done then
-				row.Name:SetTextColor(0.5, 0.5, 0.5)
-			elseif i == nextIndex then
-				row.Name:SetTextColor(1, 0.92, 0.6)
-			elseif row.otherFloor then
-				row.Name:SetTextColor(0.72, 0.72, 0.72)
-			else
-				row.Name:SetTextColor(1, 1, 1)
-			end
+			local k = theme.kinds[stop.kind] or theme.kinds.boss
+			row.Badge:SetVertexColor(k[1], k[2], k[3])
+			row.Number:SetTextColor(k[1], k[2], k[3])
+			local c = done and theme.done or i == nextIndex and theme.next or row.otherFloor and theme.dim or theme.text
+			row.Name:SetTextColor(c[1], c[2], c[3])
+			local f, h = theme.badgeFill, theme.highlight
+			row.BadgeFill:SetVertexColor(f[1], f[2], f[3], f[4])
+			row.Highlight:SetColorTexture(h[1], h[2], h[3], h[4])
+			row.Hover:SetColorTexture(h[1], h[2], h[3], h[4])
 			row:Show()
 			y = y - ROW_HEIGHT
 		end

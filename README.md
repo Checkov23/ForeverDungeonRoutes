@@ -59,6 +59,7 @@ replace them.
   without the addon, or share routes as text (export and import).
 - Route list: players put their routes up for everyone, a click takes a route over, and good routes
   get recommended. The list comes from your guild, your parties and the server channel FDRoutes.
+- Three window styles: dark, parchment (light like the map art) and classic (the game's gold frame).
 - Button at the minimap (right-click for a few switches), slash command and key binding.
 - English, German, French, Spanish, Portuguese, Russian, Korean and Chinese (simplified and
   traditional). Names of bosses, dungeons, map levels and rooms come from the game in the language
@@ -117,7 +118,8 @@ By hand:
   click on the entrance sets the map pin.
 - The gear button holds the settings: stop list, arrows, tick off bosses automatically, open
   automatically in dungeons, button at the minimap, small display in dungeons, route list over the
-  server channel, line width, text size of the stop list, opacity.
+  server channel, line width, text size of the stop list, window style (dark, parchment, classic),
+  opacity.
 
 Stratholme, Maraudon and Dire Maul North come with two standard routes each (living and undead
 side, purple and orange side, full clear and tribute run).

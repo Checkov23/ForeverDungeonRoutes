@@ -411,7 +411,7 @@ function Editor:BuildToolbar(parent)
 	bar.Hint:SetPoint("TOPRIGHT", 0, -26)
 	bar.Hint:SetJustifyH("LEFT")
 	bar.Hint:SetSpacing(2)
-	bar.Hint:SetTextColor(0.75, 0.85, 1)
+	DR.ThemeText(bar.Hint, "hint")
 
 	bar.Undo = CreateFrame("Button", nil, bar, "UIPanelButtonTemplate")
 	bar.Undo:SetSize(66, 20)
