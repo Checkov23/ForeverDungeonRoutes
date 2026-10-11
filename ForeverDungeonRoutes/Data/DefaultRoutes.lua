@@ -241,7 +241,7 @@ DR.DefaultRoutes["gnomeregan"] = {
     {kind="boss", floor=227, x=0.2443, y=0.6798, name="Electrocutioner 6000", nameDE="Elektrokutor 6000", nameFR="Électrocuteur 6000", nameES="Electrocutor 6000", namePT="Eletrocutor 6000", nameRU="\"Электрошокер-6000\"", nameKO="기계화 문지기 6000", nameCN="电刑器6000型", nameTW="電刑器6000型", encounters={2770,2927}},
     {kind="boss", floor=228, x=0.4331, y=0.8811, name="Crowd Pummeler 9-60", nameDE="Meuteverprügler 9-60", nameFR="Disperseur de foule 9-60", nameES="Golpeamasa 9-60", namePT="Espanca-gente 9-60", nameRU="\"Толпогон 9-60\"", nameKO="고철 압축기 9-60", nameCN="群体打击者9-60", nameTW="群體打擊者9-60", encounters={2771,2899}},
     {kind="rare", floor=229, x=0.277, y=0.6259, name="Dark Iron Ambassador"},
-    {kind="boss", floor=229, x=0.3123, y=0.2962, name="Mekgineer Thermaplugg", nameDE="Robogenieur Thermadraht", nameFR="Mekgénieur Thermojoncteur", nameES="Mekigeniero Termochufe", namePT="Mecangenheiro Termaplugue", nameRU="Анжинер Термоштепсель", nameKO="멕기니어 텔마플러그", nameCN="机械师瑟玛普拉格", nameTW="機電師瑟瑪普拉格", encounters={2772,2940}},
+    {kind="boss", floor=229, x=0.3123, y=0.2962, name="Mekgineer Thermaplugg", nameDE="Robogenieur Thermadraht", nameFR="Mekgénieur Thermojoncteur", nameES="Mekigeniero Termochufe", namePT="Mecangenheiro Termaplugue", nameRU="Анжинер Термоштепсель", nameKO="기계박사 텔마플러그", nameCN="机械师瑟玛普拉格", nameTW="機電師瑟瑪普拉格", encounters={2772,2940}},
   },
   notes = {
     {floor=226, x=0.5792, y=0.4937, text="Jump down onto the gear", textDE="Auf das Zahnrad hinunterspringen"},

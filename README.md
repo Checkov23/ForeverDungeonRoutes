@@ -13,6 +13,8 @@ spirit of Mythic Dungeon Tools.
 | ![Blackrock Depths, Shadowforge City, The Grim Guzzler lit up, the small display above the window](docs/screenshots/room.png) | ![Scholomance with the question whether to take over a route](docs/screenshots/share.png) |
 | **Scholomance: blue squares lead to the other map levels** | **German game client** |
 | ![Scholomance, The Upper Study](docs/screenshots/scholomance.png) | ![The Deadmines with German texts (Todesminen)](docs/screenshots/german.png) |
+| **New in WoW: Forever: Ruins of Lordaeron, the map drawn from the game's floor plan** | **The Hall of Thanes** |
+| ![Ruins of Lordaeron, King's Alley lit up, no route yet](docs/screenshots/new-lordaeron.png) | ![The Hall of Thanes, map drawn from the building's floors](docs/screenshots/new-thanes.png) |
 
 These are preview images, not in-game screenshots: the addon's own code runs against a replica of
 the game's interface functions, and every frame, line and texture it creates is drawn with the map
@@ -25,6 +27,10 @@ replace them.
   the art files are still in the game client; the addon draws them itself. No other addon needed.
 - Standard routes for all 24 classic dungeons. The line color runs from the entrance to the last
   boss, arrows show the walking direction, dashed lines mark side paths.
+- The four new dungeons of WoW: Forever (The Hall of Thanes, Ruins of Lordaeron, Excavation Site:
+  Wetlands, City of Dalaran): the game has no map art for them, so the addon brings maps drawn from
+  the floor plans in the game's files. Their rooms light up and their bosses tick themselves off;
+  standard routes for them follow, until then draw your own.
 - Numbered bosses in route order, rares (`R`), optional bosses (`+`) and notes (`!`) with keys,
   events and quest items. Blue squares switch to the next map level.
 - Where you are, as well as the game allows: WoW gives addons no position inside dungeons (since
@@ -120,6 +126,9 @@ Razorfen Kraul, Gnomeregan, Scarlet Monastery (Graveyard, Library, Armory, Cathe
 Razorfen Downs, Uldaman, Zul'Farrak, Maraudon, Sunken Temple, Blackrock Depths,
 Lower Blackrock Spire, Dire Maul (East, West, North), Scholomance, Stratholme.
 
+Without a standard route yet (map, rooms and bosses are there): The Hall of Thanes, Ruins of
+Lordaeron, Excavation Site: Wetlands, City of Dalaran.
+
 ## How the map works
 
 The addon ships no map art. It shows the game's own dungeon map files by their file IDs
@@ -134,6 +143,12 @@ Scarlet Monastery already the first room.
 
 The entrances (`Data/Entrances.lua`) are WoW: Forever's own map points where it has them, else the
 positions of Blizzard's table of dungeon entrances, placed on Forever's zone maps.
+
+For the new Forever dungeons there is no map art in the game. Their maps (`maps/*.blp`,
+`Data/Pictures.lua`) are drawn from the game's files: the walkable floors of the buildings, the
+terrain with its slopes and water, the walls as ink lines, the names of the areas. No picture from
+the game is copied. Their rooms are the areas and named building parts the game reports there. The
+game has no entrance data for these dungeons.
 
 ## Credits
 

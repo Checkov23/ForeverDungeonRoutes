@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.5.9
+
+- The four new dungeons of WoW: Forever: The Hall of Thanes, Ruins of Lordaeron, Excavation Site:
+  Wetlands and City of Dalaran. The game has no map art for them, so the addon brings its own maps,
+  drawn from the floor plans in the game's files (buildings, terrain, water, walls). The areas and
+  named places the game reports light up like the rooms of the classic dungeons ("You are in:
+  King's Alley"), and the bosses are known, so stops named like them tick themselves off.
+- No standard routes for them yet: create your own route ("New route") or import one.
+- Boss names from the current Forever client (one Korean name changed).
+
 ## 0.5.8
 
 - Dungeon names as WoW: Forever names its zones, the text you see when you enter: Deadmines,

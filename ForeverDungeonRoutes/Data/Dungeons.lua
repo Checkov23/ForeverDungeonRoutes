@@ -1,20 +1,30 @@
 local _, DR = ...
 
--- Classic dungeons. floors are the uiMapIDs of the dungeon map levels, instanceID is the
--- value GetInstanceInfo() returns. Level ranges follow the WoW: Forever dungeon list.
+-- Dungeons of WoW: Forever. floors are the uiMapIDs of the dungeon map levels; the new Forever
+-- dungeons have no map art in the game and use the picture floors of Data/Pictures.lua
+-- (1000000 + map ID * 10 + level). instanceID is the value GetInstanceInfo() returns. Level ranges
+-- follow the WoW: Forever dungeon list.
 DR.Dungeons = {
 	{ key = "ragefire", instanceID = 389, floors = { 213 }, levels = { 13, 19 },
 		name = "Ragefire Chasm", nameDE = "Ragefireabgrund", nameFR = "Gouffre de Ragefeu", nameES = "Sima Ígnea", namePT = "Cavernas Ígneas", nameRU = "Огненная пропасть", nameKO = "성난불길 협곡", nameCN = "怒焰裂谷", nameTW = "怒焰裂谷" },
+	{ key = "hallofthanes", instanceID = 3065, floors = { 1030651 }, levels = { 13, 18 },
+		name = "The Hall of Thanes", nameDE = "Die Halle der Thanen", nameFR = "La salle des Thanes", nameES = "El Salón de los Feudales", namePT = "Salão dos Thanes", nameRU = "Чертоги танов", nameKO = "영주의 전당", nameCN = "领主大厅", nameTW = "族長之廳" },
+	{ key = "ruinsoflordaeron", instanceID = 2999, floors = { 1029991 }, levels = { 15, 20 },
+		name = "Ruins of Lordaeron", nameDE = "Ruinen von Lordaeron", nameFR = "Ruines de Lordaeron", nameES = "Ruinas de Lordaeron", namePT = "Ruínas de Lordaeron", nameRU = "Руины Лордерона", nameKO = "로데론의 폐허", nameCN = "洛丹伦废墟", nameTW = "羅德隆廢墟" },
 	{ key = "deadmines", instanceID = 36, floors = { 291, 292 }, levels = { 18, 24 },
 		name = "Deadmines", nameDE = "Todesminen", nameFR = "Mortemines", nameES = "Minas de la Muerte", namePT = "Minas Mortas", nameRU = "Мертвые копи", nameKO = "죽음의 폐광", nameCN = "死亡矿井", nameTW = "死亡礦坑" },
 	{ key = "wailingcaverns", instanceID = 43, floors = { 279 }, levels = { 19, 25 },
 		name = "Wailing Caverns", nameDE = "Höhlen des Wehklagens", nameFR = "Cavernes des Lamentations", nameES = "Cuevas de los Lamentos", namePT = "Caverna Ululante", nameRU = "Пещеры Стенаний", nameKO = "통곡의 동굴", nameCN = "哀嚎洞穴", nameTW = "哀嚎洞穴" },
 	{ key = "shadowfang", instanceID = 33, floors = { 310, 311, 312, 313, 314, 315, 316 }, levels = { 23, 29 },
 		name = "Shadowfang Keep", nameDE = "Burg Shadowfang", nameFR = "Donjon d'Ombrecroc", nameES = "Castillo de Colmillo Oscuro", namePT = "Bastilha da Presa Negra", nameRU = "Крепость Темного Клыка", nameKO = "그림자송곳니 성채", nameCN = "影牙城堡", nameTW = "影牙城堡" },
+	{ key = "excavationsite", instanceID = 2998, floors = { 1029981 }, levels = { 24, 29 },
+		name = "Excavation Site: Wetlands", nameDE = "Ausgrabungsstätte: Sumpfland", nameFR = "Excavations : les Paluns", nameES = "Excavación: Los Humedales", namePT = "Sítio de Escavação: Pantanal", nameRU = "Раскопки: Болотина", nameKO = "발굴 현장: 저습지", nameCN = "挖掘场：湿地", nameTW = "挖掘場：濕地" },
 	{ key = "blackfathom", instanceID = 48, floors = { 221, 222, 223 }, levels = { 25, 31 },
 		name = "Blackfathom Deeps", nameDE = "Blackfathom-Tiefe", nameFR = "Profondeurs de Brassenoire", nameES = "Cavernas de Brazanegra", namePT = "Profundezas Negras", nameRU = "Непроглядная Пучина", nameKO = "검은심연의 나락", nameCN = "黑暗深渊", nameTW = "黑澗深淵" },
 	{ key = "stockade", instanceID = 34, floors = { 225 }, levels = { 26, 32 },
 		name = "Stormwind Stockade", nameDE = "Verlies von Stormwind", nameFR = "Prison de Stormwind", nameES = "Mazmorras de Ventormenta", namePT = "Cárcere de Ventobravo", nameRU = "Тюрьма Штормграда", nameKO = "스톰윈드 지하감옥", nameCN = "暴风城监狱", nameTW = "暴風城監獄" },
+	{ key = "dalaran", instanceID = 2959, floors = { 1029591 }, levels = { 28, 33 },
+		name = "City of Dalaran", nameDE = "Dalaran", nameFR = "Cité de Dalaran", nameES = "Ciudad de Dalaran", namePT = "Dalaran", nameRU = "Даларан", nameKO = "달라란", nameCN = "达拉然城", nameTW = "達拉然城" },
 	{ key = "razorfenkraul", instanceID = 47, floors = { 301 }, levels = { 30, 36 },
 		name = "Razorfen Kraul", nameDE = "Kral von Razorfen", nameFR = "Kraal de Tranchebauge", nameES = "Horado Rajacieno", namePT = "Urzal dos Tuscos", nameRU = "Лабиринты Иглошкурых", nameKO = "가시덩굴 우리", nameCN = "剃刀沼泽", nameTW = "剃刀沼澤" },
 	{ key = "gnomeregan", instanceID = 90, floors = { 226, 227, 228, 229 }, levels = { 31, 37 },
