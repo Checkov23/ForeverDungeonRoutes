@@ -41,6 +41,11 @@ replace them.
 
 ## Install
 
+On [CurseForge](https://www.curseforge.com/wow/addons/forever-dungeon-routes): the files there are
+Beta files, so allow Beta for this addon in the CurseForge app to get the updates.
+
+By hand:
+
 1. Download `ForeverDungeonRoutes-<version>.zip` from the [releases](../../releases).
 2. Unzip it into `World of Warcraft\<Forever folder>\Interface\AddOns\`. The folder must be named
    `ForeverDungeonRoutes`.
