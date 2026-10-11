@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.5.13
+
+- All seven raids of WoW: Forever: Molten Core, Onyxia's Lair, Blackwing Lair, Zul'Gurub, Ruins of
+  Ahn'Qiraj, Ahn'Qiraj Temple and Naxxramas, with the game's map art, the rooms and areas the game
+  names, and bosses that tick themselves off. The standard route "Bosses" shows each boss where the
+  game's dungeon journal has it (no paths yet); Zul'Gurub has no boss positions in the journal.
+- In the dungeon list the raids sit in their own submenu "Raids", so the list stays short.
+- Entrances of the raids for the waypoint, except Naxxramas (the game's table only knows its
+  Northrend entrance).
+
 ## 0.5.12
 
 - Window styles behind the gear button ("Window style"): Dark (as before), Parchment (light like the

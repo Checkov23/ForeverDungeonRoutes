@@ -128,12 +128,17 @@ function DR.PlayerLevel()
 	return type(level) == "number" and level or nil
 end
 
-function DR:GetLevelText(key)
+-- "18-24", or one number where the range is one level (raids: 60).
+function DR:GetLevelRange(key)
 	local dungeon = self:GetDungeon(key)
-	if dungeon and dungeon.levels then
-		return L["Level"] .. " " .. dungeon.levels[1] .. "-" .. dungeon.levels[2]
-	end
-	return nil
+	if not dungeon or not dungeon.levels then return nil end
+	local lo, hi = dungeon.levels[1], dungeon.levels[2]
+	return lo == hi and tostring(lo) or (lo .. "-" .. hi)
+end
+
+function DR:GetLevelText(key)
+	local range = self:GetLevelRange(key)
+	return range and (L["Level"] .. " " .. range) or nil
 end
 
 function DR:GetFloorName(floor)

@@ -1,7 +1,7 @@
 local _, DR = ...
 
--- Dungeons of WoW: Forever. floors are the uiMapIDs of the dungeon map levels; the new Forever
--- dungeons have no map art in the game and use the picture floors of Data/Pictures.lua
+-- Dungeons and raids (raid = true) of WoW: Forever. floors are the uiMapIDs of the map levels; the
+-- new Forever dungeons have no map art in the game and use the picture floors of Data/Pictures.lua
 -- (1000000 + map ID * 10 + level). instanceID is the value GetInstanceInfo() returns. Level ranges
 -- follow the WoW: Forever dungeon list.
 DR.Dungeons = {
@@ -61,4 +61,18 @@ DR.Dungeons = {
 		name = "Scholomance", nameDE = "Scholomance", nameFR = "Scholomance", nameES = "Scholomance", namePT = "Scolomântia", nameRU = "Некроситет", nameKO = "스칼로맨스", nameCN = "通灵学院", nameTW = "通靈學院" },
 	{ key = "stratholme", instanceID = 329, floors = { 317, 318 }, levels = { 58, 60 },
 		name = "Stratholme", nameDE = "Stratholme", nameFR = "Stratholme", nameES = "Stratholme", namePT = "Stratholme", nameRU = "Стратхольм", nameKO = "스트라솔름", nameCN = "斯坦索姆", nameTW = "斯坦索姆" },
+	{ key = "moltencore", instanceID = 409, floors = { 232 }, levels = { 60, 60 }, raid = true,
+		name = "Molten Core", nameDE = "Geschmolzener Kern", nameFR = "Cœur du Magma", nameES = "Núcleo de Magma", namePT = "Núcleo Derretido", nameRU = "Огненные Недра", nameKO = "화산 심장부", nameCN = "熔火之心", nameTW = "熔火之心" },
+	{ key = "onyxia", instanceID = 249, floors = { 248 }, levels = { 60, 60 }, raid = true,
+		name = "Onyxia's Lair", nameDE = "Onyxias Hort", nameFR = "Repaire d'Onyxia", nameES = "Guarida de Onyxia", namePT = "Covil de Onyxia", nameRU = "Логово Ониксии", nameKO = "오닉시아의 둥지", nameCN = "奥妮克希亚的巢穴", nameTW = "奧妮克希亞的巢穴" },
+	{ key = "blackwinglair", instanceID = 469, floors = { 287, 288, 289, 290 }, levels = { 60, 60 }, raid = true,
+		name = "Blackwing Lair", nameDE = "Pechschwingenhort", nameFR = "Repaire de l'Aile noire", nameES = "Guarida Alanegra", namePT = "Covil Asa Negra", nameRU = "Логово Крыла Тьмы", nameKO = "검은날개 둥지", nameCN = "黑翼之巢", nameTW = "黑翼之巢" },
+	{ key = "zulgurub", instanceID = 309, floors = { 233 }, levels = { 60, 60 }, raid = true,
+		name = "Zul'Gurub", nameDE = "Zul'Gurub", nameFR = "Zul'Gurub", nameES = "Zul'Gurub", namePT = "Zul'Gurub", nameRU = "Зул'Гуруб", nameKO = "줄구룹", nameCN = "祖尔格拉布", nameTW = "祖爾格拉布" },
+	{ key = "ruinsofahnqiraj", instanceID = 509, floors = { 247 }, levels = { 60, 60 }, raid = true,
+		name = "Ruins of Ahn'Qiraj", nameDE = "Ruinen von Ahn'Qiraj", nameFR = "Ruines d'Ahn'Qiraj", nameES = "Ruinas de Ahn'Qiraj", namePT = "Ruínas de Ahn'Qiraj", nameRU = "Руины Ан'Киража", nameKO = "안퀴라즈 폐허", nameCN = "安其拉废墟", nameTW = "安其拉廢墟" },
+	{ key = "templeofahnqiraj", instanceID = 531, floors = { 320, 319, 321 }, levels = { 60, 60 }, raid = true,
+		name = "Ahn'Qiraj Temple", nameDE = "Tempel von Ahn'Qiraj", nameFR = "Temple d'Ahn'Qiraj", nameES = "Templo de Ahn'Qiraj", namePT = "Templo de Ahn'Qiraj", nameRU = "Храм Ан'Киража", nameKO = "안퀴라즈 사원", nameCN = "安其拉神殿", nameTW = "安其拉神廟" },
+	{ key = "naxxramas", instanceID = 533, floors = { 166, 163, 165, 164, 162, 167 }, levels = { 60, 60 }, raid = true,
+		name = "Naxxramas", nameDE = "Naxxramas", nameFR = "Naxxramas", nameES = "Naxxramas", namePT = "Naxxramas", nameRU = "Наксрамас", nameKO = "낙스라마스", nameCN = "纳克萨玛斯", nameTW = "納克薩瑪斯" },
 }

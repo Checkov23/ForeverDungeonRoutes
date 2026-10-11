@@ -29,4 +29,10 @@ DR.Entrances = {
 	diremaul_north = { map = 1444, x = 0.6261, y = 0.2489 },
 	scholomance = { map = 1422, x = 0.6968, y = 0.7341 },
 	stratholme = { map = 1423, x = 0.2633, y = 0.1044 },
+	moltencore = { map = 1427, x = 0.319, y = 0.9494 },
+	onyxia = { map = 1445, x = 0.523, y = 0.7614 },
+	blackwinglair = { map = 1428, x = 0.3654, y = 0.2544 },
+	zulgurub = { map = 1434, x = 0.539, y = 0.1757 },
+	ruinsofahnqiraj = { map = 1451, x = 0.2954, y = 0.995 },
+	templeofahnqiraj = { map = 1451, x = 0.1528, y = 0.9781 },
 }

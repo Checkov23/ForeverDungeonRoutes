@@ -1,19 +1,19 @@
 ## Interface: 16001
 ## Title: Forever Dungeon Routes
-## Notes: Dungeon map for all dungeons of WoW: Forever: routes, boss order and notes for the classic dungeons, own maps for the new ones. Bosses tick themselves off. Create, edit and share your own routes, or take one over from the route list.
-## Notes-deDE: Dungeonkarte für alle Dungeons von WoW: Forever: Routen, Boss-Reihenfolge und Hinweise für die klassischen Dungeons, eigene Karten für die neuen. Bosse haken sich selbst ab. Eigene Routen erstellen, bearbeiten und teilen oder eine aus der Routenliste übernehmen.
-## Notes-frFR: Carte de tous les donjons de WoW: Forever : itinéraires, ordre des boss et notes pour les donjons classiques, cartes propres pour les nouveaux. Les boss se cochent tout seuls. Créez, modifiez et partagez vos propres itinéraires, ou reprenez-en un de la liste des itinéraires.
-## Notes-esES: Mapa de todas las mazmorras de WoW: Forever: rutas, orden de jefes y notas para las mazmorras clásicas, mapas propios para las nuevas. Los jefes se marcan solos. Crea, edita y comparte tus propias rutas, o adopta una de la lista de rutas.
-## Notes-esMX: Mapa de todas las mazmorras de WoW: Forever: rutas, orden de jefes y notas para las mazmorras clásicas, mapas propios para las nuevas. Los jefes se marcan solos. Crea, edita y comparte tus propias rutas, o adopta una de la lista de rutas.
-## Notes-ptBR: Mapa de todas as masmorras de WoW: Forever: rotas, ordem dos chefes e notas para as masmorras clássicas, mapas próprios para as novas. Os chefes se marcam sozinhos. Crie, edite e compartilhe suas próprias rotas, ou adote uma da lista de rotas.
-## Notes-ruRU: Карта всех подземелий WoW: Forever: маршруты, порядок боссов и заметки для классических подземелий, собственные карты для новых. Боссы отмечаются сами. Создавайте, редактируйте и делитесь своими маршрутами или берите их из списка маршрутов.
-## Notes-koKR: WoW: Forever의 모든 던전 지도: 클래식 던전의 경로, 우두머리 순서와 메모, 새 던전용 자체 지도. 우두머리는 자동으로 체크됩니다. 나만의 경로를 만들고 편집하고 공유하거나 경로 목록에서 가져오세요.
-## Notes-zhCN: WoW: Forever 全部地下城的地图：经典地下城的路线、首领顺序和备注，新地下城的自绘地图。首领会自动勾选。可创建、编辑和分享你自己的路线，或从路线列表中接受一条。
-## Notes-zhTW: WoW: Forever 全部地城的地圖：經典地城的路線、首領順序和備註，新地城的自繪地圖。首領會自動勾選。可建立、編輯和分享你自己的路線，或從路線列表中接受一條。
+## Notes: Dungeon map for all dungeons and raids of WoW: Forever: routes, boss order and notes for the classic dungeons, own maps for the new ones, boss positions in the raids. Bosses tick themselves off. Create, edit and share your own routes, or take one over from the route list.
+## Notes-deDE: Dungeonkarte für alle Dungeons und Schlachtzüge von WoW: Forever: Routen, Boss-Reihenfolge und Hinweise für die klassischen Dungeons, eigene Karten für die neuen, Bosspositionen in den Schlachtzügen. Bosse haken sich selbst ab. Eigene Routen erstellen, bearbeiten und teilen oder eine aus der Routenliste übernehmen.
+## Notes-frFR: Carte de tous les donjons et raids de WoW: Forever : itinéraires, ordre des boss et notes pour les donjons classiques, cartes propres pour les nouveaux, position des boss dans les raids. Les boss se cochent tout seuls. Créez, modifiez et partagez vos propres itinéraires, ou reprenez-en un de la liste des itinéraires.
+## Notes-esES: Mapa de todas las mazmorras y bandas de WoW: Forever: rutas, orden de jefes y notas para las mazmorras clásicas, mapas propios para las nuevas, posiciones de los jefes en las bandas. Los jefes se marcan solos. Crea, edita y comparte tus propias rutas, o adopta una de la lista de rutas.
+## Notes-esMX: Mapa de todas las mazmorras y bandas de WoW: Forever: rutas, orden de jefes y notas para las mazmorras clásicas, mapas propios para las nuevas, posiciones de los jefes en las bandas. Los jefes se marcan solos. Crea, edita y comparte tus propias rutas, o adopta una de la lista de rutas.
+## Notes-ptBR: Mapa de todas as masmorras e raides de WoW: Forever: rotas, ordem dos chefes e notas para as masmorras clássicas, mapas próprios para as novas, posições dos chefes nas raides. Os chefes se marcam sozinhos. Crie, edite e compartilhe suas próprias rotas, ou adote uma da lista de rotas.
+## Notes-ruRU: Карта всех подземелий и рейдов WoW: Forever: маршруты, порядок боссов и заметки для классических подземелий, собственные карты для новых, положение боссов в рейдах. Боссы отмечаются сами. Создавайте, редактируйте и делитесь своими маршрутами или берите их из списка маршрутов.
+## Notes-koKR: WoW: Forever의 모든 던전과 공격대 지도: 클래식 던전의 경로, 우두머리 순서와 메모, 새 던전용 자체 지도, 공격대의 우두머리 위치. 우두머리는 자동으로 체크됩니다. 나만의 경로를 만들고 편집하고 공유하거나 경로 목록에서 가져오세요.
+## Notes-zhCN: WoW: Forever 全部地下城和团队副本的地图：经典地下城的路线、首领顺序和备注，新地下城的自绘地图，团队副本的首领位置。首领会自动勾选。可创建、编辑和分享你自己的路线，或从路线列表中接受一条。
+## Notes-zhTW: WoW: Forever 全部地城和團隊副本的地圖：經典地城的路線、首領順序和備註，新地城的自繪地圖，團隊副本的首領位置。首領會自動勾選。可建立、編輯和分享你自己的路線，或從路線列表中接受一條。
 ## Author: Checkov23
 ## X-Copyright: Copyright (c) 2026 Checkov23
 ## X-License: MIT
-## Version: 0.5.12
+## Version: 0.5.13
 ## Category: Map
 ## Category-deDE: Karte
 ## Category-frFR: Carte

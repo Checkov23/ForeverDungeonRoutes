@@ -1,9 +1,9 @@
 # Forever Dungeon Routes
 
-A dungeon map with routes for **World of Warcraft: Forever**, for all 28 dungeons: ready routes for
-the 24 classic dungeons, own maps for the 4 new Forever dungeons, boss order and notes, bosses that
-tick themselves off, an editor for your own routes in the spirit of Mythic Dungeon Tools, and a
-route list where players put up their routes for everyone.
+A dungeon map with routes for **World of Warcraft: Forever**, for all 28 dungeons and the 7 raids:
+ready routes for the 24 classic dungeons, own maps for the 4 new Forever dungeons, the bosses of the
+raids, boss order and notes, bosses that tick themselves off, an editor for your own routes in the
+spirit of Mythic Dungeon Tools, and a route list where players put up their routes for everyone.
 
 ![Inside the Deadmines: the first boss ticked off by the kill, the room you are in lights up, the run time counts](docs/screenshots/dungeon.png)
 
@@ -32,6 +32,9 @@ replace them.
   Wetlands, City of Dalaran): the game has no map art for them, so the addon brings maps drawn from
   the floor plans in the game's files. Their rooms light up and their bosses tick themselves off;
   standard routes for them follow, until then draw your own.
+- All seven raids (Molten Core to Naxxramas): the game's map art, rooms and areas, bosses that tick
+  themselves off, and a standard route "Bosses" with each boss where the game's dungeon journal has
+  it (no paths yet). In the dungeon list they sit in the submenu "Raids".
 - Numbered bosses in route order, rares (`R`), optional bosses (`+`) and notes (`!`) with keys,
   events and quest items. Blue squares switch to the next map level.
 - Where you are, as well as the game allows: WoW gives addons no position inside dungeons (since
@@ -155,6 +158,10 @@ Lower Blackrock Spire, Dire Maul (East, West, North), Scholomance, Stratholme.
 Without a standard route yet (map, rooms and bosses are there): The Hall of Thanes, Ruins of
 Lordaeron, Excavation Site: Wetlands, City of Dalaran.
 
+Raids with the standard route "Bosses" (boss positions, no paths yet): Molten Core, Onyxia's Lair,
+Blackwing Lair, Ruins of Ahn'Qiraj, Ahn'Qiraj Temple, Naxxramas. Zul'Gurub: map, areas and bosses,
+no route yet.
+
 ## How the map works
 
 The addon ships no map art. It shows the game's own dungeon map files by their file IDs
@@ -181,7 +188,8 @@ game has no entrance data for these dungeons.
 The standard routes were traced from the dungeon walkthrough maps of aetherflask.com, which went
 offline in 2022 and are mirrored at [eintr.net](https://eintr.net/WoW/World-of-Warcraft-Classic-Dungeon-Walkthrough.html).
 For the Sunken Temple and parts of Scholomance those maps served as a guide for the boss
-order; the paths follow the corridors of the game's map. Boss names come from the game's boss list.
+order; the paths follow the corridors of the game's map. Boss names come from the game's boss list,
+the boss positions in the raids from the game's dungeon journal.
 
 ## License
 

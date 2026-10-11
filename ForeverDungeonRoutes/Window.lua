@@ -257,6 +257,7 @@ local function openDungeonMenu(owner)
 	MenuUtil.CreateContextMenu(owner, function(_, root)
 		local level = DR.PlayerLevel()
 		root:CreateTitle(level and L["Dungeons (level %d)"]:format(level) or L["Dungeons"])
+		local raids -- the raids in a submenu at the end, so the list stays short
 		for _, dungeon in ipairs(DR.Dungeons) do
 			local key = dungeon.key
 			local text = DR:GetKeyName(key)
@@ -265,12 +266,20 @@ local function openDungeonMenu(owner)
 				text = "|cff" .. color .. text .. "|r"
 			end
 			if dungeon.levels then
-				text = text .. "  |cff8c8c8c" .. dungeon.levels[1] .. "-" .. dungeon.levels[2] .. "|r"
+				text = text .. "  |cff8c8c8c" .. DR:GetLevelRange(key) .. "|r"
 			end
 			if key == DR.currentKey then
 				text = text .. "  |cffffd75c" .. L["(you are here)"] .. "|r"
 			end
-			root:CreateRadio(text, function() return shown.key == key end, function()
+			local parent = root
+			if dungeon.raid then
+				if not raids then
+					root:CreateDivider()
+					raids = root:CreateButton(L["Raids"])
+				end
+				parent = raids
+			end
+			parent:CreateRadio(text, function() return shown.key == key end, function()
 				following = key == DR.currentKey
 				Window:ShowDungeon(key)
 			end)
