@@ -13,7 +13,7 @@
 ## Author: Checkov23
 ## X-Copyright: Copyright (c) 2026 Checkov23
 ## X-License: MIT
-## Version: 0.5.15
+## Version: 0.5.16
 ## Category: Map
 ## Category-deDE: Karte
 ## Category-frFR: Carte

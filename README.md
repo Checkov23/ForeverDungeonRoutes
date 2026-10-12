@@ -18,6 +18,8 @@ spirit of Mythic Dungeon Tools, and a route list where players put up their rout
 | ![Ruins of Lordaeron, King's Alley lit up, no route yet](docs/screenshots/new-lordaeron.png) | ![The Hall of Thanes, map drawn from the building's floors](docs/screenshots/new-thanes.png) |
 | **Or from the game's own minimap pictures (gear button)** | **The Hall of Thanes from the minimap pictures** |
 | ![Ruins of Lordaeron from the game's minimap pictures, King's Alley lit up](docs/screenshots/new-lordaeron-minimap.png) | ![The Hall of Thanes from the game's minimap pictures, Anvilmar's Rest lit up](docs/screenshots/new-thanes-minimap.png) |
+| **Raids with paths: Molten Core** | **Zul'Gurub, the route "Full clear"** |
+| ![Molten Core with the standard route from the entrance to Ragnaros](docs/screenshots/raid-moltencore.png) | ![Zul'Gurub with the route Full clear, optional bosses marked](docs/screenshots/raid-zulgurub.png) |
 | **The minimap pictures for every dungeon: the Deadmines** | **Blackrock Depths, The Grim Guzzler lit up** |
 | ![The Deadmines from the game's minimap pictures, with the standard route](docs/screenshots/minimap-deadmines.png) | ![Blackrock Depths from the game's minimap pictures, The Grim Guzzler lit up](docs/screenshots/minimap-blackrockdepths.png) |
 
@@ -37,8 +39,9 @@ replace them.
   the floor plans in the game's files. Their rooms light up and their bosses tick themselves off;
   standard routes for them follow, until then draw your own.
 - All seven raids (Molten Core to Naxxramas): the game's map art, rooms and areas, bosses that tick
-  themselves off, and a standard route "Bosses" with each boss where the game's dungeon journal has
-  it (no paths yet). In the dungeon list they sit in the submenu "Raids".
+  themselves off, and standard routes from the entrance from boss to boss over the walkable floors;
+  Zul'Gurub and Ahn'Qiraj with two each ("Full clear" and "Efficient"). In the dungeon list they sit
+  in the submenu "Raids".
 - Or the game's own minimap pictures (gear button, "Map from the game's minimap"): every dungeon and
   raid put together from the pictures the minimap shows there, one map per level, with the same
   routes, rooms and notes.
@@ -165,9 +168,9 @@ Lower Blackrock Spire, Dire Maul (East, West, North), Scholomance, Stratholme.
 Without a standard route yet (map, rooms and bosses are there): The Hall of Thanes, Ruins of
 Lordaeron, Excavation Site: Wetlands, City of Dalaran.
 
-Raids with the standard route "Bosses" (boss positions, no paths yet): Molten Core, Onyxia's Lair,
-Blackwing Lair, Ruins of Ahn'Qiraj, Ahn'Qiraj Temple, Naxxramas. Zul'Gurub: map, areas and bosses,
-no route yet.
+Raids: Molten Core, Onyxia's Lair, Blackwing Lair, Naxxramas (in the order of the game's dungeon
+journal: Arachnid, Plague, Military and Construct Quarter), and with "Full clear" and "Efficient"
+Zul'Gurub, Ruins of Ahn'Qiraj and Ahn'Qiraj Temple.
 
 ## How the map works
 
@@ -202,7 +205,9 @@ The standard routes were traced from the dungeon walkthrough maps of aetherflask
 offline in 2022 and are mirrored at [eintr.net](https://eintr.net/WoW/World-of-Warcraft-Classic-Dungeon-Walkthrough.html).
 For the Sunken Temple and parts of Scholomance those maps served as a guide for the boss
 order; the paths follow the corridors of the game's map. Boss names come from the game's boss list,
-the boss positions in the raids from the game's dungeon journal.
+the boss positions in the raids from the game's dungeon journal (in Zul'Gurub from the game's areas
+and the skulls of its map). The raid paths are searched over the walkable floors in the game's
+files, around lava and deep water.
 
 ## License
 

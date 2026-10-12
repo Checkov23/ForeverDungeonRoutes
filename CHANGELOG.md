@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.5.16
+
+- Paths for the raids: the standard routes now lead from the entrance from boss to boss, over the
+  walkable floors in the game's files (around lava and deep water, through the doors). Blue squares
+  switch the map level in Blackwing Lair and Ahn'Qiraj Temple; in Naxxramas each quarter starts at
+  the center.
+- Zul'Gurub, Ruins of Ahn'Qiraj and Ahn'Qiraj Temple come with two routes: "Full clear" with the
+  optional bosses, and "Efficient" with only the bosses on the way to the last one. Zul'Gurub's
+  bosses stand in their areas of the game, at the skulls of its map where it has one.
+
 ## 0.5.15
 
 - The game's minimap pictures for every dungeon and raid: gear button, "Map from the game's
