@@ -48,7 +48,9 @@ replace them.
   raid put together from the pictures the minimap shows there, one map per level, with the same
   routes, rooms and notes.
 - Numbered bosses in route order, rares (`R`), optional bosses (`+`) and notes (`!`) with keys,
-  events and quest items. Blue squares switch to the next map level.
+  events and quest items. Blue squares switch to the next map level. Where the drawn map of a dungeon
+  comes from a later version of the game and marks a boss that WoW: Forever does not have there, a
+  note says so.
 - Where you are, as well as the game allows: WoW gives addons no position inside dungeons (since
   patch 7.1), so there is no arrow for you or your group. But the game names the room you are in
   (the text above the minimap). The addon knows where these rooms lie: the room lights up on the

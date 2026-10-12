@@ -645,6 +645,9 @@ function View:Refresh()
 	if self.route and self.floor then
 		self:AddPins()
 	end
+	if self.floor then
+		self:AddMapNotes()
+	end
 	self:Layout()
 	self:UpdateGroup()
 	self:UpdateRoom()
@@ -995,6 +998,22 @@ function View:AddPins()
 			end
 			self:PlacePin(pin, link.x, link.y)
 		end
+	end
+end
+
+-- Remarks on the drawn map art (DR.MapNotes in Data/DefaultRoutes.lua), the same for every route: a
+-- skull of a later version of the dungeon where WoW: Forever has no boss, a part of a cave the art
+-- leaves out. The game's minimap pictures have neither, so the remarks stay off there. Not part of a
+-- route, so the editor leaves them alone.
+function View:AddMapNotes()
+	local floor = self.floor
+	if DR.db.gameMinimap and DR.MinimapArt and DR.MinimapArt[floor] then
+		return
+	end
+	for _, note in ipairs(DR.MapNotes and DR.MapNotes[floor] or {}) do
+		local pin = acquire(self, self.notePins, "numNotes", createNotePin)
+		pin.route, pin.index, pin.note = nil, nil, note
+		self:PlacePin(pin, note.x, note.y)
 	end
 end
 

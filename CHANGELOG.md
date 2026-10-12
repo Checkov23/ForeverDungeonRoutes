@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.5.19
+
+- Map notes where the drawn map marks a boss that WoW: Forever does not have there: the map art of
+  some dungeons comes from later versions of the game (Ragefire Chasm, Wailing Caverns, Maraudon, the
+  Deadmines). In the Wailing Caverns the drawn map also leaves out the Winding Chasm, where Lord
+  Pythas and Skum stand; a note says so, and the game's minimap pictures show it. The notes show with
+  every route, not with the minimap pictures.
+- Stratholme, living side: Malor the Zealous is on the route now, between Timmy the Cruel and Cannon
+  Master Willey; his kill ticks him off.
+- Lower Blackrock Spire: Urok Doomhowl and Bannok Grimaxe stand on the map level Hall of Blackhand,
+  Overlord Wyrmthalak in the Chamber of Battle, as the game's map shows them; the route leads there.
+
 ## 0.5.18
 
 - New installs start in the window style "Gilded", and it comes first in the style menu. A style
