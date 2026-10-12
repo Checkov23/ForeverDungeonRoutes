@@ -311,7 +311,7 @@ local function openSettingsMenu(owner)
 			function() setting("showStops", not DR.db.showStops) end)
 		root:CreateCheckbox(L["Arrows on the route"], function() return DR.db.showArrows end,
 			function() setting("showArrows", not DR.db.showArrows) end)
-		root:CreateCheckbox(L["New dungeons: map from the game's minimap"], function() return DR.db.gameMinimap end,
+		root:CreateCheckbox(L["Map from the game's minimap"], function() return DR.db.gameMinimap end,
 			function() setting("gameMinimap", not DR.db.gameMinimap) end)
 		root:CreateCheckbox(L["Tick off bosses automatically"], function() return DR.db.autoCheck end,
 			function() setting("autoCheck", not DR.db.autoCheck) end)

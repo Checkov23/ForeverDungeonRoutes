@@ -18,6 +18,8 @@ spirit of Mythic Dungeon Tools, and a route list where players put up their rout
 | ![Ruins of Lordaeron, King's Alley lit up, no route yet](docs/screenshots/new-lordaeron.png) | ![The Hall of Thanes, map drawn from the building's floors](docs/screenshots/new-thanes.png) |
 | **Or from the game's own minimap pictures (gear button)** | **The Hall of Thanes from the minimap pictures** |
 | ![Ruins of Lordaeron from the game's minimap pictures, King's Alley lit up](docs/screenshots/new-lordaeron-minimap.png) | ![The Hall of Thanes from the game's minimap pictures, Anvilmar's Rest lit up](docs/screenshots/new-thanes-minimap.png) |
+| **The minimap pictures for every dungeon: the Deadmines** | **Blackrock Depths, The Grim Guzzler lit up** |
+| ![The Deadmines from the game's minimap pictures, with the standard route](docs/screenshots/minimap-deadmines.png) | ![Blackrock Depths from the game's minimap pictures, The Grim Guzzler lit up](docs/screenshots/minimap-blackrockdepths.png) |
 
 These are preview images, not in-game screenshots: the addon's own code runs against a replica of
 the game's interface functions, and every frame, line and texture it creates is drawn with the map
@@ -32,12 +34,14 @@ replace them.
   boss, arrows show the walking direction, dashed lines mark side paths.
 - The four new dungeons of WoW: Forever (The Hall of Thanes, Ruins of Lordaeron, Excavation Site:
   Wetlands, City of Dalaran): the game has no map art for them, so the addon brings maps drawn from
-  the floor plans in the game's files. Behind the gear button they can show the game's own minimap
-  pictures instead, put together into one map. Their rooms light up and their bosses tick themselves
-  off; standard routes for them follow, until then draw your own.
+  the floor plans in the game's files. Their rooms light up and their bosses tick themselves off;
+  standard routes for them follow, until then draw your own.
 - All seven raids (Molten Core to Naxxramas): the game's map art, rooms and areas, bosses that tick
   themselves off, and a standard route "Bosses" with each boss where the game's dungeon journal has
   it (no paths yet). In the dungeon list they sit in the submenu "Raids".
+- Or the game's own minimap pictures (gear button, "Map from the game's minimap"): every dungeon and
+  raid put together from the pictures the minimap shows there, one map per level, with the same
+  routes, rooms and notes.
 - Numbered bosses in route order, rares (`R`), optional bosses (`+`) and notes (`!`) with keys,
   events and quest items. Blue squares switch to the next map level.
 - Where you are, as well as the game allows: WoW gives addons no position inside dungeons (since
@@ -122,8 +126,8 @@ By hand:
 - Above the stop list: the level of the dungeon in the colour of your level, the run time and your
   best time (the mouse on them shows your last ten runs), and outside the dungeon its entrance. A
   click on the entrance sets the map pin.
-- The gear button holds the settings: stop list, arrows, the new dungeons from the game's minimap,
-  tick off bosses automatically, open automatically in dungeons, button at the minimap, small display
+- The gear button holds the settings: stop list, arrows, map from the game's minimap, tick off
+  bosses automatically, open automatically in dungeons, button at the minimap, small display
   in dungeons, route list over the server channel, line width, text size of the stop list, window
   style (dark, parchment, classic), opacity.
 
@@ -186,10 +190,11 @@ terrain with its slopes and water, the walls as ink lines, the names of the area
 the game is copied. Their rooms are the areas and named building parts the game reports there. The
 game has no entrance data for these dungeons.
 
-Behind the gear button the new dungeons can also show the game's own minimap pictures
-(`Data/Minimaps.lua`, by file ID like the other map art): outdoors the picture of each terrain tile,
-in The Hall of Thanes the pictures of each part of the building, turned and put together on the same
-spot as the drawn map, so routes and rooms fit both.
+Behind the gear button every map level can also show the game's own minimap pictures
+(`Data/Minimaps.lua`, by file ID like the other map art): the pictures of the building parts the game
+puts on the level (where WoW: Forever rebuilt a dungeon, the new parts take the level of the old ones
+in the same place), outdoors those of the terrain tiles, turned and put together on the same spot as
+the map art, so routes and rooms fit both.
 
 ## Credits
 

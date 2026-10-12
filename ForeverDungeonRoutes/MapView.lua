@@ -301,7 +301,7 @@ function View:Create(parent)
 	self.picture = canvas:CreateTexture(nil, "BACKGROUND")
 	self.picture:SetAllPoints(canvas)
 	self.picture:Hide()
-	-- or, where the player chose so, the game's own minimap pictures of that floor (Data/Minimaps.lua)
+	-- or, where the player chose so, the game's own minimap pictures of the floor (Data/Minimaps.lua)
 	self.minimapTiles = {}
 
 	self.layer = CreateFrame("Frame", nil, canvas)
@@ -588,16 +588,16 @@ function View:SetFloor(key, floor)
 	self:Refresh()
 end
 
--- The art of the shown floor: the game's map tiles, a drawn picture (floor.image) or, where the
--- player chose so, the game's minimap pictures of a picture floor instead.
+-- The art of the shown floor: the game's map tiles or a drawn picture (floor.image), or, where the
+-- player chose so, the game's minimap pictures of the floor instead.
 function View:UpdateArt()
 	local floor = self.floor
 	local info = DR.Floors[floor]
 	local hasArt = floor ~= nil and DR.FloorHasArt(floor)
-	local minimap = hasArt and info.image and DR.db.gameMinimap and DR.MinimapArt and DR.MinimapArt[floor]
+	local minimap = floor ~= nil and DR.db.gameMinimap and DR.MinimapArt and DR.MinimapArt[floor]
 	local picture = hasArt and not minimap and info.image
 	for i, tile in ipairs(self.tiles) do
-		if hasArt and not info.image then
+		if hasArt and not minimap and not info.image then
 			tile:SetTexture(info.tiles[i], nil, nil, "TRILINEAR")
 			tile:Show()
 		else
@@ -610,7 +610,8 @@ function View:UpdateArt()
 	end
 	self.picture:SetShown(picture and true or false)
 	-- { file, x, y, width, height, 8 texture coordinates, sublevel }: in pixels of the map, turned by the
-	-- texture coordinates, higher building parts drawn over lower ones
+	-- texture coordinates (a building at an angle leaves the rest of its box clear), higher building
+	-- parts drawn over lower ones
 	local count = minimap and #minimap or 0
 	for i = 1, count do
 		local part, tile = minimap[i], self.minimapTiles[i]
@@ -618,7 +619,7 @@ function View:UpdateArt()
 			tile = self.canvas:CreateTexture(nil, "BACKGROUND")
 			self.minimapTiles[i] = tile
 		end
-		tile:SetTexture(part[1], nil, nil, "TRILINEAR")
+		tile:SetTexture(part[1], "CLAMPTOBLACKADDITIVE", "CLAMPTOBLACKADDITIVE", "TRILINEAR")
 		tile:SetTexCoord(part[6], part[7], part[8], part[9], part[10], part[11], part[12], part[13])
 		tile:SetDrawLayer("BACKGROUND", part[14])
 		tile:SetSize(part[4], part[5])
@@ -635,7 +636,7 @@ function View:UpdateArt()
 	end
 	self.credit:SetShown(credit and true or false)
 	self.creditBack:SetShown(credit and true or false)
-	self.message:SetShown(floor ~= nil and not hasArt)
+	self.message:SetShown(floor ~= nil and not hasArt and not minimap)
 end
 
 function View:Refresh()

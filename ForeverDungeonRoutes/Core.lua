@@ -7,7 +7,7 @@ DR.version = (C_AddOns and C_AddOns.GetAddOnMetadata and C_AddOns.GetAddOnMetada
 
 local DB_DEFAULTS = {
 	showArrows = true,
-	gameMinimap = false, -- new dungeons: the game's minimap pictures instead of the drawn maps
+	gameMinimap = false, -- the game's minimap pictures instead of the map art (Data/Minimaps.lua)
 	showPlayer = true,  -- own position and group on the map, where the game reveals it (not in dungeons)
 	showStops = true,   -- stop list beside the map
 	autoOpen = false,   -- open the map when entering a dungeon

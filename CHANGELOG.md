@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.15
+
+- The game's minimap pictures for every dungeon and raid: gear button, "Map from the game's
+  minimap" (until now only for the four new dungeons). Each map level shows the pictures of the
+  building parts the game puts on it, outdoors those of the terrain, turned and placed where the
+  map art lies, so routes, rooms and notes fit. Off by default.
+
 ## 0.5.14
 
 - The four new dungeons can show the game's own minimap pictures instead of the drawn maps: gear
