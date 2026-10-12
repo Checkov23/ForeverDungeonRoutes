@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.5.20
+
+- More of the bosses the game reports are on the routes now, so their kills tick them off:
+  Houndmaster Grebmar (Blackrock Depths, before only a note), Cho'Rush the Observer (Dire Maul
+  North; optional in the tribute run, where he stays alive) and Shadowpriest Sezz'ziz (Zul'Farrak,
+  together with Nekrum).
+- Optional stops (+) with a short note: Ribbly Screwspigot and Princess Moira Bronzebeard (Blackrock
+  Depths), Postmaster Malown, the Crimson Hammersmith and the Black Guard Swordsmith (Stratholme),
+  Kormok (Scholomance) and Lord Hel'nurath (Dire Maul West).
+
 ## 0.5.19
 
 - Map notes where the drawn map marks a boss that WoW: Forever does not have there: the map art of
