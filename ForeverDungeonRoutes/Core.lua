@@ -23,7 +23,7 @@ local DB_DEFAULTS = {
 	liked = {},         -- routes of the list this player recommended: [hash] = "sent" or "done"
 	runs = {},          -- last runs: [dungeonKey] = { { time = seconds, date = epoch, route = name }, ... }
 	listScale = 1,      -- text size of the stop list
-	theme = "dark",     -- window style (Theme.lua)
+	theme = "gilded",   -- window style (Theme.lua); new installs since 0.5.18, a style chosen before stays
 	lineWidth = 4,
 	alpha = 1,
 	window = {},        -- point, relativePoint, x, y, width, height

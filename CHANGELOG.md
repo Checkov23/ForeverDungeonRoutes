@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.18
+
+- New installs start in the window style "Gilded", and it comes first in the style menu. A style
+  chosen before stays; the gear button switches between all four.
+- The preview images show the new style.
+
 ## 0.5.17
 
 - New window style "Gilded" behind the gear button: dark brick walls in a gold frame with a title
