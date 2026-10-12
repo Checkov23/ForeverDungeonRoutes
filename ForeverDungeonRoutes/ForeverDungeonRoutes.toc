@@ -13,7 +13,7 @@
 ## Author: Checkov23
 ## X-Copyright: Copyright (c) 2026 Checkov23
 ## X-License: MIT
-## Version: 0.5.13
+## Version: 0.5.14
 ## Category: Map
 ## Category-deDE: Karte
 ## Category-frFR: Carte
@@ -37,6 +37,7 @@ Data\Encounters.lua
 Data\DefaultRoutes.lua
 Data\Rooms.lua
 Data\Pictures.lua
+Data\Minimaps.lua
 Data\Entrances.lua
 Routes.lua
 Serialize.lua

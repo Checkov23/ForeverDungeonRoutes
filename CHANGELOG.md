@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.14
+
+- The four new dungeons can show the game's own minimap pictures instead of the drawn maps: gear
+  button, "New dungeons: map from the game's minimap". Outdoors these are the pictures of the
+  terrain, in The Hall of Thanes those of each part of the building, put together into one map.
+  Routes, rooms and notes lie on them as on the drawn maps. Off by default.
+
 ## 0.5.13
 
 - All seven raids of WoW: Forever: Molten Core, Onyxia's Lair, Blackwing Lair, Zul'Gurub, Ruins of

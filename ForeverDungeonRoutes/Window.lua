@@ -311,6 +311,8 @@ local function openSettingsMenu(owner)
 			function() setting("showStops", not DR.db.showStops) end)
 		root:CreateCheckbox(L["Arrows on the route"], function() return DR.db.showArrows end,
 			function() setting("showArrows", not DR.db.showArrows) end)
+		root:CreateCheckbox(L["New dungeons: map from the game's minimap"], function() return DR.db.gameMinimap end,
+			function() setting("gameMinimap", not DR.db.gameMinimap) end)
 		root:CreateCheckbox(L["Tick off bosses automatically"], function() return DR.db.autoCheck end,
 			function() setting("autoCheck", not DR.db.autoCheck) end)
 		root:CreateCheckbox(L["Open automatically in dungeons"], function() return DR.db.autoOpen end,
@@ -932,6 +934,8 @@ DR:On("SETTINGS_CHANGED", function(key)
 		frame:SetAlpha(DR.db.alpha)
 	elseif key == "showStops" then
 		layout()
+	elseif key == "gameMinimap" then
+		view:UpdateArt()
 	elseif key == "listScale" then
 		sidebar.List:SetScale(DR.db.listScale)
 		sidebar.List:SetWidth(sidebar.Scroll:GetWidth() / DR.db.listScale)

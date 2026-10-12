@@ -301,6 +301,8 @@ function View:Create(parent)
 	self.picture = canvas:CreateTexture(nil, "BACKGROUND")
 	self.picture:SetAllPoints(canvas)
 	self.picture:Hide()
+	-- or, where the player chose so, the game's own minimap pictures of that floor (Data/Minimaps.lua)
+	self.minimapTiles = {}
 
 	self.layer = CreateFrame("Frame", nil, canvas)
 	self.layer:SetAllPoints(canvas)
@@ -581,31 +583,59 @@ function View:SetFloor(key, floor)
 	if key ~= self.key or floor ~= self.floor then
 		self.key, self.floor = key, floor
 		self.zoom = 1
-		local info = DR.Floors[floor]
-		local hasArt = DR.FloorHasArt(floor)
-		local picture = hasArt and info.image
-		for i, tile in ipairs(self.tiles) do
-			if hasArt and not picture then
-				tile:SetTexture(info.tiles[i], nil, nil, "TRILINEAR")
-				tile:Show()
-			else
-				tile:Hide()
-			end
-		end
-		if picture then
-			self.picture:SetTexture(ADDON_PATH .. picture.file, nil, nil, "TRILINEAR")
-			self.picture:SetTexCoord(0, picture.right or 1, 0, picture.bottom or 1)
-		end
-		self.picture:SetShown(picture and true or false)
-		local credit = hasArt and info.credit
-		if credit then
-			self.credit:SetText(L["Map: %s"]:format(credit))
-		end
-		self.credit:SetShown(credit and true or false)
-		self.creditBack:SetShown(credit and true or false)
-		self.message:SetShown(floor ~= nil and not hasArt)
+		self:UpdateArt()
 	end
 	self:Refresh()
+end
+
+-- The art of the shown floor: the game's map tiles, a drawn picture (floor.image) or, where the
+-- player chose so, the game's minimap pictures of a picture floor instead.
+function View:UpdateArt()
+	local floor = self.floor
+	local info = DR.Floors[floor]
+	local hasArt = floor ~= nil and DR.FloorHasArt(floor)
+	local minimap = hasArt and info.image and DR.db.gameMinimap and DR.MinimapArt and DR.MinimapArt[floor]
+	local picture = hasArt and not minimap and info.image
+	for i, tile in ipairs(self.tiles) do
+		if hasArt and not info.image then
+			tile:SetTexture(info.tiles[i], nil, nil, "TRILINEAR")
+			tile:Show()
+		else
+			tile:Hide()
+		end
+	end
+	if picture then
+		self.picture:SetTexture(ADDON_PATH .. picture.file, nil, nil, "TRILINEAR")
+		self.picture:SetTexCoord(0, picture.right or 1, 0, picture.bottom or 1)
+	end
+	self.picture:SetShown(picture and true or false)
+	-- { file, x, y, width, height, 8 texture coordinates, sublevel }: in pixels of the map, turned by the
+	-- texture coordinates, higher building parts drawn over lower ones
+	local count = minimap and #minimap or 0
+	for i = 1, count do
+		local part, tile = minimap[i], self.minimapTiles[i]
+		if not tile then
+			tile = self.canvas:CreateTexture(nil, "BACKGROUND")
+			self.minimapTiles[i] = tile
+		end
+		tile:SetTexture(part[1], nil, nil, "TRILINEAR")
+		tile:SetTexCoord(part[6], part[7], part[8], part[9], part[10], part[11], part[12], part[13])
+		tile:SetDrawLayer("BACKGROUND", part[14])
+		tile:SetSize(part[4], part[5])
+		tile:ClearAllPoints()
+		tile:SetPoint("TOPLEFT", self.canvas, "TOPLEFT", part[2], -part[3])
+		tile:Show()
+	end
+	for i = count + 1, #self.minimapTiles do
+		self.minimapTiles[i]:Hide()
+	end
+	local credit = hasArt and not minimap and info.credit
+	if credit then
+		self.credit:SetText(L["Map: %s"]:format(credit))
+	end
+	self.credit:SetShown(credit and true or false)
+	self.creditBack:SetShown(credit and true or false)
+	self.message:SetShown(floor ~= nil and not hasArt)
 end
 
 function View:Refresh()
