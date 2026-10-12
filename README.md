@@ -18,6 +18,8 @@ Mythic Dungeon Tools, and a route list where players put up their routes for eve
 | ![Ruins of Lordaeron, King's Alley lit up, no route yet](docs/screenshots/new-lordaeron.png) | ![The Hall of Thanes, map drawn from the building's floors](docs/screenshots/new-thanes.png) |
 | **Or from the game's own minimap pictures (gear button)** | **The Hall of Thanes from the minimap pictures** |
 | ![Ruins of Lordaeron from the game's minimap pictures, King's Alley lit up](docs/screenshots/new-lordaeron-minimap.png) | ![The Hall of Thanes from the game's minimap pictures, Anvilmar's Rest lit up](docs/screenshots/new-thanes-minimap.png) |
+| **Window style Gilded (gear button)** | **Gilded: the map levels as tabs** |
+| ![The Deadmines in the window style Gilded: brick and gold, title plate, the dungeon as title, the stops with their progress](docs/screenshots/style-gilded.png) | ![Blackrock Depths in the window style Gilded with the two map levels as tabs](docs/screenshots/style-gilded-tabs.png) |
 | **Raids with paths: Molten Core** | **Zul'Gurub, the route "Full clear"** |
 | ![Molten Core with the standard route from the entrance to Ragnaros](docs/screenshots/raid-moltencore.png) | ![Zul'Gurub with the route Full clear, optional bosses marked](docs/screenshots/raid-zulgurub.png) |
 | **The minimap pictures for every dungeon: the Deadmines** | **Blackrock Depths, The Grim Guzzler lit up** |
@@ -72,7 +74,8 @@ replace them.
   without the addon, or share routes as text (export and import).
 - Route list: players put their routes up for everyone, a click takes a route over, and good routes
   get recommended. The list comes from your guild, your parties and the server channel FDRoutes.
-- Three window styles: dark, parchment (light like the map art) and classic (the game's gold frame).
+- Four window styles: dark, parchment (light like the map art), classic (the game's gold frame) and
+  gilded (brick and gold, with a title plate, the map levels as tabs and a footer).
 - Button at the minimap (right-click for a few switches), slash command and key binding.
 - English, German, French, Spanish, Portuguese, Russian, Korean and Chinese (simplified and
   traditional). Names of bosses, dungeons, map levels and rooms come from the game in the language
@@ -132,7 +135,7 @@ By hand:
 - The gear button holds the settings: stop list, arrows, map from the game's minimap, tick off
   bosses automatically, open automatically in dungeons, button at the minimap, small display
   in dungeons, route list over the server channel, line width, text size of the stop list, window
-  style (dark, parchment, classic), opacity.
+  style (dark, parchment, classic, gilded), opacity.
 
 Stratholme, Maraudon and Dire Maul North come with two standard routes each (living and undead
 side, purple and orange side, full clear and tribute run).

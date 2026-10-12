@@ -6,6 +6,11 @@ local L = DR.L
 -- styled box and text registers here and is styled again when the style changes.
 
 local SOLID = { bgFile = "Interface\\Buttons\\WHITE8X8", edgeFile = "Interface\\Buttons\\WHITE8X8", edgeSize = 1 }
+-- dark brick walls (the addon's own texture, tiled) with a thin gold edge
+local BRICK = {
+	bgFile = "Interface\\AddOns\\ForeverDungeonRoutes\\media\\brick", edgeFile = "Interface\\Buttons\\WHITE8X8",
+	tile = true, tileSize = 128, edgeSize = 1, insets = { left = 1, right = 1, top = 1, bottom = 1 },
+}
 -- the game's own dialog and tooltip frames (Forever client: Blizzard_SharedXML/Backdrop.lua)
 local GOLD_DIALOG = {
 	bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background-Dark",
@@ -61,6 +66,29 @@ DR.THEMES = {
 		highlight = { 0.35, 0.55, 1, 0.18 }, badgeFill = { 0.04, 0.04, 0.08, 0.95 },
 		kinds = { boss = { 1, 0.82, 0 }, rare = { 0.85, 0.85, 0.85 }, optional = { 0.4, 0.75, 1 } },
 		shadow = true,
+	},
+	{
+		-- brick walls framed in gold, with a title plate, the dungeon as title, the floors as tabs and a
+		-- footer (Window.lua draws these where a style has "ornate")
+		key = "gilded", name = "Gilded",
+		window = BRICK, bg = { 1, 1, 1 }, border = { 0.79, 0.64, 0.15, 1 },
+		field = SOLID, fieldBg = { 0.07, 0.05, 0.03, 1 }, fieldBorder = { 0.43, 0.31, 0.13, 1 },
+		hover = { 1, 0.82, 0.25, 1 }, fieldText = { 0.93, 0.89, 0.8 }, arrow = { 0.79, 0.64, 0.15 },
+		icon = { 0.79, 0.64, 0.15 }, iconHover = { 1, 0.86, 0.35 },
+		text = { 0.93, 0.89, 0.8 }, next = { 1, 0.82, 0 }, dim = { 0.72, 0.65, 0.53 }, done = { 0.59, 0.52, 0.41 },
+		muted = { 0.59, 0.52, 0.41 }, title = { 1, 0.82, 0 }, accent = { 0.84, 0.7, 0.27 },
+		link = { 0.45, 0.78, 1 }, linkHover = { 0.7, 0.9, 1 }, hint = { 0.75, 0.85, 1 },
+		highlight = { 1, 0.82, 0.3, 0.12 }, badgeFill = { 0.06, 0.04, 0.02, 0.95 },
+		kinds = { boss = { 0.84, 0.69, 0.24 }, rare = { 0.89, 0.87, 0.82 }, optional = { 0.62, 0.78, 0.95 } },
+		shadow = true,
+		ornate = {
+			trim = { 0.43, 0.31, 0.13, 1 },        -- inner line of the frame, lines and the map frame
+			plate = { 0.07, 0.05, 0.03, 0.97 },    -- title plate and the chosen tab
+			band = { 0, 0, 0, 0.28 },              -- every other stop
+			nextFill = { 0.21, 0.15, 0.08, 0.9 },  -- the next stop
+			nextBar = { 1, 0.82, 0, 1 },
+			check = { 0.84, 0.69, 0.24 },
+		},
 	},
 }
 

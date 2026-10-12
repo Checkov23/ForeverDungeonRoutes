@@ -14,6 +14,11 @@ local MIN_W, MIN_H = 520, 320
 local ROUTE_Y, LIST_Y = -30, -60 -- route choice and stop list below the level, time and entrance lines
 local DEFAULT_W, DEFAULT_H = 900, 480
 local MEDIA = "Interface\\AddOns\\ForeverDungeonRoutes\\media\\"
+local WHITE = "Interface\\Buttons\\WHITE8X8"
+-- style "Gilded" (Theme.lua, ornate): a taller header with the title and the floor tabs, a footer,
+-- the route choice on top of the sidebar and a head line over the stops
+local ORNATE_HEADER_H, FOOTER_H = 92, 26
+local ORNATE_ROUTE_Y, ORNATE_LIST_Y = 0, -52
 
 local Window = {}
 DR.Window = Window
@@ -90,6 +95,17 @@ local function indexOf(list, value)
 	return nil
 end
 
+-- The decoration of the chosen style (Theme.lua: ornate), or nil.
+local function ornate()
+	return DR.Theme().ornate
+end
+
+local function rowHeight()
+	return ornate() and 20 or ROW_HEIGHT
+end
+
+local styleOrnate
+
 -- Geometry ----------------------------------------------------------------------------------
 
 local function saveGeometry()
@@ -111,26 +127,36 @@ local function restoreGeometry()
 end
 
 local function layout()
+	local o = ornate()
+	local top, bottom = o and ORNATE_HEADER_H or HEADER_H, o and (PAD + FOOTER_H) or PAD
+	frame.Header:SetHeight(top)
 	local map = view.frame
 	map:ClearAllPoints()
-	map:SetPoint("TOPLEFT", frame, "TOPLEFT", PAD, -HEADER_H)
+	map:SetPoint("TOPLEFT", frame, "TOPLEFT", PAD, -top)
+	sidebar:ClearAllPoints()
+	sidebar:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -PAD, -top)
+	sidebar:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -PAD, o and bottom or (PAD + 10))
+	sidebar:SetWidth(SIDEBAR_W - PAD)
+	sidebar.Scroll:SetPoint("TOPLEFT", sidebar, "TOPLEFT", 0, o and ORNATE_LIST_Y or LIST_Y)
 	frame.RouteButton:ClearAllPoints()
 	if DR.db.showStops then
 		sidebar:Show()
-		map:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -(SIDEBAR_W + PAD), PAD)
+		map:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -(SIDEBAR_W + PAD), bottom)
 		frame.RouteButton:SetParent(sidebar)
 		frame.RouteButton:SetFrameLevel(sidebar:GetFrameLevel() + 2)
-		frame.RouteButton:SetPoint("TOPLEFT", sidebar, "TOPLEFT", 0, ROUTE_Y)
-		frame.RouteButton:SetPoint("TOPRIGHT", sidebar, "TOPRIGHT", 0, ROUTE_Y)
+		local y = o and ORNATE_ROUTE_Y or ROUTE_Y
+		frame.RouteButton:SetPoint("TOPLEFT", sidebar, "TOPLEFT", 0, y)
+		frame.RouteButton:SetPoint("TOPRIGHT", sidebar, "TOPRIGHT", 0, y)
 	else
 		sidebar:Hide()
-		map:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -PAD, PAD)
+		map:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -PAD, bottom)
 		-- without the stop list the route choice sits on the map
 		frame.RouteButton:SetParent(map)
 		frame.RouteButton:SetFrameLevel(map:GetFrameLevel() + 40)
 		frame.RouteButton:SetPoint("TOPRIGHT", map, "TOPRIGHT", -6, -6)
 		frame.RouteButton:SetWidth(210)
 	end
+	styleOrnate()
 end
 
 -- Menus -------------------------------------------------------------------------------------
@@ -366,11 +392,23 @@ local function makeRow(index)
 	row.Hover = row:CreateTexture(nil, "BACKGROUND")
 	row.Hover:SetAllPoints()
 	row.Hover:Hide()
+	-- style "Gilded": every other row darker, the next stop filled with a gold edge on the left
+	row.Band = row:CreateTexture(nil, "BACKGROUND", nil, -2)
+	row.Band:SetAllPoints()
+	row.Band:Hide()
+	row.NextFill = row:CreateTexture(nil, "BACKGROUND", nil, -1)
+	row.NextFill:SetAllPoints()
+	row.NextFill:Hide()
+	row.NextBar = row:CreateTexture(nil, "ARTWORK")
+	row.NextBar:SetPoint("TOPLEFT")
+	row.NextBar:SetPoint("BOTTOMLEFT")
+	row.NextBar:SetWidth(2)
+	row.NextBar:Hide()
 
 	row.Badge = row:CreateTexture(nil, "ARTWORK")
 	row.Badge:SetTexture(MEDIA .. "ring")
 	row.Badge:SetSize(16, 16)
-	row.Badge:SetPoint("LEFT", 2, 0)
+	row.Badge:SetPoint("LEFT", 5, 0)
 	row.BadgeFill = row:CreateTexture(nil, "BACKGROUND", nil, 1)
 	row.BadgeFill:SetTexture(MEDIA .. "circle")
 	row.BadgeFill:SetAllPoints(row.Badge)
@@ -423,6 +461,33 @@ local function makeRow(index)
 	return row
 end
 
+-- The last runs of the shown dungeon in a tooltip (mouse on the run time).
+local function showLastRuns(self)
+	local runs = shown.key and DR.db.runs[shown.key]
+	if not runs or #runs == 0 then return end
+	GameTooltip:SetOwner(self, "ANCHOR_BOTTOMLEFT")
+	GameTooltip:SetText(L["Last runs"], 1, 1, 1)
+	for _, run in ipairs(runs) do
+		GameTooltip:AddDoubleLine(date("%Y-%m-%d", run.date) .. "  " .. (run.route or ""), DR.FormatDuration(run.time),
+			0.8, 0.8, 0.8, 1, 0.82, 0)
+	end
+	GameTooltip:Show()
+end
+
+local function entranceEnter(self)
+	local c = DR.Theme().linkHover
+	self.Text:SetTextColor(c[1], c[2], c[3])
+	GameTooltip:SetOwner(self, "ANCHOR_LEFT")
+	GameTooltip:SetText(L["Click: set a waypoint to the entrance"], 1, 1, 1, 1, true)
+	GameTooltip:Show()
+end
+
+local function entranceLeave(self)
+	local c = DR.Theme().link
+	self.Text:SetTextColor(c[1], c[2], c[3])
+	GameTooltip:Hide()
+end
+
 local function buildSidebar()
 	sidebar = CreateFrame("Frame", nil, frame)
 	sidebar:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -PAD, -HEADER_H)
@@ -444,27 +509,9 @@ local function buildSidebar()
 	timeHover:SetPoint("TOPLEFT", sidebar.Time, "TOPLEFT", -2, 2)
 	timeHover:SetPoint("BOTTOMRIGHT", sidebar.Time, "BOTTOMRIGHT", 2, -2)
 	timeHover:SetMouseMotionEnabled(true) -- the tooltip only, clicks go through
-	timeHover:SetScript("OnEnter", function(self)
-		local runs = shown.key and DR.db.runs[shown.key]
-		if not runs or #runs == 0 then return end
-		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMLEFT")
-		GameTooltip:SetText(L["Last runs"], 1, 1, 1)
-		for _, run in ipairs(runs) do
-			GameTooltip:AddDoubleLine(date("%Y-%m-%d", run.date) .. "  " .. (run.route or ""), DR.FormatDuration(run.time),
-				0.8, 0.8, 0.8, 1, 0.82, 0)
-		end
-		GameTooltip:Show()
-	end)
+	timeHover:SetScript("OnEnter", showLastRuns)
 	timeHover:SetScript("OnLeave", GameTooltip_Hide)
 	sidebar.TimeHover = timeHover
-	local ticker = 0
-	sidebar:SetScript("OnUpdate", function(_, elapsed)
-		ticker = ticker + elapsed
-		if ticker >= 1 then
-			ticker = 0
-			Window:UpdateTime()
-		end
-	end)
 	-- the way to the entrance, outside the dungeon
 	local entrance = CreateFrame("Button", nil, sidebar)
 	entrance:SetPoint("TOPLEFT", 2, -14)
@@ -473,18 +520,8 @@ local function buildSidebar()
 	entrance.Text:SetPoint("LEFT")
 	DR.ThemeText(entrance.Text, "link")
 	entrance:SetScript("OnClick", function() DR:SetEntranceWaypoint(shown.key) end)
-	entrance:SetScript("OnEnter", function(self)
-		local c = DR.Theme().linkHover
-		self.Text:SetTextColor(c[1], c[2], c[3])
-		GameTooltip:SetOwner(self, "ANCHOR_LEFT")
-		GameTooltip:SetText(L["Click: set a waypoint to the entrance"], 1, 1, 1, 1, true)
-		GameTooltip:Show()
-	end)
-	entrance:SetScript("OnLeave", function(self)
-		local c = DR.Theme().link
-		self.Text:SetTextColor(c[1], c[2], c[3])
-		GameTooltip:Hide()
-	end)
+	entrance:SetScript("OnEnter", entranceEnter)
+	entrance:SetScript("OnLeave", entranceLeave)
 	sidebar.Entrance = entrance
 
 	-- the stops scroll when the window is too small for all of them
@@ -493,7 +530,7 @@ local function buildSidebar()
 	scroll:EnableMouseWheel(true)
 	scroll:SetScript("OnMouseWheel", function(self, delta)
 		local range = self:GetVerticalScrollRange()
-		self:SetVerticalScroll(DR.Clamp(self:GetVerticalScroll() - delta * ROW_HEIGHT * 2, 0, range))
+		self:SetVerticalScroll(DR.Clamp(self:GetVerticalScroll() - delta * rowHeight() * 2, 0, range))
 	end)
 	local list = CreateFrame("Frame", nil, scroll)
 	list:SetSize(SIDEBAR_W - PAD, 10)
@@ -560,9 +597,18 @@ local function refreshSidebar()
 	sidebar.Level:SetText(color and ("|cff" .. color .. levelText .. "|r") or levelText)
 	local zone = DR:GetEntranceZone(key)
 	local inside = key == DR.currentKey
+	local orn = ornate()
 	sidebar.Entrance.Text:SetText(zone and L["Entrance: %s"]:format(zone) or "")
 	sidebar.Entrance:SetWidth(sidebar.Entrance.Text:GetStringWidth() + 4)
-	sidebar.Entrance:SetShown(zone ~= nil and not inside)
+	sidebar.Entrance:SetShown(zone ~= nil and not inside and not orn)
+	if orn then
+		-- style "Gilded": level and entrance under the title
+		local o = frame.Ornate
+		o.Level:SetText(color and ("|cff" .. color .. levelText .. "|r") or levelText)
+		o.Entrance.Text:SetText(zone and ("   \194\183   " .. L["Entrance: %s"]:format(zone)) or "")
+		o.Entrance:SetWidth(o.Entrance.Text:GetStringWidth() + 4)
+		o.Entrance:SetShown(zone ~= nil and not inside)
+	end
 	Window:UpdateTime()
 	for _, row in ipairs(rows) do
 		row:Hide()
@@ -575,6 +621,7 @@ local function refreshSidebar()
 	sidebar.Toolbar:Hide()
 
 	local y = 0
+	frame.Ornate.StopsCount:SetText("")
 	if not route then
 		sidebar.Empty:SetText(L["No route for this dungeon yet. Create one or import a route text."])
 		sidebar.Empty:Show()
@@ -586,8 +633,10 @@ local function refreshSidebar()
 		local labels = DR:GetStopLabels(route)
 		local nextIndex = DR:GetNextStopIndex(key, route)
 		local theme = DR.Theme()
+		local height, doneCount = rowHeight(), 0
 		for i, stop in ipairs(route.stops) do
 			local row = rows[i] or makeRow(i)
+			row:SetHeight(height)
 			row.index = i
 			row.floor = stop.floor
 			row.stopName = DR:GetStopName(stop)
@@ -601,6 +650,19 @@ local function refreshSidebar()
 			row.Name:SetText(row.stopName)
 			local done = DR:IsStopDone(key, route, i)
 			row.Check:SetShown(done)
+			if done then doneCount = doneCount + 1 end
+			if orn then
+				local b, f, e, c = orn.band, orn.nextFill, orn.nextBar, orn.check
+				row.Band:SetColorTexture(b[1], b[2], b[3], b[4])
+				row.NextFill:SetColorTexture(f[1], f[2], f[3], f[4])
+				row.NextBar:SetColorTexture(e[1], e[2], e[3], e[4])
+				row.Check:SetVertexColor(c[1], c[2], c[3])
+			else
+				row.Check:SetVertexColor(1, 1, 1)
+			end
+			row.Band:SetShown(orn ~= nil and i % 2 == 0 and i ~= nextIndex)
+			row.NextFill:SetShown(orn ~= nil and i == nextIndex)
+			row.NextBar:SetShown(orn ~= nil and i == nextIndex)
 			local k = theme.kinds[stop.kind] or theme.kinds.boss
 			row.Badge:SetVertexColor(k[1], k[2], k[3])
 			row.Number:SetTextColor(k[1], k[2], k[3])
@@ -611,8 +673,9 @@ local function refreshSidebar()
 			row.Highlight:SetColorTexture(h[1], h[2], h[3], h[4])
 			row.Hover:SetColorTexture(h[1], h[2], h[3], h[4])
 			row:Show()
-			y = y - ROW_HEIGHT
+			y = y - height
 		end
+		frame.Ornate.StopsCount:SetText(#route.stops > 0 and (doneCount .. "/" .. #route.stops) or "")
 		if #route.stops == 0 then
 			sidebar.Empty:SetText(L["This route has no stops yet."])
 			sidebar.Empty:Show()
@@ -629,6 +692,241 @@ local function refreshSidebar()
 		end
 	end
 	sidebar.List:SetHeight(math.max(10, -y))
+end
+
+-- Style "Gilded" ----------------------------------------------------------------------------------
+-- A frame of brick and gold: an inner trim, gems at the corners, a title plate on the top edge, the
+-- logo with the dungeon as title (click: choose a dungeon) and below its level and entrance, the
+-- floors as tabs, a frame around the map, a head line over the stops and a footer with the run time.
+-- Hidden in the other styles, where the header holds the dungeon and floor choice and the sidebar the
+-- level, the times and the entrance.
+
+local function makeLine(parent)
+	local line = parent:CreateTexture(nil, "ARTWORK")
+	line:SetHeight(1)
+	return line
+end
+
+local function tabColors(tab)
+	local t = DR.Theme()
+	local orn = t.ornate
+	if tab.selected then
+		tab:SetBackdropColor(orn.plate[1], orn.plate[2], orn.plate[3], orn.plate[4])
+		tab:SetBackdropBorderColor(orn.trim[1], orn.trim[2], orn.trim[3], orn.trim[4])
+		tab.Text:SetTextColor(t.title[1], t.title[2], t.title[3])
+	else
+		tab:SetBackdropColor(0, 0, 0, 0)
+		tab:SetBackdropBorderColor(0, 0, 0, 0)
+		local c = tab.hover and t.title or t.accent
+		tab.Text:SetTextColor(c[1], c[2], c[3])
+	end
+end
+
+local function makeTab(index)
+	local tab = CreateFrame("Button", nil, frame.Ornate, "BackdropTemplate")
+	tab:SetHeight(22)
+	tab:SetBackdrop({ bgFile = WHITE, edgeFile = WHITE, edgeSize = 1 })
+	tab.Text = tab:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+	tab.Text:SetPoint("LEFT", 10, 0)
+	tab.Text:SetPoint("RIGHT", -10, 0)
+	tab.Text:SetWordWrap(false)
+	DR.ThemeText(tab.Text)
+	tab:SetScript("OnClick", function(self) Window:SelectFloor(self.floor, true) end)
+	tab:SetScript("OnEnter", function(self)
+		self.hover = true
+		tabColors(self)
+	end)
+	tab:SetScript("OnLeave", function(self)
+		self.hover = false
+		tabColors(self)
+	end)
+	frame.Ornate.Tabs[index] = tab
+	return tab
+end
+
+local function buildOrnate()
+	local o = CreateFrame("Frame", nil, frame)
+	o:SetAllPoints()
+	o:SetFrameLevel(frame:GetFrameLevel() + 3)
+	frame.Ornate = o
+	o.Trim = CreateFrame("Frame", nil, o, "BackdropTemplate")
+	o.Trim:SetPoint("TOPLEFT", 3, -3)
+	o.Trim:SetPoint("BOTTOMRIGHT", -3, 3)
+	o.Trim:SetBackdrop({ edgeFile = WHITE, edgeSize = 1 })
+	o.Gems = {}
+	for i, point in ipairs({ "TOPLEFT", "TOPRIGHT", "BOTTOMLEFT", "BOTTOMRIGHT" }) do
+		local gem = o:CreateTexture(nil, "OVERLAY")
+		gem:SetTexture(MEDIA .. "diamond")
+		gem:SetSize(14, 14)
+		gem:SetPoint("CENTER", frame, point, 0, 0)
+		o.Gems[i] = gem
+	end
+	-- the title plate on the top edge
+	local plate = CreateFrame("Frame", nil, o, "BackdropTemplate")
+	plate:SetPoint("CENTER", frame, "TOP", 0, 0)
+	plate:SetHeight(24)
+	plate:SetBackdrop({ bgFile = WHITE, edgeFile = WHITE, edgeSize = 1 })
+	plate.Text = plate:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+	plate.Text:SetPoint("CENTER")
+	plate.Text:SetText(L["Forever Dungeon Routes"]:upper())
+	DR.ThemeText(plate.Text, "title")
+	plate:SetWidth(plate.Text:GetStringWidth() + 84)
+	plate.Gems = {}
+	for i, side in ipairs({ "LEFT", "RIGHT" }) do
+		local gem = plate:CreateTexture(nil, "OVERLAY")
+		gem:SetTexture(MEDIA .. "diamond")
+		gem:SetSize(8, 8)
+		gem:SetPoint("CENTER", plate, side, i == 1 and 16 or -16, 0)
+		plate.Gems[i] = gem
+	end
+	o.Plate = plate
+	-- the logo, the dungeon as title and below its level and the way to the entrance
+	o.Logo = o:CreateTexture(nil, "ARTWORK")
+	o.Logo:SetTexture(MEDIA .. "icon")
+	o.Logo:SetSize(34, 34)
+	o.Logo:SetPoint("TOPLEFT", frame, "TOPLEFT", PAD + 6, -20)
+	local title = CreateFrame("Button", nil, o)
+	title:SetPoint("TOPLEFT", o.Logo, "TOPRIGHT", 10, 3)
+	title:SetHeight(24)
+	title.Text = title:CreateFontString(nil, "OVERLAY", "GameFontNormalHuge")
+	title.Text:SetPoint("LEFT")
+	title.Text:SetWordWrap(false)
+	DR.ThemeText(title.Text, "title")
+	title.Arrow = title:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+	title.Arrow:SetPoint("LEFT", title.Text, "RIGHT", 8, -1)
+	title.Arrow:SetText("v")
+	DR.ThemeText(title.Arrow, "arrow")
+	title:SetScript("OnClick", openDungeonMenu)
+	title:SetScript("OnEnter", function(self)
+		GameTooltip:SetOwner(self, "ANCHOR_BOTTOM")
+		GameTooltip:SetText(L["Choose a dungeon"], 1, 1, 1, 1, true)
+		GameTooltip:Show()
+	end)
+	title:SetScript("OnLeave", GameTooltip_Hide)
+	o.Title = title
+	o.Level = o:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+	o.Level:SetPoint("TOPLEFT", o.Logo, "TOPRIGHT", 10, -24)
+	DR.ThemeText(o.Level, "text")
+	local entrance = CreateFrame("Button", nil, o)
+	entrance:SetPoint("LEFT", o.Level, "RIGHT", 0, 0)
+	entrance:SetHeight(14)
+	entrance.Text = entrance:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+	entrance.Text:SetPoint("LEFT")
+	DR.ThemeText(entrance.Text, "link")
+	entrance:SetScript("OnClick", function() DR:SetEntranceWaypoint(shown.key) end)
+	entrance:SetScript("OnEnter", entranceEnter)
+	entrance:SetScript("OnLeave", entranceLeave)
+	o.Entrance = entrance
+	-- the floors as tabs on a line
+	o.Tabs = {}
+	o.TabLine = makeLine(o)
+	o.TabLine:SetPoint("TOPLEFT", frame, "TOPLEFT", PAD, -(ORNATE_HEADER_H - 6))
+	o.TabLine:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -PAD, -(ORNATE_HEADER_H - 6))
+	-- a frame around the map
+	o.MapFrame = CreateFrame("Frame", nil, o, "BackdropTemplate")
+	o.MapFrame:SetPoint("TOPLEFT", view.frame, "TOPLEFT", -1, 1)
+	o.MapFrame:SetPoint("BOTTOMRIGHT", view.frame, "BOTTOMRIGHT", 1, -1)
+	o.MapFrame:SetBackdrop({ edgeFile = WHITE, edgeSize = 1 })
+	-- the head line over the stops: how many are done
+	o.StopsHead = sidebar:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+	o.StopsHead:SetPoint("TOPLEFT", sidebar, "TOPLEFT", 2, -32)
+	o.StopsHead:SetText(L["Stops"]:upper())
+	DR.ThemeText(o.StopsHead, "title")
+	o.StopsCount = sidebar:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
+	o.StopsCount:SetPoint("TOPRIGHT", sidebar, "TOPRIGHT", -2, -32)
+	DR.ThemeText(o.StopsCount, "muted")
+	o.StopsLine = makeLine(sidebar)
+	o.StopsLine:SetPoint("TOPLEFT", sidebar, "TOPLEFT", 0, -46)
+	o.StopsLine:SetPoint("TOPRIGHT", sidebar, "TOPRIGHT", 0, -46)
+	-- the footer: the addon, the run time and the best time
+	o.FootLine = makeLine(o)
+	o.FootLine:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", PAD, FOOTER_H)
+	o.FootLine:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -PAD, FOOTER_H)
+	o.FootIcon = o:CreateTexture(nil, "ARTWORK")
+	o.FootIcon:SetTexture(MEDIA .. "icon")
+	o.FootIcon:SetSize(16, 16)
+	o.FootIcon:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", PAD + 2, 6)
+	o.FootName = o:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+	o.FootName:SetPoint("LEFT", o.FootIcon, "RIGHT", 6, 0)
+	o.FootName:SetText(L["Forever Dungeon Routes"])
+	DR.ThemeText(o.FootName, "accent")
+	o.FootTime = o:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
+	o.FootTime:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -(PAD + 14), 10)
+	DR.ThemeText(o.FootTime, "muted")
+	local timeHover = CreateFrame("Frame", nil, o)
+	timeHover:SetPoint("TOPLEFT", o.FootTime, "TOPLEFT", -2, 2)
+	timeHover:SetPoint("BOTTOMRIGHT", o.FootTime, "BOTTOMRIGHT", 2, -2)
+	timeHover:SetMouseMotionEnabled(true)
+	timeHover:SetScript("OnEnter", showLastRuns)
+	timeHover:SetScript("OnLeave", GameTooltip_Hide)
+	o.TimeHover = timeHover
+end
+
+-- Shows or hides the decoration for the chosen style and colours it.
+styleOrnate = function()
+	local o, t = frame.Ornate, DR.Theme()
+	local orn = t.ornate
+	o:SetShown(orn ~= nil)
+	for _, region in ipairs({ o.StopsHead, o.StopsCount, o.StopsLine }) do
+		region:SetShown(orn ~= nil)
+	end
+	frame.DungeonButton:SetShown(orn == nil)
+	sidebar.Level:SetShown(orn == nil)
+	sidebar.Time:SetShown(orn == nil)
+	sidebar.TimeHover:SetShown(orn == nil)
+	frame.Close:ClearAllPoints()
+	if orn then
+		frame.Close:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -(PAD + 6), -22)
+	else
+		frame.Close:SetPoint("RIGHT", frame.Header, "RIGHT", -PAD, -1)
+	end
+	if not orn then return end
+	local gold, trim = t.border, orn.trim
+	o.Trim:SetBackdropBorderColor(trim[1], trim[2], trim[3], trim[4])
+	o.MapFrame:SetBackdropBorderColor(trim[1], trim[2], trim[3], trim[4])
+	for _, line in ipairs({ o.TabLine, o.FootLine, o.StopsLine }) do
+		line:SetColorTexture(trim[1], trim[2], trim[3], trim[4])
+	end
+	for _, gem in ipairs(o.Gems) do gem:SetVertexColor(gold[1], gold[2], gold[3]) end
+	o.Plate:SetBackdropColor(orn.plate[1], orn.plate[2], orn.plate[3], orn.plate[4])
+	o.Plate:SetBackdropBorderColor(gold[1], gold[2], gold[3], gold[4])
+	for _, gem in ipairs(o.Plate.Gems) do gem:SetVertexColor(gold[1], gold[2], gold[3]) end
+	for _, tab in ipairs(o.Tabs) do tabColors(tab) end
+end
+
+-- Title and floor tabs of the style "Gilded"; true where the tabs replace the floor choice (several
+-- floors whose tabs fit in a row).
+local function refreshOrnate(dungeon, index)
+	local o = frame.Ornate
+	if not ornate() then return false end
+	o.Title.Text:SetText(DR:GetKeyName(shown.key))
+	o.Title:SetWidth(o.Title.Text:GetStringWidth() + 22)
+	local floors = dungeon.floors
+	local several = #floors > 1
+	local x = PAD
+	for i = 1, math.max(#floors, #o.Tabs) do
+		local tab = o.Tabs[i]
+		if several and i <= #floors then
+			tab = tab or makeTab(i)
+			tab.floor = floors[i]
+			tab.selected = i == index
+			tab.Text:SetText(i .. ". " .. DR:GetFloorName(floors[i]))
+			local w = math.min(tab.Text:GetStringWidth() + 22, 230)
+			tab:SetWidth(w)
+			tab:ClearAllPoints()
+			tab:SetPoint("BOTTOMLEFT", frame, "TOPLEFT", x, -(ORNATE_HEADER_H - 6))
+			x = x + w + 4
+			tabColors(tab)
+			tab:Show()
+		elseif tab then
+			tab:Hide()
+		end
+	end
+	local fits = several and x - 4 <= frame:GetWidth() - PAD
+	if several and not fits then
+		for i = 1, #floors do o.Tabs[i]:Hide() end
+	end
+	return fits
 end
 
 -- Building --------------------------------------------------------------------------------------
@@ -650,6 +948,15 @@ local function build()
 	frame:SetAlpha(DR.db.alpha or 1)
 	frame:SetScript("OnHide", function()
 		DR:Fire("WINDOW_HIDDEN")
+	end)
+	-- the run time goes on while the window is open
+	local ticker = 0
+	frame:SetScript("OnUpdate", function(_, elapsed)
+		ticker = ticker + elapsed
+		if ticker >= 1 then
+			ticker = 0
+			Window:UpdateTime()
+		end
 	end)
 
 	local header = CreateFrame("Frame", nil, frame)
@@ -717,6 +1024,7 @@ local function build()
 	end)
 	frame.Grip = grip
 
+	buildOrnate()
 	layout()
 end
 
@@ -749,9 +1057,17 @@ function Window:Refresh()
 	local floors = dungeon.floors
 	local index = indexOf(floors, shown.floor) or 1
 	local several = #floors > 1
-	frame.FloorPrev:SetShown(several)
-	frame.FloorNext:SetShown(several)
-	frame.FloorButton:SetShown(several)
+	-- in the style "Gilded" the floors are tabs; where they do not fit, the choice sits in the tab row
+	local tabs = refreshOrnate(dungeon, index)
+	frame.FloorPrev:ClearAllPoints()
+	if ornate() then
+		frame.FloorPrev:SetPoint("BOTTOMLEFT", frame, "TOPLEFT", PAD, -(ORNATE_HEADER_H - 8))
+	else
+		frame.FloorPrev:SetPoint("LEFT", frame.DungeonButton, "RIGHT", 8, 0)
+	end
+	frame.FloorPrev:SetShown(several and not tabs)
+	frame.FloorNext:SetShown(several and not tabs)
+	frame.FloorButton:SetShown(several and not tabs)
 	if several then
 		frame.FloorButton.Text:SetText(index .. "/" .. #floors .. "  " .. DR:GetFloorName(shown.floor))
 		frame.FloorPrev:SetEnabled(index > 1)
@@ -768,7 +1084,7 @@ end
 
 -- Run time while a run is on (or how long it took), and the best time of the shown dungeon.
 function Window:UpdateTime()
-	if not sidebar or not sidebar:IsVisible() then return end
+	if not sidebar or not frame:IsVisible() then return end
 	local started, finished, best = DR:GetRunTimes(shown.key)
 	local parts = {}
 	if started then
@@ -778,6 +1094,7 @@ function Window:UpdateTime()
 		parts[#parts + 1] = L["Best %s"]:format(DR.FormatDuration(best))
 	end
 	sidebar.Time:SetText(table.concat(parts, "  "))
+	frame.Ornate.FootTime:SetText(table.concat(parts, "   \194\183   "))
 end
 
 -- The floor of the next boss still open in the route of a dungeon.
@@ -936,6 +1253,8 @@ DR:On("SETTINGS_CHANGED", function(key)
 		layout()
 	elseif key == "gameMinimap" then
 		view:UpdateArt()
+	elseif key == "theme" then
+		layout()
 	elseif key == "listScale" then
 		sidebar.List:SetScale(DR.db.listScale)
 		sidebar.List:SetWidth(sidebar.Scroll:GetWidth() / DR.db.listScale)

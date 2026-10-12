@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.17
+
+- New window style "Gilded" behind the gear button: dark brick walls in a gold frame with a title
+  plate, the dungeon as title with its level and entrance below, the map levels as tabs, a head line
+  over the stops with the progress, the next stop with a gold edge, and a footer with the run time.
+  The other styles stay as they are.
+
 ## 0.5.16
 
 - Paths for the raids: the standard routes now lead from the entrance from boss to boss, over the
