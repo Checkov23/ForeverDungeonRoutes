@@ -24,6 +24,11 @@ end
 
 function DR:WorldToFloor(floor, x, y)
 	local info = self.Floors[floor]
+	-- picture floors with a map turned against north (Data/Pictures.lua): straight from its frame
+	local f = info and info.frame
+	if f then
+		return f[1] * x + f[2] * y + f[3], f[4] * x + f[5] * y + f[6]
+	end
 	local rect = info and info.world
 	if not rect then return nil end
 	local minX, minY, maxX, maxY = rect[1], rect[2], rect[3], rect[4]

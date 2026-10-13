@@ -23,7 +23,7 @@ DR.Dungeons = {
 		name = "Blackfathom Deeps", nameDE = "Blackfathom-Tiefe", nameFR = "Profondeurs de Brassenoire", nameES = "Cavernas de Brazanegra", namePT = "Profundezas Negras", nameRU = "Непроглядная Пучина", nameKO = "검은심연의 나락", nameCN = "黑暗深渊", nameTW = "黑澗深淵" },
 	{ key = "stockade", instanceID = 34, floors = { 225 }, levels = { 26, 32 },
 		name = "Stormwind Stockade", nameDE = "Verlies von Stormwind", nameFR = "Prison de Stormwind", nameES = "Mazmorras de Ventormenta", namePT = "Cárcere de Ventobravo", nameRU = "Тюрьма Штормграда", nameKO = "스톰윈드 지하감옥", nameCN = "暴风城监狱", nameTW = "暴風城監獄" },
-	{ key = "dalaran", instanceID = 2959, floors = { 1029591 }, levels = { 28, 33 },
+	{ key = "dalaran", instanceID = 2959, floors = { 1029591, 1029592 }, levels = { 28, 33 },
 		name = "City of Dalaran", nameDE = "Dalaran", nameFR = "Cité de Dalaran", nameES = "Ciudad de Dalaran", namePT = "Dalaran", nameRU = "Даларан", nameKO = "달라란", nameCN = "达拉然城", nameTW = "達拉然城" },
 	{ key = "razorfenkraul", instanceID = 47, floors = { 301 }, levels = { 30, 36 },
 		name = "Razorfen Kraul", nameDE = "Kral von Razorfen", nameFR = "Kraal de Tranchebauge", nameES = "Horado Rajacieno", namePT = "Urzal dos Tuscos", nameRU = "Лабиринты Иглошкурых", nameKO = "가시덩굴 우리", nameCN = "剃刀沼泽", nameTW = "剃刀沼澤" },

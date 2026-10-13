@@ -1,0 +1,7 @@
+Map pictures in this folder (hallofthanes, ruinsoflordaeron, excavationsite, dalaran,
+dalaran_underbelly): Santiago Reyes, Atlas de Azeroth: Forever
+https://asguevara433.wixsite.com/srmaps
+
+Used with his permission, in the versions with his watermark. They are not covered by the
+MIT license of this addon; all rights stay with Santiago Reyes. Please do not reuse them
+without his permission.

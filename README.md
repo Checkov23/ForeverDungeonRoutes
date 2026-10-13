@@ -1,7 +1,7 @@
 # Forever Dungeon Routes
 
 A dungeon map with routes for **World of Warcraft: Forever**, for all 28 dungeons and the 7 raids:
-ready routes for the 24 classic dungeons and the 7 raids, own maps for the 4 new Forever dungeons,
+ready routes for the 24 classic dungeons and the 7 raids, maps by Santiago Reyes for the 4 new Forever dungeons,
 boss order and notes, bosses that tick themselves off, an editor for your own routes in the spirit of
 Mythic Dungeon Tools, and a route list where players put up their routes for everyone.
 
@@ -14,8 +14,8 @@ Mythic Dungeon Tools, and a route list where players put up their routes for eve
 | ![Blackrock Depths, Shadowforge City, The Grim Guzzler lit up, the small display above the window](docs/screenshots/room.png) | ![Scholomance with the question whether to take over a route](docs/screenshots/share.png) |
 | **Scholomance: blue squares lead to the other map levels** | **German game client** |
 | ![Scholomance, The Upper Study](docs/screenshots/scholomance.png) | ![The Deadmines with German texts (Todesminen)](docs/screenshots/german.png) |
-| **New in WoW: Forever: Ruins of Lordaeron, the map drawn from the game's floor plan** | **The Hall of Thanes** |
-| ![Ruins of Lordaeron, King's Alley lit up, no route yet](docs/screenshots/new-lordaeron.png) | ![The Hall of Thanes, map drawn from the building's floors](docs/screenshots/new-thanes.png) |
+| **New in WoW: Forever: Ruins of Lordaeron, map by Santiago Reyes** | **The Hall of Thanes, map by Santiago Reyes** |
+| ![Ruins of Lordaeron on the map by Santiago Reyes (Atlas de Azeroth: Forever), King's Alley lit up, no route yet](docs/screenshots/new-lordaeron.png) | ![The Hall of Thanes on the map by Santiago Reyes (Atlas de Azeroth: Forever)](docs/screenshots/new-thanes.png) |
 | **Or from the game's own minimap pictures (gear button)** | **The Hall of Thanes from the minimap pictures** |
 | ![Ruins of Lordaeron from the game's minimap pictures, King's Alley lit up](docs/screenshots/new-lordaeron-minimap.png) | ![The Hall of Thanes from the game's minimap pictures, Anvilmar's Rest lit up](docs/screenshots/new-thanes-minimap.png) |
 | **The other window styles (gear button): Dark** | **Parchment** |
@@ -37,8 +37,9 @@ replace them.
 - Standard routes for all 24 classic dungeons. The line color runs from the entrance to the last
   boss, arrows show the walking direction, dashed lines mark side paths.
 - The four new dungeons of WoW: Forever (The Hall of Thanes, Ruins of Lordaeron, Excavation Site:
-  Wetlands, City of Dalaran): the game has no map art for them, so the addon brings maps drawn from
-  the floor plans in the game's files. Their rooms light up and their bosses tick themselves off;
+  Wetlands, City of Dalaran): the game has no map art for them, so the addon shows the maps of
+  Santiago Reyes (Atlas de Azeroth: Forever), used with his permission; City of Dalaran with the
+  Underbelly as a second map level. Their rooms light up and their bosses tick themselves off;
   standard routes for them follow, until then draw your own.
 - All seven raids (Molten Core to Naxxramas): the game's map art, rooms and areas, bosses that tick
   themselves off, and standard routes from the entrance from boss to boss over the walkable floors;
@@ -214,6 +215,12 @@ the boss positions in the raids from the game's dungeon journal (in Zul'Gurub fr
 and the skulls of its map). The raid paths are searched over the walkable floors in the game's
 files, around lava and deep water.
 
+The maps of the four new Forever dungeons and of the Underbelly of Dalaran are by Santiago Reyes,
+from his [Atlas de Azeroth: Forever](https://asguevara433.wixsite.com/srmaps), used with his permission in the
+versions with his watermark.
+
 ## License
 
-Copyright (c) 2026 Checkov23. MIT license, see [LICENSE](LICENSE).
+Copyright (c) 2026 Checkov23. MIT license, see [LICENSE](LICENSE). The map pictures in
+`ForeverDungeonRoutes/maps/` are by Santiago Reyes and not covered by the MIT license, see
+[maps/CREDITS.txt](ForeverDungeonRoutes/maps/CREDITS.txt).

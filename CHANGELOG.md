@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.21
+
+- The four new dungeons show the maps of Santiago Reyes (Atlas de Azeroth: Forever), used with his
+  permission, with his name at the top of the map. City of Dalaran gets the Underbelly as a second
+  map level; the map switches there when the game reports the Underbelly. Rooms light up on his
+  maps, and the game's minimap pictures stay available behind the gear button. Routes you drew
+  yourself on the old maps of these dungeons need to be drawn again.
+
 ## 0.5.20
 
 - More of the bosses the game reports are on the routes now, so their kills tick them off:
