@@ -68,6 +68,7 @@ DR.DefaultRoutes["blackrockdepths"] = {
     {kind="boss", floor=243, x=0.8032, y=0.1159, name="Magmus", nameRU="Магмус", nameKO="마그무스", nameCN="玛格姆斯", nameTW="瑪格姆斯", encounters={244}},
     {kind="boss", floor=243, x=0.9165, y=0.1145, name="Emperor Dagran Thaurissan", nameDE="Imperator Dagran Thaurissan", nameFR="Empereur Dagran Thaurissan", nameES="Emperador Dagran Thaurissan", namePT="Imperador Dagran Thaurissan", nameRU="Император Дагран Тауриссан", nameKO="제왕 다그란 타우릿산", nameCN="达格兰·索瑞森大帝", nameTW="達格蘭‧索瑞森大帝", encounters={2790}, note="With Princess Moira", noteDE="Mit Prinzessin Moira"},
     {kind="optional", floor=243, x=0.915, y=0.146, name="Princess Moira Bronzebeard", nameDE="Prinzessin Moira Bronzebart", nameFR="Princesse Moira Barbe-de-Bronze", nameES="Princesa Moira Barbabronce", namePT="Princesa Moira Barbabronze", nameRU="Принцесса Мойра Бронзобород", nameKO="공주 모이라 브론즈비어드", nameCN="铁炉堡公主茉艾拉·铜须", nameTW="茉艾拉·銅鬚公主", encounters={2789}, note="Heals the Emperor. For her quests leave her alive: killing her fails them.", noteDE="Heilt den Imperator. Für ihre Quests am Leben lassen, sonst scheitern sie."},
+    {kind="optional", floor=243, x=0.5942, y=0.6574, name="The Vault", nameDE="Das Gewölbe", nameFR="Le Coffre", nameES="Las Arcas", namePT="A Caixa-forte", nameRU="Свод", nameKO="아이언포지 은행", nameCN="银行", nameTW="銀行", encounters={2791}, note="Optional: Watchman Doomgrip appears once all 12 relic coffers in the Vault are open (the keys drop from trash)", noteDE="Optional: Der Wächter erscheint, wenn alle 12 Truhen im Gewölbe offen sind (die Schlüssel fallen bei normalen Gegnern)"},
   },
   notes = {
     {floor=243, x=0.6617, y=0.1056, text="Light the braziers with torches dropped by Shadowforge Flame Keepers", textDE="Kohlenbecken mit den Fackeln der Shadowforge Flame Keeper anzünden"},
@@ -836,11 +837,11 @@ DR.DefaultRoutes["stratholme"] = {
     {kind="boss", floor=317, x=0.0382, y=0.4954, name="Cannon Master Willey", nameDE="Kanonenmeister Willey", nameFR="Maître canonnier Willey", nameES="Cañonero Jefe Willey", namePT="Mestre de Canhões Gualter", nameRU="Мастер-канонир Вилли", nameKO="포병대장 윌리", nameCN="炮手威利", nameTW="砲手威利", encounters={475}},
     {kind="boss", floor=317, x=0.2774, y=0.7397, name="Archivist Galford", nameDE="Archivar Galford", nameFR="Archiviste Galford", nameES="Archivista Galford", namePT="Arquivista Galford", nameRU="Архивариус Галфорд", nameKO="기록관 갈포드", nameCN="档案管理员加尔福特", nameTW="檔案管理員加爾福特", encounters={477}},
     {kind="boss", floor=317, x=0.2047, y=0.8205, name="Balnazzar", nameRU="Балназзар", nameKO="발나자르", nameCN="巴纳扎尔", nameTW="巴納札爾", encounters={478}},
+    {kind="optional", floor=317, x=0.5728, y=0.7045, name="Ezra Grimm", namePT="Ezra Carranca", nameRU="Эзра Гримм", nameKO="에즈라 그림", nameCN="艾兹拉·格里姆", nameTW="艾茲拉‧格里姆", encounters={2797}, note="Optional: using his tobacco box starts the fight", noteDE="Optional: Seine Tabakkiste zu benutzen startet den Kampf"},
   },
   notes = {
     {floor=318, x=0.5833, y=0.7618, text="Locked gate: needs the Key to the City", textDE="Verschlossenes Tor: Schlüssel zur Stadt nötig"},
     {floor=317, x=0.69, y=0.3741, text="There are 6 postboxes in the city. Opening them gives extra loot and mobs.", textDE="In der Stadt stehen 6 Briefkästen. Öffnen bringt Extra-Beute und Gegner."},
-    {floor=317, x=0.5728, y=0.7045, text="Fras Siabi (quest)", textDE="Fras Siabi (Quest)"},
   },
   links = {
   },
@@ -1010,6 +1011,39 @@ DR.DefaultRoutes["uldaman"] = {
     {floor=231, x=0.5037, y=0.3213, text="Disks of Norgannon", textDE="Scheiben von Norgannon"},
   },
   links = {
+  },
+}
+
+DR.DefaultRoutes["upperblackrock"] = {
+  id = "default",
+  builtin = true,
+  source = "aetherflask.com (via eintr.net)",
+  paths = {
+    {kind="main", floor=1002295, t0=0, t1=0.1182, pts={0.371,0.2978,0.3709,0.2914,0.3689,0.2843,0.3685,0.2585,0.3666,0.2488,0.3669,0.2366,0.3656,0.2272,0.3646,0.1956,0.3634,0.1868,0.3599,0.1737,0.3618,0.1685,0.3594,0.1711,0.3568,0.171,0.3512,0.1681,0.3424,0.1665,0.3369,0.1619,0.3348,0.1563,0.3348,0.1417,0.3367,0.1367,0.3417,0.1343,0.3373,0.1335,0.3313,0.1277,0.3194,0.1263,0.3059,0.1295,0.3031,0.1438}},
+    {kind="main", floor=1002296, t0=0.1182, t1=0.2609, pts={0.3013,0.178,0.3018,0.2107,0.3008,0.2216,0.3013,0.2432,0.2999,0.2593,0.3001,0.2756,0.302,0.3014,0.3075,0.3359,0.3085,0.3529,0.3109,0.3603,0.3195,0.3632,0.3662,0.3663,0.3709,0.3677,0.3741,0.3698,0.3757,0.3726,0.3756,0.3811,0.3742,0.3851,0.3753,0.3878,0.3483,0.3955}},
+    {kind="main", floor=1002297, t0=0.292, t1=0.7545, pts={0.2896,0.3992,0.2894,0.3918,0.2876,0.388,0.2865,0.379,0.2862,0.3605,0.2871,0.3459,0.288,0.3416,0.2916,0.3372,0.2993,0.339,0.3038,0.3375,0.3063,0.3149,0.3083,0.3107,0.3087,0.3073,0.311,0.3055,0.3098,0.3052,0.3086,0.3019,0.3083,0.2872,0.3097,0.2814,0.3135,0.2801,0.31,0.2788,0.3103,0.2717,0.3131,0.261,0.3161,0.2573,0.3193,0.2568,0.3246,0.2522,0.3353,0.25,0.3728,0.2517,0.3821,0.2633,0.3862,0.2622,0.3893,0.2631,0.3995,0.2756,0.4041,0.277,0.411,0.2819,0.4191,0.2834,0.4359,0.2834,0.4403,0.2819,0.4451,0.2779,0.4501,0.2801,0.4627,0.2789,0.4715,0.2842,0.4738,0.2911,0.4776,0.2923,0.4787,0.2918,0.484,0.2611,0.4848,0.2743,0.4836,0.2727,0.4799,0.2742,0.4772,0.2845,0.4757,0.3334,0.4775,0.3547,0.4835,0.3668,0.4842,0.3751,0.4882,0.3705,0.4905,0.3663,0.4908,0.363,0.4935,0.3602,0.5228,0.3589,0.5413,0.3606,0.5446,0.3919,0.5428,0.4074,0.5428,0.4352,0.5463,0.4434,0.5472,0.4494,0.5544,0.4602,0.5583,0.4644,0.5603,0.4649,0.5612,0.4674,0.5649,0.4708,0.5817,0.4715,0.5914,0.4652,0.5999,0.4567,0.6053,0.4634,0.6031,0.4593,0.6026,0.4545,0.6074,0.4462,0.6095,0.4367,0.6126,0.4344,0.6182,0.4393,0.6143,0.4353,0.6131,0.4312,0.6179,0.4166,0.6206,0.3999,0.6257,0.3902,0.626,0.3852,0.6292,0.3764,0.6289,0.3642,0.6328,0.3456,0.6349,0.3102}},
+    {kind="main", floor=1002297, t0=0.7545, t1=1, pts={0.6349,0.3102,0.6309,0.3763,0.6264,0.4173,0.6235,0.4319,0.6143,0.4588,0.6093,0.4685,0.6029,0.4763,0.5918,0.4806,0.5753,0.482,0.5619,0.479,0.5383,0.4696,0.5101,0.4641,0.4861,0.4624,0.4664,0.4633,0.4274,0.4609,0.4029,0.4623,0.3922,0.4648,0.3828,0.4704,0.3641,0.4852,0.3462,0.5019}},
+  },
+  stops = {
+    {kind="boss", floor=1002296, x=0.2996, y=0.2698, name="Pyroguard Emberseer", nameDE="Feuerwache Glutseher", nameFR="Pyrogarde Prophète ardent", nameES="Piroguardián brasadivino", namePT="Piroguarda Mirabrasa", nameRU="Пиростраж Углевзор", nameKO="불의수호자 엠버시어", nameCN="烈焰卫士艾博希尔", nameTW="烈焰衛士艾博希爾", encounters={3062}},
+    {kind="optional", floor=1002296, x=0.3844, y=0.3747, name="Solakar Flamewreath", note="Optional: summoned in this room", noteDE="Optional: wird in diesem Raum beschworen"},
+    {kind="boss", floor=1002297, x=0.3278, y=0.249, name="Goraluk Anvilcrack"},
+    {kind="rare", floor=1002297, x=0.3707, y=0.2516, name="Jed Runewatcher"},
+    {kind="boss", floor=1002297, x=0.4842, y=0.2551, name="Warchief Rend Blackhand", nameDE="Kriegshäuptling Rend Schwarzfaust", nameFR="Chef de guerre Rend Main-noire", nameES="Jefe de Guerra Rend Puño Negro", namePT="Chefe Guerreiro Laceral Mão Negra", nameRU="Вождь Ренд Чернорук", nameKO="대족장 렌드 블랙핸드", nameCN="大酋长雷德·黑手", nameTW="大酋長雷德·黑手", encounters={3063}},
+    {kind="boss", floor=1002297, x=0.6349, y=0.3102, name="The Beast", nameDE="Die Bestie", nameFR="La Bête", nameES="La Bestia", namePT="A Fera", nameRU="Зверь", nameKO="괴수", nameCN="比斯巨兽", nameTW="比斯巨獸", encounters={3068}},
+    {kind="optional", floor=1002297, x=0.6458, y=0.3736, name="Lord Valthalak", nameFR="Seigneur Valthalak", namePT="Lorde Valthalak", nameRU="Лорд Вальтхалак", nameKO="군주 발타라크", nameCN="瓦塔拉克公爵", nameTW="瓦薩拉克領主", encounters={3070}, note="Optional: summoned", noteDE="Optional: wird beschworen"},
+    {kind="boss", floor=1002297, x=0.3462, y=0.5019, name="General Drakkisath", nameFR="Général Drakkisath", nameRU="Генерал Драккисат", nameKO="사령관 드라키사스", nameCN="达基萨斯将军", nameTW="達基薩斯將軍", encounters={3069}},
+  },
+  notes = {
+    {floor=1002295, x=0.3345, y=0.1416, text="Locked door: opens when the orcs in every side room are dead", textDE="Verschlossene Tür: öffnet sich, wenn die Orcs in allen Seitenräumen tot sind"},
+    {floor=1002297, x=0.4544, y=0.2794, text="Jump down here", textDE="Hier hinunterspringen"},
+    {floor=1002297, x=0.6557, y=0.3272, text="Finkle Einhorn (quest): appears after the Beast", textDE="Finkle Einhorn (Quest): erscheint nach der Bestie"},
+  },
+  links = {
+    {floor=1002295, x=0.3031, y=0.1438, to=1002296, label="A"},
+    {floor=1002296, x=0.3012, y=0.1754, to=1002295, label="A"},
+    {floor=1002296, x=0.3032, y=0.4105, to=1002297, label="B"},
+    {floor=1002297, x=0.2895, y=0.403, to=1002296, label="B"},
   },
 }
 

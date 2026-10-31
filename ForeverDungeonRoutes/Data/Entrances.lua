@@ -25,6 +25,7 @@ DR.Entrances = {
 	blackrockdepths = { map = 1427, x = 0.2755, y = 0.7238 },
 	diremaul_east = { map = 1444, x = 0.6485, y = 0.3007 },
 	lowerblackrock = { map = 1428, x = 0.3654, y = 0.2544 },
+	upperblackrock = { map = 1428, x = 0.3654, y = 0.2544 },
 	diremaul_west = { map = 1444, x = 0.6031, y = 0.3142 },
 	diremaul_north = { map = 1444, x = 0.6261, y = 0.2489 },
 	scholomance = { map = 1422, x = 0.6968, y = 0.7341 },

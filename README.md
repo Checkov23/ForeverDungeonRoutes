@@ -1,7 +1,7 @@
 # Forever Dungeon Routes
 
-A dungeon map with routes for **World of Warcraft: Forever**, for all 28 dungeons and the 7 raids:
-ready routes for the 24 classic dungeons and the 7 raids, maps by Santiago Reyes for the 4 new Forever dungeons,
+A dungeon map with routes for **World of Warcraft: Forever**, for all 29 dungeons and the 7 raids:
+ready routes for the 25 classic dungeons and the 7 raids, maps by Santiago Reyes for the 4 new Forever dungeons,
 boss order and notes, bosses that tick themselves off, an editor for your own routes in the spirit of
 Mythic Dungeon Tools, and a route list where players put up their routes for everyone.
 
@@ -34,7 +34,7 @@ replace them.
 
 - Own map window with the game's dungeon map art. WoW: Forever has no dungeon maps of its own, but
   the art files are still in the game client; the addon draws them itself. No other addon needed.
-- Standard routes for all 24 classic dungeons. The line color runs from the entrance to the last
+- Standard routes for all 25 classic dungeons. The line color runs from the entrance to the last
   boss, arrows show the walking direction, dashed lines mark side paths.
 - The four new dungeons of WoW: Forever (The Hall of Thanes, Ruins of Lordaeron, Excavation Site:
   Wetlands, City of Dalaran): the game has no map art for them, so the addon shows the maps of
@@ -169,7 +169,7 @@ run, `/fdr pos` prints the position data and the room the game reports (helps wi
 Ragefire Chasm, Deadmines, Wailing Caverns, Shadowfang Keep, Blackfathom Deeps, Stormwind Stockade,
 Razorfen Kraul, Gnomeregan, Scarlet Monastery (Graveyard, Library, Armory, Cathedral),
 Razorfen Downs, Uldaman, Zul'Farrak, Maraudon, Sunken Temple, Blackrock Depths,
-Lower Blackrock Spire, Dire Maul (East, West, North), Scholomance, Stratholme.
+Lower and Upper Blackrock Spire, Dire Maul (East, West, North), Scholomance, Stratholme.
 
 Without a standard route yet (map, rooms and bosses are there): The Hall of Thanes, Ruins of
 Lordaeron, Excavation Site: Wetlands, City of Dalaran.
@@ -187,8 +187,13 @@ generated from the game's building files: each named part of a dungeon building 
 placed on the map level where the game's own map shows it. Rooms come with all dungeons except
 Shadowfang Keep, Stormwind Stockade, Razorfen Kraul, Zul'Farrak and Dire Maul (there only the entrance
 of East and West); the game names no rooms there. Between rooms the map follows the boss kills the
-game reports. In Scarlet Monastery and Dire Maul a kill also tells which wing you are in, in
-Scarlet Monastery already the first room.
+game reports. In Scarlet Monastery, Dire Maul and Blackrock Spire a kill also tells which wing you
+are in (Lower or Upper Spire), in Scarlet Monastery and Upper Blackrock Spire already the first room.
+
+Upper Blackrock Spire has no map level in today's map tables. Its stadium, furnace and throne room
+are on Blizzard's old seventh map level of Blackrock Spire, which is still in the WoW: Forever
+client; Dragonspire Hall, the Hall of Binding and the Rookery are drawn on the map levels of the
+Lower Spire, and the addon shows them there under their own names.
 
 The entrances (`Data/Entrances.lua`) are WoW: Forever's own map points where it has them, else the
 positions of Blizzard's table of dungeon entrances, placed on Forever's zone maps.

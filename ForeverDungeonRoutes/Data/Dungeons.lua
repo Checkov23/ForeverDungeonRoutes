@@ -53,6 +53,8 @@ DR.Dungeons = {
 		name = "Dire Maul: East", nameDE = "Düsterbruch: Ost", nameFR = "Hache-tripes: Est", nameES = "La Masacre: Este", namePT = "Gládio Cruel: Leste", nameRU = "Забытый Город: Восток", nameKO = "혈투의 전장: 동쪽", nameCN = "厄运之槌：东区", nameTW = "厄運之槌：東區" },
 	{ key = "lowerblackrock", instanceID = 229, floors = { 250, 251, 252, 253, 254, 255 }, levels = { 55, 60 },
 		name = "Lower Blackrock Spire", nameDE = "Untere Blackrockspitze", nameFR = "Bas du pic Blackrock", nameES = "Cumbre de Roca Negra Inferior", namePT = "Pico da Rocha Negra Inferior", nameRU = "Нижняя часть пика Черной горы", nameKO = "검은바위 첨탑 하층", nameCN = "黑石塔下层", nameTW = "黑石塔下層" },
+	{ key = "upperblackrock", instanceID = 229, floors = { 1002295, 1002296, 1002297 }, levels = { 55, 60 },
+		name = "Upper Blackrock Spire", nameDE = "Obere Blackrockspitze", nameFR = "Sommet du pic Blackrock", nameES = "Cumbre de Roca Negra Superior", namePT = "Pico da Rocha Negra Superior", nameRU = "Верхняя часть пика Черной горы", nameKO = "검은바위 첨탑 상층", nameCN = "黑石塔上层", nameTW = "黑石塔上層" },
 	{ key = "diremaul_west", instanceID = 429, floors = { 236, 237, 238 }, levels = { 58, 60 },
 		name = "Dire Maul: West", nameDE = "Düsterbruch: West", nameFR = "Hache-tripes: Ouest", nameES = "La Masacre: Oeste", namePT = "Gládio Cruel: Oeste", nameRU = "Забытый Город: Запад", nameKO = "혈투의 전장: 서쪽", nameCN = "厄运之槌：西区", nameTW = "厄運之槌：西區" },
 	{ key = "diremaul_north", instanceID = 429, floors = { 235 }, levels = { 58, 60 },

@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.0.0
+
+- Release for the launch of WoW: Forever. Checked against the live game client (build 1.60.1.70707):
+  the boss list is the same as in the beta, there are no new dungeons, and every map art file the
+  addon draws is in the client.
+- Upper Blackrock Spire is a dungeon of its own with a standard route: from the entrance through
+  Dragonspire Hall, the Hall of Binding and the Rookery to the Hall of Blackhand, the stadium, the
+  Furnace and the Spire Throne. Pyroguard Emberseer, Warchief Rend Blackhand, The Beast, General
+  Drakkisath and Lord Valthalak (optional, summoned) tick themselves off; Solakar Flamewreath,
+  Goraluk Anvilcrack and Jed Runewatcher are ticked by hand. The map is Blizzard's old seventh map
+  level of Blackrock Spire, which is still in the game client; Dragonspire Hall and the Hall of
+  Binding are shown on the map levels of the Lower Spire. Its rooms light up, and Dragonspire Hall or
+  a kill there switches the map from Lower to Upper Blackrock Spire.
+- Lower Blackrock Spire: Dragonspire Hall and the Rookery belong to the Upper Spire now; before,
+  entering them showed the Lower Spire.
+- Stratholme, living side: Ezra Grimm, who took the place of Fras Siabi, is an optional stop at his
+  tobacco box; his kill ticks him off.
+- Blackrock Depths: The Vault is an optional stop. Watchman Doomgrip appears once all 12 relic
+  coffers in the Vault are open; his kill ticks it off.
+
 ## 0.5.21
 
 - The four new dungeons show the maps of Santiago Reyes (Atlas de Azeroth: Forever), used with his
