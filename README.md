@@ -93,8 +93,8 @@ app: search for "Forever Dungeon Routes".
 By hand:
 
 1. Download `ForeverDungeonRoutes-<version>.zip` from the [releases](../../releases).
-2. Unzip it into `World of Warcraft\<Forever folder>\Interface\AddOns\`. The folder must be named
-   `ForeverDungeonRoutes`.
+2. Unzip it into `World of Warcraft\_forever_\Interface\AddOns\` (the beta used `_classic_beta_`).
+   The folder must be named `ForeverDungeonRoutes`.
 
 ## Use
 
