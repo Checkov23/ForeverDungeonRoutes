@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.2
+
+- The small map can be resized: drag the grip in its lower right corner (at least 200 x 150). Size
+  and place are kept; "Reset window size and position" in the gear menu brings back the default.
+
 ## 1.0.1
 
 - Small map when you enter a dungeon: the map shows small and slightly transparent at the right edge

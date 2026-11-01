@@ -1057,7 +1057,15 @@ end
 -- dungeon close it.
 
 local MINI_W, MINI_H, MINI_BAR = 320, 236, 20
+local MINI_MIN_W, MINI_MIN_H = 200, 150
 local MINI_ALPHA = 0.75 -- fully visible while the mouse is over it
+
+local function saveMiniGeometry()
+	local point, _, relativePoint, x, y = mini:GetPoint(1)
+	local g = DR.db.mini
+	g.point, g.relativePoint, g.x, g.y = point, relativePoint, x, y
+	g.width, g.height = mini:GetWidth(), mini:GetHeight()
+end
 
 restoreMiniGeometry = function()
 	local g = DR.db.mini
@@ -1067,7 +1075,7 @@ restoreMiniGeometry = function()
 	else
 		mini:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -24, -240)
 	end
-	mini:SetSize(MINI_W, MINI_H)
+	mini:SetSize(math.max(MINI_MIN_W, g.width or MINI_W), math.max(MINI_MIN_H, g.height or MINI_H))
 end
 
 local function buildMini()
@@ -1076,6 +1084,8 @@ local function buildMini()
 	mini:SetFrameStrata("MEDIUM")
 	mini:SetClampedToScreen(true)
 	mini:SetMovable(true)
+	mini:SetResizable(true)
+	mini:SetResizeBounds(MINI_MIN_W, MINI_MIN_H)
 	mini:SetDontSavePosition(true)
 	mini:EnableMouse(true)
 	mini:Hide()
@@ -1099,9 +1109,7 @@ local function buildMini()
 	bar:SetScript("OnDragStart", function() mini:StartMoving() end)
 	bar:SetScript("OnDragStop", function()
 		mini:StopMovingOrSizing()
-		local point, _, relativePoint, x, y = mini:GetPoint(1)
-		local g = DR.db.mini
-		g.point, g.relativePoint, g.x, g.y = point, relativePoint, x, y
+		saveMiniGeometry()
 	end)
 	mini.Close = makeButton(bar, "X", 18)
 	mini.Close:SetHeight(16)
@@ -1123,6 +1131,24 @@ local function buildMini()
 	mini.Title:SetJustifyH("LEFT")
 	mini.Title:SetWordWrap(false)
 	DR.ThemeText(mini.Title, "title")
+
+	-- the grip in the lower right corner changes the size, above the map and its buttons
+	local grip = CreateFrame("Button", nil, mini)
+	grip:SetSize(12, 12)
+	grip:SetPoint("BOTTOMRIGHT", -1, 1)
+	grip:SetFrameLevel(mini:GetFrameLevel() + 100)
+	grip.Icon = grip:CreateTexture(nil, "OVERLAY")
+	grip.Icon:SetTexture("Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Up")
+	grip.Icon:SetAllPoints()
+	grip.Highlight = grip:CreateTexture(nil, "HIGHLIGHT")
+	grip.Highlight:SetTexture("Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Highlight")
+	grip.Highlight:SetAllPoints()
+	grip:SetScript("OnMouseDown", function() mini:StartSizing("BOTTOMRIGHT") end)
+	grip:SetScript("OnMouseUp", function()
+		mini:StopMovingOrSizing()
+		saveMiniGeometry()
+	end)
+	mini.Grip = grip
 end
 
 -- Puts the map view back into the window, shown or not.

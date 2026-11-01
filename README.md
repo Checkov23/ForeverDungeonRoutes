@@ -68,9 +68,9 @@ replace them.
 - Run time from entering the dungeon to the last boss, your best time and your last runs per
   dungeon.
 - Small map when you enter a dungeon: slightly transparent at the edge of the screen, it follows
-  your run like the big map; "+" makes it the full route map, X closes it, and it closes when you
-  leave. The gear button chooses what shows on entering a dungeon: the small map, the route map or
-  nothing.
+  your run like the big map. Drag it by its title bar, resize it at its lower right corner; "+"
+  makes it the full route map, X closes it, and it closes when you leave. The gear button chooses
+  what shows on entering a dungeon: the small map, the route map or nothing.
 - Small display in dungeons (optional): dungeon, bosses down, run time, the next boss with its room
   and your room in a small box, for when the map stays closed.
 - Route from the last run: the addon notes where the bosses fell; one click makes a route of it.
