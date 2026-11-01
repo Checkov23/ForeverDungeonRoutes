@@ -116,6 +116,39 @@ DR.DefaultRoutes["blackwinglair"] = {
   },
 }
 
+DR.DefaultRoutes["dalaran"] = {
+  id = "default",
+  builtin = true,
+  source = "Rough route from guide texts (Icy Veins), stops approximate",
+  name = "Approximate (from guides)",
+  nameDE = "Ungefähr (aus Guides)",
+  nameFR = "Approximatif (guides)",
+  nameES = "Aproximada (guías)",
+  namePT = "Aproximada (guias)",
+  nameRU = "Примерный (по гайдам)",
+  nameKO = "대략 (공략 기준)",
+  nameCN = "大致路线（据攻略）",
+  nameTW = "大致路線（據攻略）",
+  paths = {
+    {kind="main", floor=1029592, t0=0, t1=0.307, pts={0.1875,0.8375,0.307,0.6404,0.319,0.6583,0.3229,0.6589,0.3361,0.6428,0.3551,0.6413,0.3607,0.634,0.41,0.6339,0.4159,0.6255,0.4193,0.6246,0.4279,0.6121,0.4525,0.61,0.4541,0.6052,0.4512,0.6001,0.4508,0.591,0.4471,0.5857,0.4397,0.5857,0.4476,0.5851,0.452,0.5785,0.4545,0.569,0.4757,0.5374,0.4852,0.5374,0.493,0.5473,0.4972,0.5504,0.5114,0.5505,0.5138,0.5533,0.5175,0.5535,0.5216,0.5577,0.5275,0.5576,0.5331,0.5489,0.5332,0.5189,0.5371,0.5124}},
+    {kind="main", floor=1029591, t0=0.307, t1=1, pts={0.5322,0.8375,0.525,0.8272,0.515,0.8272,0.5114,0.8316,0.4984,0.8316,0.4948,0.836,0.474,0.836,0.465,0.8231,0.4611,0.8227,0.4592,0.8203,0.4609,0.8234,0.4608,0.8303,0.4467,0.8516,0.4447,0.8521,0.442,0.8492,0.4266,0.8489,0.411,0.8259,0.3754,0.8258,0.371,0.824,0.3646,0.8146,0.3616,0.813,0.3646,0.8146,0.371,0.824,0.3754,0.8258,0.411,0.8259,0.4269,0.8491,0.442,0.8492,0.4445,0.852,0.4467,0.8516,0.4723,0.8131,0.4808,0.793,0.5087,0.7451,0.5088,0.7297,0.5107,0.7257,0.5117,0.6956,0.5051,0.6854,0.5045,0.6744,0.4948,0.6656,0.4863,0.6525,0.4864,0.6488,0.4883,0.6451,0.4873,0.6378,0.4874,0.6166,0.4906,0.6144,0.5038,0.5943,0.5038,0.5873,0.5012,0.5829,0.501,0.5789,0.5078,0.565,0.508,0.5445,0.5133,0.5364,0.514,0.5324,0.5216,0.5228,0.5348,0.5227,0.5397,0.5242,0.5446,0.5227,0.5469,0.5267,0.5489,0.5082,0.5547,0.5002,0.5557,0.4731,0.5662,0.4555,0.5687,0.446,0.5751,0.4366,0.5839,0.4364,0.5912,0.4436,0.5983,0.4436,0.6007,0.4408,0.6041,0.4407,0.6093,0.4465,0.6168,0.4383,0.6172,0.4321,0.6198,0.4281,0.6241,0.4273,0.6277,0.4219,0.6293,0.405,0.631,0.4027,0.6356,0.4025,0.6386,0.3981,0.6387,0.3882,0.6424,0.3823,0.6426,0.3779,0.6445,0.3743,0.6445,0.3563,0.6422,0.3494,0.6361,0.3402,0.6327,0.34,0.6252,0.351,0.627,0.3479,0.627,0.3388,0.6229,0.3324,0.6058,0.3324,0.6034,0.3352,0.599,0.3353,0.5966,0.3381,0.5936,0.3385,0.5853,0.3479,0.5811,0.3574,0.5811,0.3757,0.5853,0.3836,0.5811,0.3757,0.5811,0.3578,0.5849,0.3497,0.585,0.3402,0.5758,0.3265,0.537,0.3268,0.5248,0.345,0.5192,0.349,0.5052,0.3699,0.5049,0.3831,0.5063,0.3287,0.5127,0.2196}},
+    {kind="side", floor=1029591, title="Arcanic Enigma", pts={0.625,0.3514,0.6332,0.3397,0.6359,0.34,0.6424,0.3497,0.6455,0.3578,0.6455,0.3713,0.6475,0.3754,0.6475,0.3907,0.6541,0.4025,0.6563,0.4156,0.6608,0.424,0.6652,0.4243,0.6738,0.4103,0.6735,0.4134,0.6642,0.4273,0.6641,0.4317,0.6718,0.4526,0.6722,0.4632,0.6779,0.4714,0.6815,0.4714,0.6836,0.4685}},
+  },
+  stops = {
+    {kind="boss", floor=1029592, x=0.5371, y=0.5124, name="Atrexis the Grave Knight", nameDE="Atrexis der Grabritter", nameFR="Atrexis le Chevalier de la tombe", nameES="Atrexis el Caballero de la Tumba", namePT="Atrexis, o Cavaleiro da Sepultura", nameRU="Атрексий Могильный Рыцарь", nameKO="무덤 기사 아트렉시스", nameCN="墓穴骑士阿特雷克斯", nameTW="『墓地騎士』亞崔希斯", encounters={3311}, note="First boss, in the middle of the sewers; where the way up into the city starts is not known", noteDE="Erster Boss, mitten in der Kanalisation; wo der Weg hinauf in die Stadt führt, ist nicht bekannt"},
+    {kind="boss", floor=1029591, x=0.5322, y=0.8375, name="Arcane Anomaly", nameDE="Arkananomalie", nameFR="Anomalie arcanique", nameES="Anomalía Arcana", namePT="Anomalia Arcana", nameRU="Волшебная аномалия", nameKO="비전 변형물", nameCN="奥术畸体", nameTW="秘法異象", encounters={3298}, note="At Krasus' Landing on the surface", noteDE="Am Krasus' Landeplatz an der Oberfläche"},
+    {kind="boss", floor=1029591, x=0.3613, y=0.8126, name="Mana Devourer", nameDE="Manaschlinger", nameFR="Dévoreur de mana", nameES="Devorador de maná", namePT="Devorador de Mana", nameRU="Пожиратель маны", nameKO="마나 포식자", nameCN="法力吞噬者", nameTW="法力吞噬者", encounters={3300}, note="At the Violet Hold", noteDE="An der Violetten Festung"},
+    {kind="boss", floor=1029591, x=0.5469, y=0.5271, name="Fel Ancient", nameDE="Teufelsurtum", nameFR="Ancien gangrené", nameES="Anciano vil", namePT="Anciente Vil", nameRU="Древень Скверны", nameKO="지옥의 고대정령", nameCN="邪能古树", nameTW="魔化古樹", encounters={3299}, note="In the middle of the city; a mage lowers the barrier first", noteDE="Mitten in der Stadt; zuerst senkt ein Magier die Barriere"},
+    {kind="boss", floor=1029591, x=0.625, y=0.3514, name="Unstable Sentinel", nameDE="Instabile Schildwache", nameFR="Sentinelle instable", nameES="Centinela inestable", namePT="Sentinela Oscilante", nameRU="Нестабильный часовой", nameKO="불안정한 파수꾼", nameCN="不稳定的哨兵", nameTW="不穩定的哨兵", encounters={3302}, note="Approximate: northern end, by the profession buildings", noteDE="Ungefähr: am Nordende bei den Berufsgebäuden"},
+    {kind="optional", floor=1029591, x=0.6836, y=0.4685, name="Arcanic Enigma", note="Approximate: north-east, near the Antonidas statue. Named only in the guide, not in the game's boss list; the map does not tick him off by itself", noteDE="Ungefähr: im Nordosten bei der Statue von Antonidas. Nur im Guide genannt, nicht in der Bossliste des Spiels; die Karte hakt ihn nicht selbst ab"},
+    {kind="boss", floor=1029591, x=0.5127, y=0.2196, name="Shade of the Archmage", nameDE="Schemen des Erzmagiers", nameFR="Ombre de l’archimage", nameES="Sombra del archimago", namePT="Vulto do Arquimago", nameRU="Тень верховного мага", nameKO="대마법사의 망령", nameCN="大法师之影", nameTW="大法師之影", encounters={3303}, note="Last boss: Archmage Modera at the bottom of the Violet Citadel opens the portal", noteDE="Letzter Boss: Erzmagierin Modera unten in der Violetten Zitadelle öffnet das Portal"},
+  },
+  notes = {
+  },
+  links = {
+  },
+}
+
 DR.DefaultRoutes["deadmines"] = {
   id = "default",
   builtin = true,
@@ -264,6 +297,33 @@ DR.DefaultRoutes["diremaul_west"] = {
   },
 }
 
+DR.DefaultRoutes["excavationsite"] = {
+  id = "default",
+  builtin = true,
+  source = "Rough route from guide texts (Icy Veins), stops approximate",
+  name = "Approximate (from guides)",
+  nameDE = "Ungefähr (aus Guides)",
+  nameFR = "Approximatif (guides)",
+  nameES = "Aproximada (guías)",
+  namePT = "Aproximada (guias)",
+  nameRU = "Примерный (по гайдам)",
+  nameKO = "대략 (공략 기준)",
+  nameCN = "大致路线（据攻略）",
+  nameTW = "大致路線（據攻略）",
+  paths = {
+    {kind="main", floor=1029981, t0=0, t1=1, pts={0.8965,0.2562,0.8975,0.2542,0.8973,0.2487,0.892,0.2407,0.8895,0.2398,0.8871,0.2363,0.8867,0.2315,0.8854,0.2299,0.8802,0.2299,0.8768,0.2316,0.8688,0.243,0.8595,0.243,0.8492,0.2284,0.8207,0.2299,0.8104,0.2371,0.8029,0.2373,0.8008,0.2412,0.8004,0.2381,0.7765,0.2009,0.7687,0.2007,0.7626,0.2078,0.7579,0.208,0.7413,0.2311,0.7279,0.2313,0.6952,0.2536,0.6927,0.2571,0.6927,0.2626,0.709,0.2875,0.7089,0.2912,0.7061,0.2963,0.706,0.3087,0.6984,0.3219,0.6982,0.3278,0.6964,0.3306,0.6923,0.3306,0.6864,0.3222,0.6752,0.3221,0.6725,0.3192,0.6661,0.3191,0.6608,0.3119,0.6488,0.3119,0.6461,0.3148,0.6378,0.3149,0.6307,0.3209,0.6254,0.3289,0.6252,0.3384,0.6376,0.3589,0.6387,0.3761,0.6416,0.3812,0.6416,0.4109,0.6329,0.4243,0.6237,0.4266,0.6115,0.4449,0.6103,0.4552,0.6051,0.4641,0.5902,0.4641,0.5844,0.4656,0.5817,0.4627,0.5568,0.4626,0.5519,0.4555,0.5517,0.4511,0.5489,0.4449,0.5488,0.4339,0.5469,0.4303,0.5469,0.425,0.5469,0.4303,0.5488,0.4339,0.5488,0.4581,0.5448,0.464,0.5399,0.4644,0.5314,0.477,0.5179,0.4773,0.5153,0.4744,0.4974,0.4744,0.4921,0.4801,0.4874,0.4803,0.485,0.4832,0.4728,0.4816,0.4637,0.4686,0.4591,0.4686,0.4567,0.4714,0.4506,0.4714,0.4469,0.4671,0.4427,0.4671,0.4391,0.47,0.4308,0.4701,0.4235,0.4817,0.41,0.4814,0.4092,0.4797,0.4092,0.472,0.4102,0.4689,0.4091,0.4801,0.4069,0.4832,0.3861,0.4832,0.3795,0.4788,0.3617,0.4773,0.3573,0.4756,0.3549,0.472,0.3543,0.4654,0.3449,0.4511,0.3447,0.4438,0.3412,0.4383,0.3265,0.4363,0.3233,0.4409,0.3232,0.4489,0.3219,0.4544,0.3192,0.4582,0.3121,0.4588,0.2953,0.4841,0.2947,0.4877,0.2914,0.4929,0.2885,0.4934,0.2748,0.4705,0.2742,0.4639,0.2699,0.4574,0.2587,0.4571,0.2549,0.4628,0.2539,0.4826,0.2526,0.4896,0.2374,0.5122,0.225,0.5124,0.2227,0.5156,0.2227,0.5269,0.2283,0.5357,0.2296,0.543,0.2322,0.5474,0.2325,0.5533,0.2341,0.556,0.2325,0.5533,0.2322,0.5489,0.2296,0.5449,0.2211,0.5447,0.2084,0.5631,0.2037,0.5642,0.1992,0.5716,0.2012,0.5877,0.2014,0.599,0.212,0.6148,0.2382,0.615,0.242,0.6206,0.2439,0.6292,0.2432,0.6155,0.2451,0.6115,0.2451,0.5964,0.2467,0.5935,0.2592,0.59,0.2733,0.5901,0.2955,0.6232,0.296,0.6294,0.2988,0.6342,0.2992,0.6404,0.3114,0.6571,0.3195,0.6606,0.325,0.6689,0.3251,0.6792,0.3221,0.6837,0.3192,0.6835,0.3127,0.6739,0.3219,0.6876,0.3246,0.6896,0.3365,0.6896,0.3397,0.6855,0.3418,0.6852}},
+  },
+  stops = {
+    {kind="boss", floor=1029981, x=0.5469, y=0.4246, name="Saltspine", nameDE="Salzrücken", nameFR="Seléchine", nameES="Espinasal", namePT="Salespino", nameRU="Солеспин", nameKO="소금가시", nameCN="盐脊", nameTW="鹽脊", encounters={3480}, note="On the lake", noteDE="Auf dem See"},
+    {kind="boss", floor=1029981, x=0.3418, y=0.4392, name="Shadetooth", nameDE="Schemenzahn", nameFR="Dent-Sombre", nameES="Sombradiente", namePT="Caninumbra", nameRU="Тенезуб", nameKO="그늘이빨", nameCN="暗齿", nameTW="蔭牙", encounters={3481}, note="Past the crocodile den; stealthed raptors in the bushes around him", noteDE="Hinter dem Krokodilbau; getarnte Raptoren in den Büschen ringsum"},
+    {kind="boss", floor=1029981, x=0.3418, y=0.6852, name="Relic Guardian", nameDE="Reliktwächter", nameFR="Gardien des reliques", nameES="Guardián de reliquias", namePT="Guardião da Relíquia", nameRU="Страж реликвий", nameKO="유물 수호자", nameCN="遗迹守卫者", nameTW="聖物守護者", encounters={3482}, note="Last boss; the Archival Panel to his right starts the fight", noteDE="Letzter Boss; das Pult rechts von ihm startet den Kampf"},
+  },
+  notes = {
+  },
+  links = {
+  },
+}
+
 DR.DefaultRoutes["gnomeregan"] = {
   id = "default",
   builtin = true,
@@ -288,6 +348,35 @@ DR.DefaultRoutes["gnomeregan"] = {
     {floor=228, x=0.4576, y=0.6124, text="Take the elevator down", textDE="Mit dem Aufzug nach unten"},
     {floor=228, x=0.5539, y=0.588, text="Locked door: requires the Workshop Key", textDE="Verschlossene Tür: Werkstattschlüssel nötig"},
     {floor=228, x=0.8621, y=0.4801, text="Back entrance", textDE="Hintereingang"},
+  },
+  links = {
+  },
+}
+
+DR.DefaultRoutes["hallofthanes"] = {
+  id = "default",
+  builtin = true,
+  source = "Rough route from guide texts (Icy Veins), stops approximate",
+  name = "Approximate (from guides)",
+  nameDE = "Ungefähr (aus Guides)",
+  nameFR = "Approximatif (guides)",
+  nameES = "Aproximada (guías)",
+  namePT = "Aproximada (guias)",
+  nameRU = "Примерный (по гайдам)",
+  nameKO = "대략 (공략 기준)",
+  nameCN = "大致路线（据攻略）",
+  nameTW = "大致路線（據攻略）",
+  paths = {
+    {kind="main", floor=1030651, t0=0, t1=1, pts={0.5078,0.937,0.5078,0.8986,0.5064,0.8862,0.5036,0.8766,0.4994,0.8701,0.4938,0.8664,0.4896,0.859,0.4868,0.8478,0.4854,0.8329,0.4854,0.8142,0.4868,0.7991,0.4896,0.7876,0.4938,0.7796,0.4994,0.7753,0.5036,0.7669,0.5064,0.7547,0.5078,0.7385,0.5078,0.6887,0.5067,0.6939,0.4955,0.694,0.4912,0.6876,0.4912,0.6316,0.5018,0.6151,0.5049,0.5997,0.5049,0.5873,0.5076,0.5857,0.5057,0.5854,0.5039,0.5822,0.5039,0.5086,0.506,0.5052,0.5125,0.5051,0.5062,0.5051,0.5051,0.5038,0.5039,0.4866,0.5029,0.4841,0.5029,0.4486,0.5059,0.4387,0.5059,0.4134,0.5076,0.4101,0.5059,0.4065,0.5059,0.3651,0.5039,0.3582,0.5039,0.2963,0.5057,0.2931,0.5076,0.2928,0.5029,0.2864,0.5029,0.2392,0.5058,0.2341,0.5059,0.2231,0.502,0.2117,0.502,0.1923,0.5078,0.183}},
+    {kind="side", floor=1030651, title="Infurnus", pts={0.5127,0.5051,0.516,0.5057,0.5275,0.5226,0.5582,0.5227,0.5636,0.5184,0.5682,0.5182,0.5734,0.514,0.578,0.5138,0.5822,0.5081,0.5897,0.508,0.5958,0.5008,0.6027,0.5005,0.6102,0.4892,0.6107,0.4832,0.6154,0.4849,0.6234,0.4949,0.6393,0.4949,0.6439,0.5007,0.6581,0.5006,0.6776,0.4703,0.6959,0.47,0.6982,0.4656}},
+  },
+  stops = {
+    {kind="boss", floor=1030651, x=0.5078, y=0.6881, name="Faldrim Anvilmar", nameFR="Faldrim Courbenclume", nameES="Faldrim Yunquemar", namePT="Faldrim Sidermar", nameRU="Фалдрим Старая Наковальня", nameKO="팔드림 앤빌마", nameCN="法德林·安威玛尔", nameTW="法爾椎‧安威瑪", encounters={3493}, note="Patrols around his tomb", noteDE="Läuft um sein Grab herum"},
+    {kind="boss", floor=1030651, x=0.6982, y=0.4656, name="Infurnus", nameRU="Инфурий", nameKO="인퍼르누스", nameCN="茵弗努斯", nameTW="英弗努斯", encounters={3495}, note="Place inferred from the boss order, not confirmed; pulls with a summoner", noteDE="Ort aus der Bossreihenfolge erschlossen, nicht gesichert; kommt mit einem Beschwörer"},
+    {kind="boss", floor=1030651, x=0.5127, y=0.5051, name="Plunder", nameDE="Plünderung", nameFR="Pillage", nameES="Saqueo", namePT="Butim", nameRU="Крад", nameKO="약탈골렘", nameCN="劫掠者", nameTW="掠奪者", encounters={3494}, note="Patrols the room before the last boss", noteDE="Läuft im Raum vor dem letzten Boss umher"},
+    {kind="boss", floor=1030651, x=0.5078, y=0.1757, name="Durgen Dirgehammer", nameFR="Durgen Mornemartel", nameES="Durgen Martillo Funesto", namePT="Durgen Martelúgubre", nameRU="Дарген Сокрушающий Молот", nameKO="드루겐 더지해머", nameCN="杜根·挽锤", nameTW="杜爾根‧戴格哈默", encounters={3496}, note="Last boss, with two stone golems", noteDE="Letzter Boss, mit zwei Steingolems"},
+  },
+  notes = {
   },
   links = {
   },
@@ -617,6 +706,37 @@ DR.DefaultRoutes["ruinsofahnqiraj"] = {
   links = {
   },
 },
+}
+
+DR.DefaultRoutes["ruinsoflordaeron"] = {
+  id = "default",
+  builtin = true,
+  source = "Rough route from guide texts (Icy Veins), stops approximate",
+  name = "Approximate (from guides)",
+  nameDE = "Ungefähr (aus Guides)",
+  nameFR = "Approximatif (guides)",
+  nameES = "Aproximada (guías)",
+  namePT = "Aproximada (guias)",
+  nameRU = "Примерный (по гайдам)",
+  nameKO = "대략 (공략 기준)",
+  nameCN = "大致路线（据攻略）",
+  nameTW = "大致路線（據攻略）",
+  paths = {
+    {kind="main", floor=1029991, t0=0, t1=1, pts={0.6104,0.2196,0.6124,0.2168,0.6161,0.2168,0.621,0.2237,0.6268,0.2241,0.6295,0.2279,0.6309,0.2363,0.6309,0.2527,0.6332,0.2562,0.6376,0.2561,0.6414,0.2505,0.6436,0.2301,0.6486,0.2226,0.6539,0.2225,0.6556,0.2211,0.6696,0.2211,0.673,0.2228,0.6748,0.226,0.6748,0.2542,0.6741,0.256,0.6748,0.2645,0.6691,0.2736,0.668,0.2787,0.668,0.2868,0.6718,0.293,0.6719,0.2981,0.6738,0.3051,0.6738,0.4694,0.6727,0.4746,0.6631,0.491,0.6631,0.4991,0.6707,0.5093,0.6729,0.5218,0.6729,0.6129,0.6736,0.6148,0.6729,0.632,0.6707,0.6415,0.6588,0.6711,0.6532,0.6793,0.6449,0.6779,0.641,0.6832,0.6404,0.6913,0.6351,0.6993,0.6347,0.7024,0.6334,0.7019,0.631,0.7055,0.6297,0.7117,0.618,0.741,0.6058,0.7549,0.6053,0.7615,0.5939,0.7787,0.5938,0.8018,0.5976,0.8113,0.5973,0.8146,0.5936,0.8198,0.587,0.82,0.5809,0.8242,0.5675,0.8288,0.5624,0.833,0.5553,0.836,0.5433,0.836,0.5409,0.8343,0.5297,0.819,0.528,0.8135,0.5211,0.8038,0.5182,0.8044,0.5082,0.8194,0.504,0.8184,0.4896,0.8,0.4891,0.7948,0.4838,0.7853,0.4757,0.7847,0.4713,0.7789,0.4545,0.7775,0.4452,0.7861,0.4386,0.7863,0.4355,0.7912,0.4363,0.8023,0.4335,0.8026,0.4257,0.814,0.4161,0.8141,0.4108,0.8199,0.4083,0.8198,0.4049,0.8164,0.392,0.797,0.3893,0.7959,0.381,0.7835,0.3808,0.7762,0.3779,0.771,0.3779,0.7634,0.3817,0.7571,0.3828,0.7524,0.3828,0.7355,0.3799,0.7271,0.3799,0.7165,0.378,0.7128,0.378,0.7059,0.3905,0.6884,0.3934,0.688,0.4015,0.6809,0.4073,0.678,0.413,0.6778,0.4217,0.6664,0.4229,0.6579,0.4199,0.6495,0.4209,0.6067,0.4186,0.6032,0.4115,0.6032,0.4098,0.6047,0.3651,0.6044,0.3633,0.6016,0.3633,0.5891,0.3616,0.5858,0.3633,0.5822,0.3621,0.5518,0.361,0.5505,0.3451,0.5505,0.3428,0.5474,0.3418,0.5412,0.3418,0.5232,0.3467,0.5002,0.3477,0.4852,0.3463,0.4832,0.342,0.4832,0.3463,0.4832,0.3477,0.4811,0.3477,0.4369,0.3467,0.4343,0.3457,0.3944,0.3445,0.3878,0.337,0.3761,0.3369,0.3666,0.3434,0.366,0.3447,0.364,0.3447,0.3066,0.3457,0.304,0.3447,0.2685,0.3457,0.2659,0.3457,0.2538,0.3417,0.2475,0.3358,0.2472,0.3303,0.2388,0.3301,0.2213,0.3358,0.214,0.3395,0.2138,0.3463,0.2235,0.3467,0.2266,0.3469,0.2224,0.3497,0.2182,0.3624,0.217,0.3671,0.2237,0.3722,0.2258,0.3776,0.2337,0.384,0.252,0.3981,0.2747,0.4013,0.2813,0.4017,0.2861,0.4061,0.2926,0.4099,0.2928,0.4073,0.2929,0.4062,0.2948,0.4062,0.3406,0.4102,0.3593,0.4102,0.3874,0.4139,0.3936,0.4235,0.3939,0.4386,0.3833,0.4471,0.3692,0.4537,0.369,0.4564,0.366,0.4589,0.3663,0.4592,0.3721,0.4635,0.3787,0.4677,0.3791,0.4769,0.3699,0.4822,0.3618,0.4828,0.3552,0.4891,0.3473,0.4948,0.347,0.4994,0.349,0.501,0.3519,0.501,0.4123,0.5,0.4149,0.5,0.4284,0.498,0.4354,0.498,0.4504,0.4962,0.4541,0.4962,0.4566,0.5055,0.4709,0.506,0.476,0.5175,0.4917,0.5233,0.492,0.5273,0.4978}},
+  },
+  stops = {
+    {kind="boss", floor=1029991, x=0.6738, y=0.3148, name="Witherfang", nameDE="Welkzahn", nameFR="Croc-Flétri", nameES="Colmimarchito", namePT="Sugapresa", nameRU="Сухожвал", nameKO="쇠퇴송곳니", nameCN="枯牙", nameTW="枯萎之牙", encounters={3353}, note="Near the entrance by King's Alley, patrols with broodlings", noteDE="Nahe dem Eingang an der Königsgasse, läuft mit Brutlingen umher"},
+    {kind="boss", floor=1029991, x=0.5977, y=0.7731, name="The Butcher", nameDE="Der Schlächter", nameFR="Le Boucher", nameES="El Carnicero", namePT="O Carniceiro", nameRU="Мясник", nameKO="도살자", nameCN="屠夫", nameTW="屠夫", encounters={3355}, note="Approximate: south-east, at the end of a hallway (the guide calls the boss there \"The Baron\")", noteDE="Ungefähr: im Südosten am Ende eines Gangs (im Guide heißt der Boss dort „The Baron“)"},
+    {kind="boss", floor=1029991, x=0.4365, y=0.8023, name="Viktor the Vile", nameDE="Viktor der Üble", nameFR="Viktor le Vil", nameES="Viktor el Abyecto", namePT="Viktor, o Vil", nameRU="Виктор Вероломный", nameKO="비열한 빅토르", nameCN="邪恶的维克多", nameTW="邪惡的維多", encounters={3411}, note="Approximate: south-west, in a ruined house; use the campfire in the fireplace, waves, then Viktor", noteDE="Ungefähr: im Südwesten in einer Hausruine; das Lagerfeuer im Kamin benutzen, Wellen, dann Viktor"},
+    {kind="boss", floor=1029991, x=0.3418, y=0.4832, name="The Abandoned", nameDE="Der Verlassene", nameFR="L’Abandonné", nameES="El Abandonado", namePT="O Abandonado", nameRU="Покинутый", nameKO="버려진 자", nameCN="被遗弃者", nameTW="被棄者", encounters={3357}, note="Approximate: west, a corridor leads to a statue with red eyes; three waves, then the boss", noteDE="Ungefähr: im Westen führt ein Gang zu einer Statue mit roten Augen; drei Wellen, dann der Boss"},
+    {kind="boss", floor=1029991, x=0.3467, y=0.2269, name="Bjork", nameRU="Бьорк", nameKO="비요크", nameCN="比约克", nameTW="布喬克", encounters={3412}, note="Approximate: north-west, at the end of a corridor", noteDE="Ungefähr: im Nordwesten am Ende eines Gangs"},
+    {kind="boss", floor=1029991, x=0.5273, y=0.4978, name="Rath'mael", nameFR="Rath’mael", nameRU="Рат'маэль", nameKO="라스마엘", nameCN="拉斯玛尔", nameTW="拉斯梅爾", encounters={3354}, note="In the middle of the ruins, seen from afar; the way leads around", noteDE="In der Mitte der Ruinen, von weitem zu sehen; der Weg führt außen herum"},
+    {kind="rare", floor=1029991, x=0.3271, y=0.366, name="Lordaeron Captain", nameDE="Hauptmann von Lordaeron", nameFR="Capitaine de Lordaeron", nameES="Capitán de Lordaeron", namePT="Capitão de Lordaeron", nameRU="Лордеронский капитан", nameKO="로데론 부대장", nameCN="洛丹伦上尉", nameTW="羅德隆隊長", encounters={3408}, note="Rare, Horde only: can appear in the west once all other bosses are dead", noteDE="Selten, nur für die Horde: kann im Westen erscheinen, wenn alle anderen Bosse tot sind"},
+  },
+  notes = {
+  },
+  links = {
+  },
 }
 
 DR.DefaultRoutes["scholomance"] = {

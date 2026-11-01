@@ -1,7 +1,8 @@
 # Forever Dungeon Routes
 
 A dungeon map with routes for **World of Warcraft: Forever**, for all 29 dungeons and the 7 raids:
-ready routes for the 25 classic dungeons and the 7 raids, maps by Santiago Reyes for the 4 new Forever dungeons,
+ready routes for the 25 classic dungeons and the 7 raids, maps by Santiago Reyes and rough routes for the 4 new
+Forever dungeons,
 boss order and notes, bosses that tick themselves off, an editor for your own routes in the spirit of
 Mythic Dungeon Tools, and a route list where players put up their routes for everyone.
 
@@ -14,8 +15,10 @@ Mythic Dungeon Tools, and a route list where players put up their routes for eve
 | ![Blackrock Depths, Shadowforge City, The Grim Guzzler lit up, the small display above the window](docs/screenshots/room.png) | ![Scholomance with the question whether to take over a route](docs/screenshots/share.png) |
 | **Scholomance: blue squares lead to the other map levels** | **German game client** |
 | ![Scholomance, The Upper Study](docs/screenshots/scholomance.png) | ![The Deadmines with German texts (Todesminen)](docs/screenshots/german.png) |
-| **New in WoW: Forever: Ruins of Lordaeron, map by Santiago Reyes** | **The Hall of Thanes, map by Santiago Reyes** |
-| ![Ruins of Lordaeron on the map by Santiago Reyes (Atlas de Azeroth: Forever), King's Alley lit up, no route yet](docs/screenshots/new-lordaeron.png) | ![The Hall of Thanes on the map by Santiago Reyes (Atlas de Azeroth: Forever)](docs/screenshots/new-thanes.png) |
+| **New in WoW: Forever: Ruins of Lordaeron, map by Santiago Reyes, rough route from guide texts** | **The Hall of Thanes with its rough route** |
+| ![Ruins of Lordaeron on the map by Santiago Reyes (Atlas de Azeroth: Forever) with the rough route Approximate (from guides), King's Alley lit up](docs/screenshots/new-lordaeron.png) | ![The Hall of Thanes on the map by Santiago Reyes (Atlas de Azeroth: Forever) with the rough route, Infurnus on the side path](docs/screenshots/new-thanes.png) |
+| **City of Dalaran: the rough route over two levels, three bosses down** | **The small map when you enter a dungeon** |
+| ![City of Dalaran on the map by Santiago Reyes with the rough route, Atrexis, Arcane Anomaly and Mana Devourer ticked off, Arcanic Enigma as an optional stop](docs/screenshots/new-dalaran.png) | ![The small map in the Deadmines, slightly transparent at the edge of the screen, with + and X](docs/screenshots/small-map.png) |
 | **Or from the game's own minimap pictures (gear button)** | **The Hall of Thanes from the minimap pictures** |
 | ![Ruins of Lordaeron from the game's minimap pictures, King's Alley lit up](docs/screenshots/new-lordaeron-minimap.png) | ![The Hall of Thanes from the game's minimap pictures, Anvilmar's Rest lit up](docs/screenshots/new-thanes-minimap.png) |
 | **The other window styles (gear button): Dark** | **Parchment** |
@@ -39,8 +42,12 @@ replace them.
 - The four new dungeons of WoW: Forever (The Hall of Thanes, Ruins of Lordaeron, Excavation Site:
   Wetlands, City of Dalaran): the game has no map art for them, so the addon shows the maps of
   Santiago Reyes (Atlas de Azeroth: Forever), used with his permission; City of Dalaran with the
-  Underbelly as a second map level. Their rooms light up and their bosses tick themselves off;
-  standard routes for them follow, until then draw your own.
+  Underbelly as a second map level. Their rooms light up and their bosses tick themselves off.
+  Each has a rough standard route, "Approximate (from guides)": where the bosses stand comes from
+  the texts of written guides (Icy Veins), the order from the game's boss list, and the paths follow
+  the floors on Santiago's maps. The places are approximate, and every stop says what is known about
+  it. Bosses no guide places yet are not on the route: Highland Horror (Excavation Site), Mana
+  Elemental, Mana Wraith and Lyn the Ignored (City of Dalaran).
 - All seven raids (Molten Core to Naxxramas): the game's map art, rooms and areas, bosses that tick
   themselves off, and standard routes from the entrance from boss to boss over the walkable floors;
   Zul'Gurub and Ahn'Qiraj with two each ("Full clear" and "Efficient"). In the dungeon list they sit
@@ -175,8 +182,8 @@ Razorfen Kraul, Gnomeregan, Scarlet Monastery (Graveyard, Library, Armory, Cathe
 Razorfen Downs, Uldaman, Zul'Farrak, Maraudon, Sunken Temple, Blackrock Depths,
 Lower and Upper Blackrock Spire, Dire Maul (East, West, North), Scholomance, Stratholme.
 
-Without a standard route yet (map, rooms and bosses are there): The Hall of Thanes, Ruins of
-Lordaeron, Excavation Site: Wetlands, City of Dalaran.
+With a rough route from guide texts ("Approximate (from guides)", places approximate): The Hall of
+Thanes, Ruins of Lordaeron, Excavation Site: Wetlands, City of Dalaran.
 
 Raids: Molten Core, Onyxia's Lair, Blackwing Lair, Naxxramas (in the order of the game's dungeon
 journal: Arachnid, Plague, Military and Construct Quarter), and with "Full clear" and "Efficient"
@@ -227,6 +234,13 @@ files, around lava and deep water.
 The maps of the four new Forever dungeons and of the Underbelly of Dalaran are by Santiago Reyes,
 from his [Atlas de Azeroth: Forever](https://asguevara433.wixsite.com/srmaps), used with his permission in the
 versions with his watermark.
+
+The rough routes of the four new dungeons place the bosses after the boss sections of the Icy Veins
+guides ([The Hall of Thanes](https://www.icy-veins.com/wow-forever/hall-of-thanes-guide),
+[Ruins of Lordaeron](https://www.icy-veins.com/wow-forever/ruins-of-lordaeron-guide),
+[Excavation Site: Wetlands](https://www.icy-veins.com/wow-forever/excavation-site-wetlands-guide),
+[City of Dalaran](https://www.icy-veins.com/wow-forever/city-of-dalaran-guide)): only what their
+texts say about the places was used, no map or route from them.
 
 ## License
 

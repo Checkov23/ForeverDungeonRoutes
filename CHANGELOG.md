@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.0.3
+
+- The four new dungeons have rough standard routes, "Approximate (from guides)": where the bosses
+  stand comes from the texts of written guides (Icy Veins), the order from the game's boss list, and
+  the paths follow the floors on the maps of Santiago Reyes. The places are approximate, and every
+  stop says what is known about it. Bosses no guide places yet are not on the route: Highland Horror
+  (Excavation Site), Mana Elemental, Mana Wraith and Lyn the Ignored (City of Dalaran).
+  - The Hall of Thanes: Faldrim Anvilmar, Infurnus on a side path (place inferred, not confirmed),
+    Plunder, Durgen Dirgehammer.
+  - Ruins of Lordaeron: from King's Alley through the south and the west to Rath'mael in the middle;
+    the Lordaeron Captain (rare, Horde only) is marked.
+  - Excavation Site: Wetlands: Saltspine on the lake, Shadetooth, Relic Guardian.
+  - City of Dalaran: Atrexis in the Underbelly first, then Krasus' Landing, the Violet Hold, the
+    middle of the city, the north end and the Violet Citadel. Arcanic Enigma, named in a guide but
+    not in the game's boss list, is an optional stop and does not hold up the run.
+- City of Dalaran now opens on the Underbelly, where the first boss of the route stands.
+
 ## 1.0.2
 
 - The small map can be resized: drag the grip in its lower right corner (at least 200 x 150). Size
