@@ -67,6 +67,10 @@ replace them.
 - Dungeons for your level: the dungeon list colours the names by your level, like quests.
 - Run time from entering the dungeon to the last boss, your best time and your last runs per
   dungeon.
+- Small map when you enter a dungeon: slightly transparent at the edge of the screen, it follows
+  your run like the big map; "+" makes it the full route map, X closes it, and it closes when you
+  leave. The gear button chooses what shows on entering a dungeon: the small map, the route map or
+  nothing.
 - Small display in dungeons (optional): dungeon, bosses down, run time, the next boss with its room
   and your room in a small box, for when the map stays closed.
 - Route from the last run: the addon notes where the bosses fell; one click makes a route of it.
@@ -136,9 +140,9 @@ By hand:
   best time (the mouse on them shows your last ten runs), and outside the dungeon its entrance. A
   click on the entrance sets the map pin.
 - The gear button holds the settings: stop list, arrows, map from the game's minimap, tick off
-  bosses automatically, open automatically in dungeons, button at the minimap, small display
-  in dungeons, route list over the server channel, line width, text size of the stop list, window
-  style (gilded, dark, parchment, classic), opacity.
+  bosses automatically, what shows on entering a dungeon (small map, route map or nothing), button
+  at the minimap, small display in dungeons, route list over the server channel, line width, text
+  size of the stop list, window style (gilded, dark, parchment, classic), opacity.
 
 Stratholme, Maraudon and Dire Maul North come with two standard routes each (living and undead
 side, purple and orange side, full clear and tribute run).

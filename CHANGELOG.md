@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.1
+
+- Small map when you enter a dungeon: the map shows small and slightly transparent at the right edge
+  of the screen (fully visible while the mouse is over it) and follows your run like the big map.
+  "+" makes it the full route map, X closes it, and it closes when you leave the dungeon. In the
+  route map, "-" makes it small again; /fdr, the key binding and the minimap button open the route
+  map. Drag the small map by its title bar.
+- The gear button chooses what shows on entering a dungeon: the small map (new default), the route
+  map or nothing. "Open automatically in dungeons" is gone; who had it on keeps the route map.
+
 ## 1.0.0
 
 - Release for the launch of WoW: Forever. Checked against the live game client (build 1.60.1.70707):

@@ -10,7 +10,8 @@ local DB_DEFAULTS = {
 	gameMinimap = false, -- the game's minimap pictures instead of the map art (Data/Minimaps.lua)
 	showPlayer = true,  -- own position and group on the map, where the game reveals it (not in dungeons)
 	showStops = true,   -- stop list beside the map
-	autoOpen = false,   -- open the map when entering a dungeon
+	onEnter = "mini",   -- on entering a dungeon: "mini" (small map), "window" (the route map) or "none"
+	mini = {},          -- point, relativePoint, x, y, width, height of the small map
 	autoCheck = true,   -- tick bosses off when the game reports the kill
 	minimapButton = true, -- round button at the minimap
 	minimapAngle = 225, -- where the button sits around the minimap, degrees
@@ -42,6 +43,15 @@ local CHAR_DEFAULTS = {
 -- experiment of 0.5.4 (Forever reports no ping position inside dungeons).
 local OBSOLETE = { "showOnMap", "showPanel", "panelCollapsed", "learnedFloors", "pingPosition", "pingTurn" }
 local OBSOLETE_CHAR = { "ping" }
+
+-- 1.0.1: "open automatically in dungeons" became the choice what shows on entering a dungeon; who
+-- had it on keeps the route map, everyone else gets the small map.
+function DR.UpgradeSettings(db)
+	if db.onEnter == nil and db.autoOpen ~= nil then
+		db.onEnter = db.autoOpen and "window" or "mini"
+	end
+	db.autoOpen = nil
+end
 
 -- Progress older than this is considered a finished run and is cleared on the next visit.
 DR.PROGRESS_MAX_AGE = 3 * 60 * 60
@@ -138,6 +148,7 @@ frame:SetScript("OnEvent", function(_, event, arg1, arg2, _, _, arg5)
 		if arg1 ~= ADDON then return end
 		ForeverDungeonRoutesDB = ForeverDungeonRoutesDB or {}
 		ForeverDungeonRoutesCharDB = ForeverDungeonRoutesCharDB or {}
+		DR.UpgradeSettings(ForeverDungeonRoutesDB)
 		applyDefaults(ForeverDungeonRoutesDB, DB_DEFAULTS)
 		applyDefaults(ForeverDungeonRoutesCharDB, CHAR_DEFAULTS)
 		for _, key in ipairs(OBSOLETE) do
@@ -179,8 +190,12 @@ function DR:OnZoneChanged()
 	end
 	if key == previous then return end
 	DR:StartRun(key)
-	if DR.db.autoOpen then
+	if DR.db.onEnter == "window" then
 		DR.Window:Open(key)
+	elseif DR.db.onEnter == "mini" then
+		if not DR.Window:IsShown() then
+			DR.Window:OpenMini(key)
+		end
 	elseif not DR.hinted and not DR.Window:IsShown() then
 		DR.hinted = true
 		DR:Print(L["Route map for %s: type /fdr or use the key binding."], DR:GetKeyName(key))

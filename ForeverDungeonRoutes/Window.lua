@@ -24,6 +24,8 @@ local Window = {}
 DR.Window = Window
 
 local frame, view, sidebar
+local mini             -- the small map (see "Small map" below)
+local restoreMiniGeometry
 local shown = {}       -- key, floor
 local following = true
 local rows = {}
@@ -127,6 +129,11 @@ local function restoreGeometry()
 end
 
 local function layout()
+	-- while the map sits in the small map, the window is laid out when it gets the map back
+	if mini and view.frame:GetParent() == mini then
+		styleOrnate()
+		return
+	end
 	local o = ornate()
 	local top, bottom = o and ORNATE_HEADER_H or HEADER_H, o and (PAD + FOOTER_H) or PAD
 	frame.Header:SetHeight(top)
@@ -341,8 +348,12 @@ local function openSettingsMenu(owner)
 			function() setting("gameMinimap", not DR.db.gameMinimap) end)
 		root:CreateCheckbox(L["Tick off bosses automatically"], function() return DR.db.autoCheck end,
 			function() setting("autoCheck", not DR.db.autoCheck) end)
-		root:CreateCheckbox(L["Open automatically in dungeons"], function() return DR.db.autoOpen end,
-			function() setting("autoOpen", not DR.db.autoOpen) end)
+		local enter = root:CreateButton(L["On entering a dungeon"])
+		for _, choice in ipairs({ { "mini", L["Show the small map"] }, { "window", L["Open the route map"] },
+				{ "none", L["Show nothing"] } }) do
+			enter:CreateRadio(choice[2], function() return DR.db.onEnter == choice[1] end,
+				function() setting("onEnter", choice[1]) end)
+		end
 		root:CreateCheckbox(L["Button at the minimap"], function() return DR.db.minimapButton end,
 			function() setting("minimapButton", not DR.db.minimapButton) end)
 		root:CreateCheckbox(L["Small display in dungeons"], function() return DR.db.showTracker end,
@@ -373,8 +384,9 @@ local function openSettingsMenu(owner)
 		end
 		root:CreateDivider()
 		root:CreateButton(L["Reset window size and position"], function()
-			DR.db.window = {}
+			DR.db.window, DR.db.mini = {}, {}
 			restoreGeometry()
+			if mini then restoreMiniGeometry() end
 		end)
 		root:CreateDivider()
 		root:CreateTitle(("Forever Dungeon Routes %s, \194\169 2026 Checkov23"):format(DR.version))
@@ -997,6 +1009,16 @@ local function build()
 	frame.Gear = makeIconButton(header, "gear", 20)
 	frame.Gear:SetPoint("RIGHT", frame.Close, "LEFT", -8, 0)
 	frame.Gear:SetScript("OnClick", openSettingsMenu)
+	frame.Smaller = makeButton(header, "-", 22)
+	frame.Smaller:SetHeight(22)
+	frame.Smaller:SetPoint("RIGHT", frame.Gear, "LEFT", -8, 0)
+	frame.Smaller:SetScript("OnClick", function() Window:OpenMini(shown.key) end)
+	frame.Smaller:SetScript("OnEnter", function(self)
+		GameTooltip:SetOwner(self, "ANCHOR_BOTTOM")
+		GameTooltip:SetText(L["Small map"], 1, 1, 1)
+		GameTooltip:Show()
+	end)
+	frame.Smaller:SetScript("OnLeave", GameTooltip_Hide)
 
 	view = DR.MapView
 	view:Create(frame)
@@ -1028,10 +1050,98 @@ local function build()
 	layout()
 end
 
+-- Small map -------------------------------------------------------------------------------------
+-- On entering a dungeon (setting onEnter = "mini") the map shows small and slightly transparent at
+-- the right edge of the screen, without header and stop list: the map view moves into a frame of
+-- its own and follows the run as in the window. "+" takes it back into the window, X and leaving the
+-- dungeon close it.
+
+local MINI_W, MINI_H, MINI_BAR = 320, 236, 20
+local MINI_ALPHA = 0.75 -- fully visible while the mouse is over it
+
+restoreMiniGeometry = function()
+	local g = DR.db.mini
+	mini:ClearAllPoints()
+	if g.point then
+		mini:SetPoint(g.point, UIParent, g.relativePoint or g.point, g.x or 0, g.y or 0)
+	else
+		mini:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -24, -240)
+	end
+	mini:SetSize(MINI_W, MINI_H)
+end
+
+local function buildMini()
+	mini = CreateFrame("Frame", "ForeverDungeonRoutesMini", UIParent, "BackdropTemplate")
+	DR.StyleBox(mini, 0.9)
+	mini:SetFrameStrata("MEDIUM")
+	mini:SetClampedToScreen(true)
+	mini:SetMovable(true)
+	mini:SetDontSavePosition(true)
+	mini:EnableMouse(true)
+	mini:Hide()
+	restoreMiniGeometry()
+	mini:SetAlpha(MINI_ALPHA)
+	-- the map takes the mouse, so the frame asks itself whether the mouse is over it
+	local ticker = 0
+	mini:SetScript("OnUpdate", function(self, elapsed)
+		ticker = ticker + elapsed
+		if ticker < 0.1 then return end
+		ticker = 0
+		self:SetAlpha(self:IsMouseOver() and 1 or MINI_ALPHA)
+	end)
+
+	local bar = CreateFrame("Frame", nil, mini)
+	bar:SetPoint("TOPLEFT", 0, 0)
+	bar:SetPoint("TOPRIGHT", 0, 0)
+	bar:SetHeight(MINI_BAR)
+	bar:EnableMouse(true)
+	bar:RegisterForDrag("LeftButton")
+	bar:SetScript("OnDragStart", function() mini:StartMoving() end)
+	bar:SetScript("OnDragStop", function()
+		mini:StopMovingOrSizing()
+		local point, _, relativePoint, x, y = mini:GetPoint(1)
+		local g = DR.db.mini
+		g.point, g.relativePoint, g.x, g.y = point, relativePoint, x, y
+	end)
+	mini.Close = makeButton(bar, "X", 18)
+	mini.Close:SetHeight(16)
+	mini.Close:SetPoint("RIGHT", -3, 0)
+	mini.Close:SetScript("OnClick", function() Window:CloseMini() end)
+	mini.Larger = makeButton(bar, "+", 18)
+	mini.Larger:SetHeight(16)
+	mini.Larger:SetPoint("RIGHT", mini.Close, "LEFT", -3, 0)
+	mini.Larger:SetScript("OnClick", function() Window:Open(shown.key, shown.floor) end)
+	mini.Larger:SetScript("OnEnter", function(self)
+		GameTooltip:SetOwner(self, "ANCHOR_BOTTOM")
+		GameTooltip:SetText(L["Larger map"], 1, 1, 1)
+		GameTooltip:Show()
+	end)
+	mini.Larger:SetScript("OnLeave", GameTooltip_Hide)
+	mini.Title = bar:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+	mini.Title:SetPoint("LEFT", 7, 0)
+	mini.Title:SetPoint("RIGHT", mini.Larger, "LEFT", -6, 0)
+	mini.Title:SetJustifyH("LEFT")
+	mini.Title:SetWordWrap(false)
+	DR.ThemeText(mini.Title, "title")
+end
+
+-- Puts the map view back into the window, shown or not.
+local function mapToWindow()
+	view.frame:SetParent(frame)
+	layout()
+	frame.RouteButton:Show()
+	view:Layout()
+end
+
 -- State -----------------------------------------------------------------------------------------
 
+-- Whether the map is on the screen, in the window or as the small map.
 function Window:IsShown()
-	return frame ~= nil and frame:IsShown()
+	return frame ~= nil and (frame:IsShown() or (mini ~= nil and mini:IsShown()))
+end
+
+function Window:IsMini()
+	return mini ~= nil and mini:IsShown()
 end
 
 function Window:GetShown()
@@ -1057,6 +1167,18 @@ function Window:Refresh()
 	local floors = dungeon.floors
 	local index = indexOf(floors, shown.floor) or 1
 	local several = #floors > 1
+	if mini then
+		-- the dungeon, with several floors which one (and its name where it is not the dungeon's)
+		local name, floorName = DR:GetKeyName(shown.key), DR:GetFloorName(shown.floor)
+		local text = name
+		if several then
+			text = name .. " \194\183 " .. index .. "/" .. #floors
+			if floorName ~= name then
+				text = text .. " " .. floorName
+			end
+		end
+		mini.Title:SetText(text)
+	end
 	-- in the style "Gilded" the floors are tabs; where they do not fit, the choice sits in the tab row
 	local tabs = refreshOrnate(dungeon, index)
 	frame.FloorPrev:ClearAllPoints()
@@ -1206,6 +1328,10 @@ function Window:Open(key, floor)
 	if not frame then
 		build()
 	end
+	if self:IsMini() then
+		mini:Hide()
+		mapToWindow()
+	end
 	key = key or DR.currentKey or shown.key or DR.Dungeons[1].key
 	if key == DR.currentKey and not floor then
 		following = true
@@ -1218,9 +1344,43 @@ function Window:Open(key, floor)
 	self:UpdateTime()
 end
 
+-- Shows the map as the small map, the window closes: on entering a dungeon and with "-" in the window.
+function Window:OpenMini(key)
+	if not frame then
+		build()
+	end
+	if not mini then
+		buildMini()
+	end
+	key = key or DR.currentKey or shown.key or DR.Dungeons[1].key
+	if key == DR.currentKey then
+		following = true
+	end
+	frame:Hide()
+	local map = view.frame
+	map:SetParent(mini)
+	map:ClearAllPoints()
+	map:SetPoint("TOPLEFT", mini, "TOPLEFT", 3, -MINI_BAR)
+	map:SetPoint("BOTTOMRIGHT", mini, "BOTTOMRIGHT", -3, 3)
+	frame.RouteButton:Hide()
+	mini:Show()
+	self:ShowDungeon(key)
+	view:Layout()
+end
+
+-- Closes the small map; the map view goes back into the closed window.
+function Window:CloseMini()
+	if not self:IsMini() then return end
+	mini:Hide()
+	mapToWindow()
+end
+
+-- The key binding, /fdr and the minimap button: the small map grows into the window.
 function Window:Toggle()
-	if self:IsShown() then
+	if frame and frame:IsShown() then
 		frame:Hide()
+	elseif self:IsMini() then
+		self:Open(shown.key, shown.floor)
 	else
 		self:Open(DR.currentKey or shown.key)
 	end
@@ -1262,6 +1422,11 @@ DR:On("SETTINGS_CHANGED", function(key)
 	refreshIfShown()
 end)
 DR:On("DUNGEON_CHANGED", function(key)
+	-- leaving the dungeon closes the small map
+	if not key and Window:IsMini() then
+		Window:CloseMini()
+		return
+	end
 	if not Window:IsShown() then return end
 	if key and following then
 		Window:ShowDungeon(key)
