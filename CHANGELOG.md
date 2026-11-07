@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.0.4
+
+- Five more new dungeons, which came into the game client with the update of November 7: The Drowned City,
+  Krol'dok Stronghold, Alcaz Prison, Blackmaw Hold and The Shaper's Terrace (levels 35 to 60). The game has no
+  map art for them: The Drowned City and Krol'dok Stronghold show the new maps of Santiago Reyes (Atlas de
+  Azeroth: Forever, used with his permission), for the other three the addon draws the maps from the game's
+  files (walkable floors, terrain, water, walls, the names of the areas). Their bosses tick themselves off,
+  their rooms light up where the game names them. No standard routes yet: no guide places their bosses so far; draw your
+  own or use "Route from the last run".
+- Rough routes: Highland Horror (Excavation Site: Wetlands, at the Lost Dig Site) and Lyn the Ignored (City of
+  Dalaran, summoned with the Tome of Dalaran in the room with planks over water on the east side of the
+  Underbelly) are optional stops now, on side paths, placed after warcraft.wiki.gg. Their kills tick them off.
+- Boss lists from the game client of November 7: in City of Dalaran the Shade of the Archmage and in Ruins of
+  Lordaeron Rath'mael now come last, as on the rough routes. Room names from the same client: Runeweaver
+  Lounge in Dalaran is a room of its own.
+
 ## 1.0.3
 
 - The four new dungeons have rough standard routes, "Approximate (from guides)": where the bosses
