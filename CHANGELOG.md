@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.6
+
+- Alcaz Prison has a second map level, Maximum Security, from the second map of the prison by Santiago Reyes
+  (Atlas de Azeroth: Forever). When the game names Maximum Security as your area, the map turns to that level.
+  The game gives the rest of the prison no names of its own, so back on the main level use the level tabs above
+  the map.
+- The game's minimap pictures of Alcaz Prison are split the same way between the two levels (19 building parts
+  above, 11 below).
+
 ## 1.0.5
 
 - The Shaper's Terrace and Alcaz Prison show the new maps of Santiago Reyes (Atlas de Azeroth: Forever, used with

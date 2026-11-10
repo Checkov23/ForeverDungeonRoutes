@@ -47,7 +47,7 @@ DR.Dungeons = {
 		name = "Uldaman", nameDE = "Uldaman", nameFR = "Uldaman", nameES = "Uldaman", namePT = "Uldaman", nameRU = "Ульдаман", nameKO = "울다만", nameCN = "奥达曼", nameTW = "奧達曼" },
 	{ key = "zulfarrak", instanceID = 209, floors = { 219 }, levels = { 45, 51 },
 		name = "Zul'Farrak", nameDE = "Zul'Farrak", nameFR = "Zul'Farrak", nameES = "Zul'Farrak", namePT = "Zul'Farrak", nameRU = "Зул'Фаррак", nameKO = "줄파락", nameCN = "祖尔法拉克", nameTW = "祖爾法拉克" },
-	{ key = "alcazprison", instanceID = 2994, floors = { 1029941 }, levels = { 48, 53 },
+	{ key = "alcazprison", instanceID = 2994, floors = { 1029941, 1029942 }, levels = { 48, 53 },
 		name = "Alcaz Prison", nameDE = "Gefängnis von Alcaz", nameFR = "Prison d’Alcaz", nameES = "Prisión de Alcaz", namePT = "Prisão de Alcaz", nameRU = "Тюрьма Алькац", nameKO = "알카즈 감옥", nameCN = "奥卡兹监狱", nameTW = "奧卡茲監獄" },
 	{ key = "maraudon", instanceID = 349, floors = { 280, 281 }, levels = { 48, 54 },
 		name = "Maraudon", nameDE = "Maraudon", nameFR = "Maraudon", nameES = "Maraudon", namePT = "Maraudon", nameRU = "Мародон", nameKO = "마라우돈", nameCN = "玛拉顿", nameTW = "瑪拉頓" },

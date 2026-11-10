@@ -1,5 +1,6 @@
 Map pictures in this folder (hallofthanes, ruinsoflordaeron, excavationsite, dalaran,
-dalaran_underbelly, drownedcity, kroldok, shapersterrace, alcazprison): Santiago Reyes, Atlas de Azeroth: Forever
+dalaran_underbelly, drownedcity, kroldok, shapersterrace, alcazprison,
+alcazprison_maximumsecurity): Santiago Reyes, Atlas de Azeroth: Forever
 https://asguevara433.wixsite.com/srmaps
 
 Used with his permission, in the versions with his watermark. They are not covered by the

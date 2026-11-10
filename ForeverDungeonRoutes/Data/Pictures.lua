@@ -48,6 +48,11 @@ DR.Floors[1029941] = { name = "Alcaz Prison", nameDE = "Gefängnis von Alcaz", n
 	frame = { -0.0032572599, -0.000118239879, -27.9573127, -4.8026539e-05, 0.00464631506, -13.5055459 },
 	credit = "Santiago Reyes, Atlas de Azeroth: Forever",
 	image = { file = "maps\\alcazprison", right = 1, bottom = 0.667 } }
+DR.Floors[1029942] = { name = "Maximum Security", nameDE = "Der Hochsicherheitstrakt", nameFR = "Haute sécurité", nameES = "Máxima seguridad", namePT = "Segurança Máxima", nameRU = "Камера строгого режима", nameKO = "최고 보안 시설", nameCN = "最高戒备区", nameTW = "最高警戒室",
+	world = { -9000.03, 2813.77, -8685.33, 3032.09 },
+	frame = { -0.0032572599, -0.000118239879, -27.9573127, -4.8026539e-05, 0.00464631506, -13.5055459 },
+	credit = "Santiago Reyes, Atlas de Azeroth: Forever",
+	image = { file = "maps\\alcazprison_maximumsecurity", right = 1, bottom = 0.667 } }
 DR.Floors[1029741] = { name = "Blackmaw Hold", nameDE = "Die Schwarzschlundfeste", nameFR = "Repaire des Noiregueules", nameES = "Bastión Faucenegra", namePT = "Gruta Bocanera", nameRU = "Крепость Черночревов", nameKO = "검은아귀 요새", nameCN = "黑喉要塞", nameTW = "黑喉要塞",
 	world = { 3077.4, 2582.6, 4034.4, 4017.4 },
 	image = { file = "maps\\blackmawhold", right = 1, bottom = 0.667 } }
@@ -111,7 +116,7 @@ DR.Rooms.drownedcity = {
 DR.Rooms.kroldok = {
 }
 DR.Rooms.alcazprison = {
-	{ name = "Maximum Security", nameDE = "Der Hochsicherheitstrakt", nameFR = "Haute sécurité", nameES = "Máxima seguridad", namePT = "Segurança Máxima", nameRU = "Камера строгого режима", nameKO = "최고 보안 시설", nameCN = "最高戒备区", nameTW = "最高警戒室", boxes = { { 1029941, 0.6573, 0.7034, 222.7482, 211.6929, 0.0098 }, { 1029941, 0.3492, 0.5419, 36.4471, 32.6024, 0.0098 }, { 1029941, 0.3524, 0.4387, 35.3536, 32.6024, 0.0098 }, { 1029941, 0.3822, 0.6991, 111.4514, 106.0587, 0.0098 }, { 1029941, 0.3951, 0.491, 53.1367, 172.7281, 0.0098 }, { 1029941, 0.492, 0.7009, 108.9793, 35.8312, 0.0098 }, { 1029941, 0.4942, 0.6081, 57.5297, 88.9945, 0.0098 } } },
+	{ name = "Maximum Security", nameDE = "Der Hochsicherheitstrakt", nameFR = "Haute sécurité", nameES = "Máxima seguridad", namePT = "Segurança Máxima", nameRU = "Камера строгого режима", nameKO = "최고 보안 시설", nameCN = "最高戒备区", nameTW = "最高警戒室", boxes = { { 1029942, 0.6573, 0.7034, 222.7482, 211.6929, 0.0098 }, { 1029942, 0.3492, 0.5419, 36.4471, 32.6024, 0.0098 }, { 1029942, 0.3524, 0.4387, 35.3536, 32.6024, 0.0098 }, { 1029942, 0.3822, 0.6991, 111.4514, 106.0587, 0.0098 }, { 1029942, 0.3951, 0.491, 53.1367, 172.7281, 0.0098 }, { 1029942, 0.492, 0.7009, 108.9793, 35.8312, 0.0098 }, { 1029942, 0.4942, 0.6081, 57.5297, 88.9945, 0.0098 }, { 1029942, 0.4894, 0.7938, 57.5297, 88.9944, 0.0098 }, { 1029942, 0.3922, 0.2956, 57.5297, 88.9945, 0.0098 } } },
 }
 DR.Rooms.blackmawhold = {
 	{ name = "Blackmaw Grove", nameDE = "Der Schwarzschlundhain", nameFR = "Bosquet des Noiregueules", nameES = "Arboleda Faucenegra", namePT = "Bosque Bocanera", nameRU = "Роща Черночревов", nameKO = "검은아귀 숲", nameCN = "黑喉林地", nameTW = "黑喉林地", boxes = { { 1029741, 0.3258, 0.4365, 23.2784, 23.267, 0 }, { 1029741, 0.3374, 0.4713, 46.5567, 23.267, 0 }, { 1029741, 0.3722, 0.5062, 116.3919, 23.267, 0 }, { 1029741, 0.3606, 0.541, 93.1135, 23.267, 0 }, { 1029741, 0.2909, 0.5932, 232.7837, 46.534, 0 }, { 1029741, 0.1515, 0.7151, 186.227, 116.3351, 0 }, { 1029741, 0.3955, 0.6455, 23.2784, 23.267, 0 }, { 1029741, 0.2096, 0.8196, 69.8351, 23.267, 0 } } },

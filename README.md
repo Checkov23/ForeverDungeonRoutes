@@ -53,8 +53,9 @@ replace them.
   route yet: no source places them.
 - The five newer dungeons (The Drowned City, Krol'dok Stronghold, Alcaz Prison, Blackmaw Hold, The
   Shaper's Terrace, levels 35 to 60, in the game client since November 7): four of them show the maps
-  of Santiago Reyes, for Blackmaw Hold the addon draws the map from the game's files. Their bosses tick
-  themselves off and their rooms light up where the game names them.
+  of Santiago Reyes (Alcaz Prison with both of its levels), for Blackmaw Hold the addon draws the map
+  from the game's files. Their bosses tick themselves off and their rooms light up where the game names
+  them.
   No standard routes yet; draw your own or use "Route from the last run".
 - All seven raids (Molten Core to Naxxramas): the game's map art, rooms and areas, bosses that tick
   themselves off, and standard routes from the entrance from boss to boss over the walkable floors;
@@ -243,7 +244,7 @@ and the skulls of its map). The raid paths are searched over the walkable floors
 files, around lava and deep water.
 
 The maps of the first four new Forever dungeons, of the Underbelly of Dalaran, of The Drowned City,
-Krol'dok Stronghold, The Shaper's Terrace and Alcaz Prison are by Santiago Reyes,
+Krol'dok Stronghold, The Shaper's Terrace and both levels of Alcaz Prison are by Santiago Reyes,
 from his [Atlas de Azeroth: Forever](https://asguevara433.wixsite.com/srmaps), used with his permission in the
 versions with his watermark.
 
