@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.7
+
+- The Drowned City has a rough standard route, "Approximate (from guides)": Zul'Alai in the Sunken Hollow, Var'Taka in
+  the Deep Archives, Captain Dreadrise at the Altar of the Serpent, Deathless Marrow in the Eternal Amphitheater and
+  Min'loth the Serpent at the Abyssal Dais, the optional Primeval Elemental under water in Ataal'Byzal. The area of
+  each boss comes from a video guide (the area name the game shows above the minimap during the fight), the way to
+  the hidden room from written guides; the spots within the areas are approximate.
+- City of Dalaran: the Fel Ancient now stands where the game files place a sound at him.
+
 ## 1.0.6
 
 - Alcaz Prison has a second map level, Maximum Security, from the second map of the prison by Santiago Reyes
