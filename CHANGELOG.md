@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.5
+
+- The Shaper's Terrace and Alcaz Prison show the new maps of Santiago Reyes (Atlas de Azeroth: Forever, used with
+  his permission). Of the nine new dungeons only Blackmaw Hold still uses the map the addon draws from the game's
+  files.
+- Alcaz Prison: 1.0.4 drew only the lowest level of the prison by mistake (a mixed-up height range); the whole prison
+  is on the map now, and the game's minimap pictures cover all 30 building parts.
+
 ## 1.0.4
 
 - Five more new dungeons, which came into the game client with the update of November 7: The Drowned City,

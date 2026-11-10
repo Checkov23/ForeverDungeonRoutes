@@ -19,8 +19,8 @@ Mythic Dungeon Tools, and a route list where players put up their routes for eve
 | ![Ruins of Lordaeron on the map by Santiago Reyes (Atlas de Azeroth: Forever) with the rough route Approximate (from guides), King's Alley lit up](docs/screenshots/new-lordaeron.png) | ![The Hall of Thanes on the map by Santiago Reyes (Atlas de Azeroth: Forever) with the rough route, Infurnus on the side path](docs/screenshots/new-thanes.png) |
 | **City of Dalaran: the rough route over two levels, three bosses down** | **The small map when you enter a dungeon** |
 | ![City of Dalaran on the map by Santiago Reyes with the rough route, Atrexis, Arcane Anomaly and Mana Devourer ticked off, Arcanic Enigma as an optional stop](docs/screenshots/new-dalaran.png) | ![The small map in the Deadmines, slightly transparent at the edge of the screen, with + and X](docs/screenshots/small-map.png) |
-| **New in 1.0.4: The Drowned City, map by Santiago Reyes** | **Alcaz Prison, map drawn from the game's files** |
-| ![The Drowned City on the map by Santiago Reyes (Atlas de Azeroth: Forever), the Flooded Shrine lit up where the game reports it, no route yet](docs/screenshots/new-drownedcity.png) | ![Alcaz Prison on the map the addon draws from the game's files, with Maximum Security](docs/screenshots/new-alcazprison.png) |
+| **New in 1.0.4: The Drowned City, map by Santiago Reyes** | **Alcaz Prison, map by Santiago Reyes** |
+| ![The Drowned City on the map by Santiago Reyes (Atlas de Azeroth: Forever), the Flooded Shrine lit up where the game reports it, no route yet](docs/screenshots/new-drownedcity.png) | ![Alcaz Prison on the map by Santiago Reyes (Atlas de Azeroth: Forever), no route yet](docs/screenshots/new-alcazprison.png) |
 | **Or from the game's own minimap pictures (gear button)** | **The Hall of Thanes from the minimap pictures** |
 | ![Ruins of Lordaeron from the game's minimap pictures, King's Alley lit up](docs/screenshots/new-lordaeron-minimap.png) | ![The Hall of Thanes from the game's minimap pictures, Anvilmar's Rest lit up](docs/screenshots/new-thanes-minimap.png) |
 | **The other window styles (gear button): Dark** | **Parchment** |
@@ -52,9 +52,9 @@ replace them.
   stops, placed after warcraft.wiki.gg. Mana Elemental and Mana Wraith (City of Dalaran) are not on the
   route yet: no source places them.
 - The five newer dungeons (The Drowned City, Krol'dok Stronghold, Alcaz Prison, Blackmaw Hold, The
-  Shaper's Terrace, levels 35 to 60, in the game client since November 7): The Drowned City and
-  Krol'dok Stronghold show the maps of Santiago Reyes, for the other three the addon draws the maps from
-  the game's files. Their bosses tick themselves off and their rooms light up where the game names them.
+  Shaper's Terrace, levels 35 to 60, in the game client since November 7): four of them show the maps
+  of Santiago Reyes, for Blackmaw Hold the addon draws the map from the game's files. Their bosses tick
+  themselves off and their rooms light up where the game names them.
   No standard routes yet; draw your own or use "Route from the last run".
 - All seven raids (Molten Core to Naxxramas): the game's map art, rooms and areas, bosses that tick
   themselves off, and standard routes from the entrance from boss to boss over the walkable floors;
@@ -220,12 +220,10 @@ Lower Spire, and the addon shows them there under their own names.
 The entrances (`Data/Entrances.lua`) are WoW: Forever's own map points where it has them, else the
 positions of Blizzard's table of dungeon entrances, placed on Forever's zone maps.
 
-For the new Forever dungeons there is no map art in the game. Six show Santiago's maps (the first
-four, The Drowned City, Krol'dok Stronghold), the other three maps the addon draws from the game's
-files (`maps/*.blp`, `Data/Pictures.lua`):
+For the new Forever dungeons there is no map art in the game. Eight show Santiago's maps, Blackmaw
+Hold a map the addon draws from the game's files (`maps/*.blp`, `Data/Pictures.lua`):
 the walkable floors of the buildings, the terrain with its slopes and water, the walls as ink lines,
-the names of the areas. No picture from the game is copied. Where a dungeon's main area reaches far
-beyond its named areas and buildings (The Shaper's Terrace), the map shows the part around them. Their rooms are the areas and named building
+the names of the areas. No picture from the game is copied. Their rooms are the areas and named building
 parts the game reports there. The game has no entrance data for these dungeons.
 
 Behind the gear button every map level can also show the game's own minimap pictures
@@ -244,8 +242,8 @@ the boss positions in the raids from the game's dungeon journal (in Zul'Gurub fr
 and the skulls of its map). The raid paths are searched over the walkable floors in the game's
 files, around lava and deep water.
 
-The maps of the first four new Forever dungeons, of the Underbelly of Dalaran, of The Drowned City and of
-Krol'dok Stronghold are by Santiago Reyes,
+The maps of the first four new Forever dungeons, of the Underbelly of Dalaran, of The Drowned City,
+Krol'dok Stronghold, The Shaper's Terrace and Alcaz Prison are by Santiago Reyes,
 from his [Atlas de Azeroth: Forever](https://asguevara433.wixsite.com/srmaps), used with his permission in the
 versions with his watermark.
 
