@@ -56,7 +56,8 @@ replace them.
   of Santiago Reyes (Alcaz Prison with both of its levels), for Blackmaw Hold the addon draws the map
   from the game's files. Their bosses tick themselves off and their rooms light up where the game names
   them.
-  No standard routes yet; draw your own or use "Route from the last run".
+  No standard routes yet; draw your own or use "Route from the last run", and please tell us where
+  the bosses stand (see "Help wanted" below).
 - All seven raids (Molten Core to Naxxramas): the game's map art, rooms and areas, bosses that tick
   themselves off, and standard routes from the entrance from boss to boss over the walkable floors;
   Zul'Gurub and Ahn'Qiraj with two each ("Full clear" and "Efficient"). In the dungeon list they sit
@@ -196,6 +197,11 @@ Thanes, Ruins of Lordaeron, Excavation Site: Wetlands, City of Dalaran.
 
 Without a standard route yet (map, rooms and bosses are there): The Drowned City, Krol'dok Stronghold,
 Alcaz Prison, Blackmaw Hold, The Shaper's Terrace.
+
+**Help wanted:** we found no guide yet that places the bosses of these five dungeons. If you ran one
+of them, tell us where each boss stood: its name and the area name the game shows above the minimap
+there; a few words about the spot help too. Post it as an [issue](https://github.com/Checkov23/ForeverDungeonRoutes/issues) or as a comment on
+[CurseForge](https://www.curseforge.com/wow/addons/forever-dungeon-routes). From that we make the standard routes.
 
 Raids: Molten Core, Onyxia's Lair, Blackwing Lair, Naxxramas (in the order of the game's dungeon
 journal: Arachnid, Plague, Military and Construct Quarter), and with "Full clear" and "Efficient"
