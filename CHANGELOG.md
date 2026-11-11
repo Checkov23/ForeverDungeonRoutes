@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.8
+
+- City of Dalaran has a better rough route, from a video guide (the minimap during each fight, matched with the
+  game's own minimap): the way out of the sewers is on the route now (at Atrexis turn right into the channel to the
+  east; at the end of the pipe a portal takes you up into the city, north of Krasus' Landing; a "P" square switches
+  between the two map levels). Mana Devourer stands in the courtyard north of the Violet Hold, Unstable Sentinel and
+  the optional Arcanic Enigma closer to where they are fought; Arcane Anomaly and the Fel Ancient were confirmed.
+
 ## 1.0.7
 
 - The Drowned City has a rough standard route, "Approximate (from guides)": Zul'Alai in the Sunken Hollow, Var'Taka in

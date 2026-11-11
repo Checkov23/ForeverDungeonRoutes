@@ -263,6 +263,7 @@ guides ([The Hall of Thanes](https://www.icy-veins.com/wow-forever/hall-of-thane
 texts say about the places was used, no map or route from them. Highland Horror and Lyn the Ignored
 are placed after warcraft.wiki.gg ([Highland Horror](https://warcraft.wiki.gg/wiki/Highland_Horror),
 [Lyn the Ignored](https://warcraft.wiki.gg/wiki/Lyn_the_Ignored)).
+In City of Dalaran the places of Mana Devourer, Unstable Sentinel and Arcanic Enigma and the way out of the sewers come from the video guide by Jurdi ([YouTube](https://www.youtube.com/watch?v=BT_73jJlqNo), beta footage): the minimap during each fight, matched with the game's own minimap; the turn towards the surface after [wow.gg](https://wow.gg/guides/city-of-dalaran).
 The rough route of The Drowned City takes the area of each boss from the video guide by Uncas ([YouTube](https://www.youtube.com/watch?v=rJU4PkcrRuk)): the area name the game shows above the minimap during each fight. The way to the hidden room of the Primeval Elemental comes from the written guides of [Wowhead](https://www.wowhead.com/forever/guide/the-drowned-city-dungeon-overview-location-rewards) and [Mobalytics](https://mobalytics.gg/wow-forever/profile/fierce-sun-30v6cf/dungeons/drowned-city-complete-dungeon-guide); no map or route from them.
 
 ## License
