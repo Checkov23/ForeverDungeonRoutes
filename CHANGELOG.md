@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.9
+
+- The notes at the stops, on the maps and about the map art are now also in Brazilian Portuguese (asked for on
+  CurseForge). Places and bosses carry the game's own Portuguese names where the client has them. Corrections by
+  native speakers are welcome.
+
 ## 1.0.8
 
 - City of Dalaran has a better rough route, from a video guide (the minimap during each fight, matched with the

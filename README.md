@@ -105,7 +105,7 @@ replace them.
 - English, German, French, Spanish, Portuguese, Russian, Korean and Chinese (simplified and
   traditional). Names of bosses, dungeons, map levels and rooms come from the game in the language
   of your client; the translations of the addon's own texts are welcome to be corrected (issues).
-  Notes on the maps are English (German in the German client).
+  Notes on the maps are English (German and Brazilian Portuguese in those clients).
 
 ## Install
 
