@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.11
+
+- Checkmarks no longer stay after a reset of the dungeon. WoW: Forever tells addons nothing about which copy of a
+  dungeon you are in, so the addon starts over at two moments: when the game reports the reset (the player who
+  resets gets that message, and the addon passes it on to group members who have it too), and when a boss that
+  already died in this run is fought again, which is only possible in a new copy. Bosses ticked by hand do not
+  count for that.
+
 ## 1.0.10
 
 - Krol'dok Stronghold has a rough route now, from two video guides (the minimap during each fight, matched with

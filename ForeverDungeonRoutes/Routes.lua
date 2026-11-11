@@ -388,6 +388,23 @@ local function hasEncounter(route, encounterID, encounterName)
 	return false
 end
 
+-- A new copy of the dungeon after a reset. WoW: Forever gives addons no instance ID (the GUIDs of
+-- creatures are secret there), so the addon knows it at two moments: a boss that already died in
+-- this run is fought or killed again (only possible in a new copy; stops ticked by hand do not
+-- count), or the game reports the reset (OnSystemMessage). The game reports each kill twice
+-- (ENCOUNTER_END and BOSS_KILL), hence the gap.
+local KILL_AGAIN_GAP = 60
+
+local function killedBefore(key, route, encounterID, encounterName)
+	local progress = route and DR.cdb.progress[key]
+	if not progress or progress.routeId ~= route.id or not progress.killed then return false end
+	for i, stop in ipairs(route.stops) do
+		local t = progress.killed[i]
+		if t and time() - t >= KILL_AGAIN_GAP and stopMatches(stop, encounterID, encounterName) then return true end
+	end
+	return false
+end
+
 -- A boss of the current dungeon died: tick its stop off. In instances with several wings
 -- (Scarlet Monastery, Dire Maul) a kill that belongs to another wing shows where the player
 -- is, since the game gives no position there: the current dungeon switches to that wing.
@@ -407,14 +424,94 @@ function DR:MarkEncounterKilled(encounterID, encounterName)
 	end
 	local route = self:GetActiveRoute(key)
 	if not route then return 0 end
+	if killedBefore(key, route, encounterID, encounterName) then
+		self:NewInstance(key)
+	end
 	local count = 0
 	for i, stop in ipairs(route.stops) do
 		if stopMatches(stop, encounterID, encounterName) and not self:IsStopDone(key, route, i) then
 			self:SetStopDone(key, route, i, true)
+			local progress = self.cdb.progress[key]
+			progress.killed = progress.killed or {}
+			progress.killed[i] = time()
 			count = count + 1
 		end
 	end
 	return count
+end
+
+-- A boss fight starts: was this boss killed earlier in the run, the player is in a new copy.
+function DR:OnEncounterStart(encounterID, encounterName)
+	encounterID, encounterName = DR.Safe(encounterID), DR.Safe(encounterName)
+	if type(encounterID) ~= "number" or not self.currentKey then return end
+	if type(encounterName) ~= "string" then encounterName = nil end
+	local keys = { self.currentKey }
+	for _, wing in ipairs(self:GetDungeonsForInstance(self.currentInstanceID)) do
+		if wing.key ~= self.currentKey then keys[#keys + 1] = wing.key end
+	end
+	for _, key in ipairs(keys) do
+		if killedBefore(key, self:GetActiveRoute(key), encounterID, encounterName) then
+			self:NewInstance(key)
+		end
+	end
+end
+
+-- The ticks of the old copy go; the new run started when the player entered.
+function DR:NewInstance(key)
+	if not self.cdb.progress[key] then return end
+	self:ResetProgress(key, key == self.currentKey and self.enteredAt or nil)
+	self:Print("%s: %s", self:GetKeyName(key), L["Progress reset."])
+end
+
+-- An instance was reset (the game's message to the player who reset it, or a group member's addon
+-- that got it): its dungeons start over. Not while the player is inside, the game refuses a reset then.
+function DR:InstanceWasReset(instanceID)
+	if not instanceID or instanceID == self.currentInstanceID then return end
+	for _, dungeon in ipairs(self:GetDungeonsForInstance(instanceID)) do
+		if self.cdb.progress[dungeon.key] then
+			self:ResetProgress(dungeon.key)
+			self:Print("%s: %s", self:GetKeyName(dungeon.key), L["Progress reset."])
+		end
+	end
+end
+
+-- Patterns of the game's message "%s has been reset." in the language of the client. Korean picks
+-- the particle after the name (|1이;가;), Russian puts the name in quotes.
+local function resetPatterns()
+	local format = DR.Safe(INSTANCE_RESET_SUCCESS)
+	if type(format) ~= "string" then return {} end
+	local formats = { format }
+	local a, b = format:match("|1([^;]*);([^;]*);")
+	if a then
+		formats = { (format:gsub("|1[^;]*;[^;]*;", a, 1)), (format:gsub("|1[^;]*;[^;]*;", b, 1)) }
+	end
+	local patterns = {}
+	for _, f in ipairs(formats) do
+		local p = f:gsub("[%^%$%(%)%%%.%[%]%*%+%-%?]", "%%%0")
+		p = p:gsub("%%%%s", "(.+)", 1)
+		patterns[#patterns + 1] = "^" .. p .. "$"
+	end
+	return patterns
+end
+
+function DR:OnSystemMessage(text)
+	text = DR.Safe(text)
+	if type(text) ~= "string" then return end
+	local name
+	for _, pattern in ipairs(resetPatterns()) do
+		name = text:match(pattern)
+		if name then break end
+	end
+	if not name then return end
+	local seen = {}
+	for _, dungeon in ipairs(self.Dungeons) do
+		local id = dungeon.instanceID
+		if not seen[id] and DR.Safe(GetRealZoneText(id)) == name then
+			seen[id] = true
+			self:InstanceWasReset(id)
+			if self.Group then self.Group:SendReset(id) end
+		end
+	end
 end
 
 -- The first floor of a route, so a freshly chosen route opens where it starts.
@@ -496,29 +593,30 @@ function DR:SetStopDone(key, route, index, done)
 	progress.time = time()
 	if not done then
 		progress.finished = nil
+		if progress.killed then progress.killed[index] = nil end
 	elseif progress.started and not progress.finished and hasBoss(route) and self:GetNextStopIndex(key, route) == nil then
 		finishRun(key, progress)
 	end
 	self:Fire("PROGRESS_CHANGED", key)
 end
 
-function DR:ResetProgress(key)
+function DR:ResetProgress(key, since)
 	self.cdb.progress[key] = nil
 	self:Fire("PROGRESS_CHANGED", key)
 	self:Fire("RUN_RESET", key)
 	if key == self.currentKey then
-		self:StartRun(key)
+		self:StartRun(key, since)
 	end
 end
 
 -- Runs: the clock starts when the player enters the dungeon (or starts a new run inside it) and
 -- stops at the last boss of the active route.
-function DR:StartRun(key)
+function DR:StartRun(key, since)
 	local route = key and self:GetActiveRoute(key)
 	if not route then return end
 	local progress = getProgress(key, route, true)
 	if not progress.started then
-		progress.started = time()
+		progress.started = since or time()
 		self:Fire("PROGRESS_CHANGED", key)
 	end
 end

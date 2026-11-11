@@ -135,6 +135,8 @@ frame:RegisterEvent("PLAYER_ENTERING_WORLD")
 frame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 frame:RegisterEvent("ENCOUNTER_END")
 frame:RegisterEvent("BOSS_KILL")
+frame:RegisterEvent("ENCOUNTER_START")
+frame:RegisterEvent("CHAT_MSG_SYSTEM")
 frame:SetScript("OnEvent", function(_, event, arg1, arg2, _, _, arg5)
 	if event == "ENCOUNTER_END" or event == "BOSS_KILL" then
 		-- ENCOUNTER_END: encounterID, name, difficulty, group size, success (1 = kill)
@@ -142,6 +144,16 @@ frame:SetScript("OnEvent", function(_, event, arg1, arg2, _, _, arg5)
 		if DR.db and (event == "BOSS_KILL" or DR.Safe(arg5) == 1) then
 			DR:OnBossKilled(arg1, arg2)
 		end
+		return
+	end
+	if event == "ENCOUNTER_START" then
+		-- encounterID, name, difficulty, group size: a boss that already died here means a new copy
+		if DR.db then DR:OnEncounterStart(arg1, arg2) end
+		return
+	end
+	if event == "CHAT_MSG_SYSTEM" then
+		-- "<instance> has been reset."
+		if DR.db then DR:OnSystemMessage(arg1) end
 		return
 	end
 	if event == "ADDON_LOADED" then
@@ -189,6 +201,7 @@ function DR:OnZoneChanged()
 		DR:Fire("PROGRESS_CHANGED", key)
 	end
 	if key == previous then return end
+	DR.enteredAt = time()
 	DR:StartRun(key)
 	if DR.db.onEnter == "window" then
 		DR.Window:Open(key)

@@ -80,7 +80,9 @@ replace them.
   (players with the addon). Ticks by hand reach the whole group, and Alt-click shows a stop to all.
 - Stop list with checkmarks per character. Bosses tick themselves off when the game reports the
   kill; rares without a boss fight are ticked by hand. "New run" clears the checkmarks, an old run
-  is cleared after three hours.
+  is cleared after three hours, and after a reset of the dungeon they start over: when the game
+  reports the reset (the addon passes it on to the group) or when a boss that already died is
+  fought again.
 - The way to the dungeon: outside, a click on "Entrance: <zone>" sets a map pin at the entrance that
   the game tracks, so the arrow on the screen leads there.
 - Dungeons for your level: the dungeon list colours the names by your level, like quests.

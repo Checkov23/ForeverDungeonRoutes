@@ -9,6 +9,7 @@ local L = DR.L
 --   W                                where are you? (answered with P)
 --   D <key> <stop> <0|1>             I ticked this stop by hand (English name of the stop)
 --   S <key> <floor> <x> <y> <stop>   look at this stop
+--   R <instanceID>                   I reset this instance (the game said so): start over there
 
 local PREFIX = "FDRGroup"
 local SHOW_SECONDS = 30   -- how long a shown stop stays marked on the map
@@ -32,6 +33,11 @@ local function send(text)
 	if channel then
 		DR.Share:Queue(PREFIX, channel, { text })
 	end
+end
+
+-- The player reset an instance (Routes.lua): the others with the addon start over there too.
+function Group:SendReset(instanceID)
+	send("R\t" .. tostring(instanceID))
 end
 
 -- Where the player is ---------------------------------------------------------------------------
@@ -174,6 +180,8 @@ function Group:OnMessage(prefix, text, channel, sender)
 		sendState(true)
 	elseif f[1] == "D" then
 		applyTick(f[2], f[3], f[4] == "1")
+	elseif f[1] == "R" then
+		DR:InstanceWasReset(tonumber(f[2] or ""))
 	elseif f[1] == "S" then
 		local floor, x, y = tonumber(f[3]), tonumber(f[4]), tonumber(f[5])
 		if DR:GetDungeon(f[2] or "") and floor and DR.Floors[floor] and x and y and x >= 0 and x <= 1 and y >= 0 and y <= 1 then
