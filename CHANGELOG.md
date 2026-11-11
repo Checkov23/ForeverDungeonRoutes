@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.10
+
+- Krol'dok Stronghold has a rough route now, from two video guides (the minimap during each fight, matched with
+  the game's own minimap): Slavecrusher Grox on the open ground in the west, Twilight Commander Zarmok among the
+  buildings in the middle, Handler Ashka in the yard in the east, Nar'gurk at the ritual circle on the stone walkway
+  and Overseer Mugg in the large hall at the top. Tunk (he drops Krol'dok Moulding) and Zalfan Moonshadow are rare
+  stops, Bossman Toof at the north-east end of the large wooden bridge is an optional stop (he is not in the game's
+  boss list). The places are approximate; corrections are welcome.
+
 ## 1.0.9
 
 - The notes at the stops, on the maps and about the map art are now also in Brazilian Portuguese (asked for on

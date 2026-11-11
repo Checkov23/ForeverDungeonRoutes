@@ -3,7 +3,7 @@
 A dungeon map with routes for **World of Warcraft: Forever**, for all 34 dungeons and the 7 raids:
 ready routes for the 25 classic dungeons and the 7 raids, maps by Santiago Reyes and rough routes for the first 4
 new Forever dungeons, maps by Santiago Reyes or drawn from the game's files for the 5 newer ones (The
-Drowned City with a rough route too), boss order and notes, bosses that tick themselves off, an editor for your own routes in the spirit of
+Drowned City and Krol'dok Stronghold with rough routes too), boss order and notes, bosses that tick themselves off, an editor for your own routes in the spirit of
 Mythic Dungeon Tools, and a route list where players put up their routes for everyone.
 
 ![Inside the Deadmines: the first boss ticked off by the kill, the room you are in lights up, the run time counts](docs/screenshots/dungeon.png)
@@ -56,9 +56,10 @@ replace them.
   of Santiago Reyes (Alcaz Prison with both of its levels), for Blackmaw Hold the addon draws the map
   from the game's files. Their bosses tick themselves off and their rooms light up where the game names
   them.
-  The Drowned City has a rough route since 1.0.7 (the area of each boss from a video guide); for the
-  other four no standard routes yet: draw your own or use "Route from the last run", and please tell
-  us where the bosses stand (see "Help wanted" below).
+  The Drowned City has a rough route since 1.0.7 (the area of each boss from a video guide), Krol'dok
+  Stronghold since 1.0.10 (the minimap during each fight in two video guides, matched with the game's
+  own minimap); for the other three no standard routes yet: draw your own or use "Route from the last
+  run", and please tell us where the bosses stand (see "Help wanted" below).
 - All seven raids (Molten Core to Naxxramas): the game's map art, rooms and areas, bosses that tick
   themselves off, and standard routes from the entrance from boss to boss over the walkable floors;
   Zul'Gurub and Ahn'Qiraj with two each ("Full clear" and "Efficient"). In the dungeon list they sit
@@ -193,13 +194,14 @@ Razorfen Kraul, Gnomeregan, Scarlet Monastery (Graveyard, Library, Armory, Cathe
 Razorfen Downs, Uldaman, Zul'Farrak, Maraudon, Sunken Temple, Blackrock Depths,
 Lower and Upper Blackrock Spire, Dire Maul (East, West, North), Scholomance, Stratholme.
 
-With a rough route from guide texts ("Approximate (from guides)", places approximate): The Hall of
-Thanes, Ruins of Lordaeron, Excavation Site: Wetlands, City of Dalaran, The Drowned City.
+With a rough route from guides ("Approximate (from guides)", places approximate): The Hall of
+Thanes, Ruins of Lordaeron, Excavation Site: Wetlands, City of Dalaran, The Drowned City, Krol'dok
+Stronghold.
 
-Without a standard route yet (map, rooms and bosses are there): Krol'dok Stronghold, Alcaz Prison,
-Blackmaw Hold, The Shaper's Terrace.
+Without a standard route yet (map, rooms and bosses are there): Alcaz Prison, Blackmaw Hold, The
+Shaper's Terrace.
 
-**Help wanted:** we found no guide yet that places the bosses of these four dungeons. If you ran one
+**Help wanted:** we found no guide yet that places the bosses of these three dungeons. If you ran one
 of them, tell us where each boss stood: its name and the area name the game shows above the minimap
 there; a few words about the spot help too. Post it as an [issue](https://github.com/Checkov23/ForeverDungeonRoutes/issues) or as a comment on
 [CurseForge](https://www.curseforge.com/wow/addons/forever-dungeon-routes). From that we make the standard routes.
@@ -265,6 +267,7 @@ are placed after warcraft.wiki.gg ([Highland Horror](https://warcraft.wiki.gg/wi
 [Lyn the Ignored](https://warcraft.wiki.gg/wiki/Lyn_the_Ignored)).
 In City of Dalaran the places of Mana Devourer, Unstable Sentinel and Arcanic Enigma and the way out of the sewers come from the video guide by Jurdi ([YouTube](https://www.youtube.com/watch?v=BT_73jJlqNo), beta footage): the minimap during each fight, matched with the game's own minimap; the turn towards the surface after [wow.gg](https://wow.gg/guides/city-of-dalaran).
 The rough route of The Drowned City takes the area of each boss from the video guide by Uncas ([YouTube](https://www.youtube.com/watch?v=rJU4PkcrRuk)): the area name the game shows above the minimap during each fight. The way to the hidden room of the Primeval Elemental comes from the written guides of [Wowhead](https://www.wowhead.com/forever/guide/the-drowned-city-dungeon-overview-location-rewards) and [Mobalytics](https://mobalytics.gg/wow-forever/profile/fierce-sun-30v6cf/dungeons/drowned-city-complete-dungeon-guide); no map or route from them.
+The rough route of Krol'dok Stronghold places the bosses after two video guides, by Ahmpy ([YouTube](https://www.youtube.com/watch?v=J6vwcCBZMVI), first clear) and by Uncas ([YouTube](https://www.youtube.com/watch?v=ahZZrnzXjng)): the minimap during each fight, matched with the game's own minimap; the boss order and the place of Tunk come from Uncas' written guide on [Mobalytics](https://mobalytics.gg/wow-forever/profile/fierce-sun-30v6cf/dungeons/krol-dok-stronghold-complete-dungeon-guide); no map or route from them.
 
 ## License
 
