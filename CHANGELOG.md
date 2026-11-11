@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.12
+
+- Alcaz Prison has a rough route now, over both levels, from a video guide (the minimap during each fight,
+  matched with the game's own minimap; the level from the area name the game shows above the minimap):
+  Tidemistress Ca'zass and Overseer Wrex on the main level, down the stairs into Maximum Security to Katerina the
+  Cleaner and Blazeroar, and back up to The Questioner. Commander Folkar in the cells (hostile for the Alliance, a
+  quest giver for the Horde) is an optional stop. The places are approximate; the place of The Questioner is the
+  least certain, corrections are welcome.
+
 ## 1.0.11
 
 - Checkmarks no longer stay after a reset of the dungeon. WoW: Forever tells addons nothing about which copy of a

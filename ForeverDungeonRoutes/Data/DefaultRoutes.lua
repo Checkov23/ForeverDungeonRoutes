@@ -5,6 +5,42 @@ local _, DR = ...
 
 DR.DefaultRoutes = DR.DefaultRoutes or {}
 
+DR.DefaultRoutes["alcazprison"] = {
+  id = "default",
+  builtin = true,
+  source = "Rough route from a video guide (the minimap during each fight, matched with the game's own minimap), stops approximate",
+  name = "Approximate (from guides)",
+  nameDE = "Ungefähr (aus Guides)",
+  nameFR = "Approximatif (guides)",
+  nameES = "Aproximada (guías)",
+  namePT = "Aproximada (guias)",
+  nameRU = "Примерный (по гайдам)",
+  nameKO = "대략 (공략 기준)",
+  nameCN = "大致路线（据攻略）",
+  nameTW = "大致路線（據攻略）",
+  paths = {
+    {kind="main", floor=1029941, t0=0, t1=0.5094, pts={0.3584,0.1654,0.3571,0.164,0.35,0.164,0.3477,0.1671,0.3467,0.2205,0.3486,0.2246,0.3487,0.2516,0.3564,0.2656,0.3564,0.3421,0.3623,0.3519,0.3633,0.4255,0.3701,0.4394,0.3711,0.4442,0.3711,0.4548,0.3699,0.4614,0.3664,0.4669,0.3624,0.4775,0.3621,0.5053,0.3461,0.5295,0.3389,0.5467,0.3389,0.5635,0.3426,0.5708,0.3431,0.5745,0.3517,0.587,0.3562,0.5871,0.3512,0.5866,0.3431,0.5745,0.3426,0.5708,0.3389,0.5635,0.3389,0.5467,0.3466,0.5284,0.3469,0.5035,0.3621,0.4804,0.3644,0.4713,0.3699,0.4614,0.3711,0.4548,0.3711,0.4442,0.3701,0.4394,0.3633,0.4255,0.3623,0.3519,0.3565,0.3424,0.3565,0.3342,0.3658,0.3479,0.3683,0.3487,0.3715,0.3529,0.3912,0.3529,0.3959,0.3485,0.4059,0.3485,0.4095,0.3529,0.4362,0.3529,0.4445,0.3412,0.4586,0.3397,0.4672,0.3353,0.5065,0.3353,0.5079,0.3342,0.5101,0.3367,0.526,0.3367,0.5355,0.3397,0.5475,0.3397,0.5502,0.3426,0.5699,0.3426,0.5717,0.3441,0.5905,0.3441,0.5922,0.3455,0.6266,0.3455,0.6332,0.3367,0.6412,0.3367,0.6443,0.3408,0.6412,0.3367,0.6332,0.3367,0.6266,0.3455,0.5922,0.3455,0.5905,0.3441,0.5717,0.3441,0.5699,0.3426,0.5297,0.3411,0.526,0.3367,0.5101,0.3367,0.5079,0.3342,0.5065,0.3353,0.4672,0.3353,0.4586,0.3397,0.4445,0.3412,0.4362,0.3529,0.4095,0.3529,0.4059,0.3485,0.3959,0.3485,0.3912,0.3529,0.3715,0.3529,0.3683,0.3487,0.3658,0.3479,0.3565,0.3342,0.3565,0.3424,0.3623,0.3519,0.3633,0.4255,0.3701,0.4394,0.3711,0.4442,0.3711,0.4548,0.3699,0.4614,0.3664,0.4669,0.3624,0.4775,0.3621,0.5053,0.3461,0.5295,0.3389,0.5467,0.3389,0.5631,0.3426,0.5708,0.343,0.5741,0.3514,0.5868,0.3562,0.5872,0.3545,0.5906,0.3535,0.6495,0.3477,0.659,0.3467,0.6744,0.3447,0.6814,0.3447,0.6964,0.3467,0.6999}},
+    {kind="main", floor=1029942, t0=0.5094, t1=0.8158, pts={0.3613,0.6999,0.3641,0.6956,0.3671,0.6865,0.3672,0.6825,0.3703,0.6719,0.3826,0.6534,0.3703,0.6719,0.3672,0.6825,0.3671,0.6865,0.3617,0.6999,0.4342,0.6999,0.4369,0.7028,0.4537,0.7028,0.4554,0.7042,0.5045,0.7042,0.5079,0.7002,0.5167,0.7129,0.5397,0.713,0.5424,0.716,0.5768,0.716,0.5795,0.713,0.5868,0.7129,0.5907,0.7074,0.5941,0.7057,0.6227,0.7042,0.6254,0.7072,0.6354,0.7072,0.6381,0.7042,0.651,0.7042,0.6582,0.6934,0.6582,0.674,0.6602,0.6612,0.6602,0.6316,0.6649,0.6224,0.6652,0.6177,0.6689,0.6118,0.6689,0.5889,0.6689,0.6118,0.6652,0.6177,0.6649,0.6224,0.6602,0.6316,0.6602,0.6612,0.6582,0.674,0.6582,0.6934,0.651,0.7042,0.6381,0.7042,0.6354,0.7072,0.6254,0.7072,0.6227,0.7042,0.5941,0.7057,0.5907,0.7074,0.5868,0.7129,0.5795,0.713,0.5768,0.716,0.5375,0.716,0.5348,0.713,0.5167,0.7129,0.5079,0.7002,0.5045,0.7042,0.4554,0.7042,0.4537,0.7028,0.4369,0.7028,0.4342,0.6999}},
+    {kind="main", floor=1029941, t0=0.8158, t1=1, pts={0.3467,0.6999,0.3447,0.6964,0.3447,0.6814,0.3467,0.6744,0.3477,0.659,0.3535,0.6495,0.3535,0.6052,0.3545,0.6027,0.3545,0.5906,0.3562,0.5872,0.3514,0.5868,0.343,0.5741,0.3426,0.5708,0.3389,0.5631,0.3389,0.5467,0.3466,0.5284,0.3469,0.5035,0.3621,0.4804,0.3644,0.4713,0.3699,0.4614,0.3711,0.4548,0.3711,0.4442,0.3701,0.4394,0.3633,0.4255,0.3622,0.3516,0.3566,0.3428,0.3563,0.3342,0.3495,0.344,0.3417,0.3443,0.3287,0.3631,0.308,0.3631,0.3063,0.3616,0.3002,0.3616,0.2985,0.3631,0.2748,0.3631,0.2638,0.3473,0.254,0.3469,0.2441,0.3333,0.2441,0.2773,0.2471,0.2718,0.2471,0.2451,0.249,0.2352,0.249,0.2114,0.2442,0.2004,0.2441,0.183}},
+    {kind="side", floor=1029942, title="Commander Folkar", pts={0.3828,0.653,0.4199,0.6237}},
+  },
+  stops = {
+    {kind="boss", floor=1029941, x=0.3564, y=0.5871, name="Tidemistress Ca'zass", nameDE="Gezeitenherrin Ca'zass", nameFR="Maîtresse des marées Ca’zass", nameES="Maestra de las mareas Ca'zass", namePT="Senhora das Marés Ca'zass", nameRU="Повелительница приливов Ка'засс", nameKO="해일여제 카자스", nameCN="海潮主母卡扎斯", nameTW="卡薩絲小姐", encounters={3410}, note="First boss, in the corridor by the cells, shortly after the entrance", noteDE="Erster Boss, auf dem Gang bei den Zellen, kurz nach dem Eingang", notePT="Primeiro chefe, no corredor junto às celas, logo após a entrada"},
+    {kind="boss", floor=1029941, x=0.6445, y=0.3411, name="Overseer Wrex", nameDE="Aufseher Wrex", nameFR="Surveillant Wrex", nameES="Sobrestante Wrex", namePT="Feitor Wrex", nameRU="Надзиратель Рекс", nameKO="감독관 렉스", nameCN="狱监雷克斯", nameTW="監督者瑞克斯", encounters={3403}, note="In the round hall at the end of the cross corridor, with cells around it; his key opens the locked door to Katerina", noteDE="In der runden Halle am Ende des Quergangs, mit Zellen ringsum; sein Schlüssel öffnet die verschlossene Tür zu Katerina", notePT="No salão redondo no fim do corredor transversal, cercado de celas; a chave dele abre a porta trancada até Katerina"},
+    {kind="boss", floor=1029942, x=0.3828, y=0.653, name="Katerina the Cleaner", nameDE="Katerina die Aufräumerin", nameFR="Katerina la Nettoyeuse", nameES="Katerina la Limpiadora", namePT="Katerina, a Faxineira", nameRU="Катерина Чистильщица", nameKO="청소부 카테리나", nameCN="清道夫卡特琳娜", nameTW="『清潔者』卡特莉娜", encounters={3418}, note="Down in Maximum Security, right at the round hall; leave the chained prisoners in the room alone", noteDE="Unten im Hochsicherheitstrakt, gleich an der runden Halle; die angeketteten Gefangenen im Raum in Ruhe lassen", notePT="Embaixo, na Segurança Máxima, junto ao salão redondo; deixe em paz os prisioneiros acorrentados na sala"},
+    {kind="optional", floor=1029942, x=0.4199, y=0.6237, name="Commander Folkar", note="In the cells next to it; a quest giver for the Horde, chained and hostile for the Alliance; not in the game's boss list, tick him off by hand", noteDE="In den Zellen daneben; für die Horde Questgeber, für die Allianz angekettet und feindlich; steht nicht in der Bossliste des Spiels, von Hand abhaken", notePT="Nas celas ao lado; para a Horda, ele dá uma missão; para a Aliança, está acorrentado e hostil; não está na lista de chefes do jogo, marque-o manualmente"},
+    {kind="boss", floor=1029942, x=0.6689, y=0.5886, name="Blazeroar", nameFR="Rugiflamme", nameES="Rugellama", namePT="Rugequeima", nameRU="Пламеяра", nameKO="불길포효", nameCN="烈焰咆哮者", nameTW="燃吼", encounters={3409}, note="In the large four-lobed hall at the end of Maximum Security; the prisoner Zarla Ober is met there before him", noteDE="Im großen Saal mit vier Rundungen am Ende des Hochsicherheitstrakts; davor trifft man dort die Gefangene Zarla Ober", notePT="No grande salão de quatro lóbulos no fim da Segurança Máxima; antes dele, encontra-se ali a prisioneira Zarla Ober"},
+    {kind="boss", floor=1029941, x=0.2441, y=0.183, name="The Questioner", nameDE="Der Verhörer", nameFR="L’Interrogateur", nameES="El Interrogador", namePT="O Questionador", nameRU="Дознаватель", nameKO="심문관", nameCN="质问者", nameTW="審問者", encounters={3415}, note="Last boss, in the round hall at the end of the main level (spot from the video not fully certain)", noteDE="Letzter Boss, in der runden Halle am Ende der Hauptebene (Stelle aus dem Video nicht ganz sicher)", notePT="Último chefe, no salão redondo no fim do nível principal (o ponto tirado do vídeo não é totalmente certo)"},
+  },
+  notes = {
+    {floor=1029941, x=0.3223, y=0.7321, text="Stairs down into Maximum Security, spot approximate; there the map switches to the lower level", textDE="Treppe hinab in den Hochsicherheitstrakt (Maximum Security), Stelle ungefähr; dort springt die Karte auf die untere Ebene", textPT="Escada para baixo até a Segurança Máxima, ponto aproximado; ali o mapa passa para o nível inferior"},
+  },
+  links = {
+    {floor=1029941, x=0.3467, y=0.6999, to=1029942, label="v"},
+    {floor=1029942, x=0.3613, y=0.6999, to=1029941, label="^"},
+  },
+}
+
 DR.DefaultRoutes["blackfathom"] = {
   id = "default",
   builtin = true,
