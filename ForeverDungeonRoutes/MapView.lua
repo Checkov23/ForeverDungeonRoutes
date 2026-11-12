@@ -13,12 +13,15 @@ local MAX_ZOOM = 4
 local ZOOM_STEP = 1.25
 local DRAG_START = 5        -- pixels the mouse moves before a press becomes a pan
 local UPDATE_INTERVAL = 0.1 -- seconds between position updates
-local ROOM_ALPHA = 0.3      -- the room the player is in: lowest opacity of its pulsing glow
-local ROOM_PULSE = 0.2      -- ... and how much brighter it gets
+local ROOM_ALPHA = 0.45     -- the room the player is in: lowest opacity of its pulsing glow
+local ROOM_PULSE = 0.3      -- ... and how much brighter it gets
+local ROOM_COLOR = { 1.00, 0.80, 0.30 }
+local ROOM_GLOW = 1.35      -- the soft glow over a part of a room is this much larger, its edge fades out
 local ADDON_PATH = "Interface\\AddOns\\ForeverDungeonRoutes\\"
 local MEDIA = ADDON_PATH .. "media\\"
 
 DR.MAP_W, DR.MAP_H = MAP_W, MAP_H
+DR.ROOM_GLOW = ROOM_GLOW
 
 -- Color of the main path runs from the first to the last stop.
 local GRADIENT = {
@@ -32,7 +35,7 @@ local ARROW_COLOR = { 0.06, 0.05, 0.03, 0.92 }
 local EDIT_DOT_COLOR = { 1.00, 1.00, 1.00, 0.95 }
 
 local MEMBER_COLOR = { 0.45, 0.78, 1.00 } -- rooms of the others in the group
-local MEMBER_ALPHA = 0.28
+local MEMBER_ALPHA = 0.45
 
 local KIND_STYLE = {
 	boss = { ring = { 0.95, 0.76, 0.31 }, text = { 1.00, 0.91, 0.66 } },
@@ -544,14 +547,34 @@ function View:OnUpdate(elapsed)
 end
 
 -- The room the player is in --------------------------------------------------------------------
--- The game names the room (Room.lua); its parts light up on the map, its name stands below.
+-- The game names the room (Room.lua); where the player wants it (setting showRoom), its parts glow softly on
+-- the map and its name stands below. The map follows the rooms either way.
+
+-- A soft glow over one part of a room: a soft rectangle (full inside, rounded corners, fading edge) stretched
+-- along a line through the middle of the part (width along the line, height as thickness), a little larger so
+-- the part lies in its full inside and the edge fades out around it.
+local function placeGlow(view, line, box)
+	local cx, cy = box[2] * MAP_W, box[3] * MAP_H
+	local half = box[4] * ROOM_GLOW / 2
+	local dx, dy = math.cos(box[6]) * half, math.sin(box[6]) * half
+	line:SetStartPoint("TOPLEFT", view.canvas, cx - dx, -(cy - dy))
+	line:SetEndPoint("TOPLEFT", view.canvas, cx + dx, -(cy + dy))
+	line:SetThickness(box[5] * ROOM_GLOW)
+end
+
+local function createGlow(view, color)
+	local line = view.canvas:CreateLine(nil, "BORDER")
+	line:SetTexture(MEDIA .. "roomglow")
+	line:SetVertexColor(color[1], color[2], color[3], 1)
+	return line
+end
 
 function View:UpdateRoom()
 	for i = 1, self.numRoomLines do
 		self.roomLines[i]:Hide()
 	end
 	self.numRoomLines = 0
-	local room = self.key ~= nil and self.key == DR.currentKey and DR.Room:Get()
+	local room = self.key ~= nil and self.key == DR.currentKey and DR.db.showRoom and DR.Room:Get()
 	self.status:SetShown(room and true or false)
 	self.statusBack:SetShown(room and true or false)
 	if not room then return end
@@ -561,16 +584,10 @@ function View:UpdateRoom()
 			self.numRoomLines = self.numRoomLines + 1
 			local line = self.roomLines[self.numRoomLines]
 			if not line then
-				line = self.canvas:CreateLine(nil, "BORDER")
-				line:SetColorTexture(1, 0.82, 0.35, 1)
+				line = createGlow(self, ROOM_COLOR)
 				self.roomLines[self.numRoomLines] = line
 			end
-			-- a box is a thick line through its middle: width along the line, height as thickness
-			local cx, cy = box[2] * MAP_W, box[3] * MAP_H
-			local dx, dy = math.cos(box[6]) * box[4] / 2, math.sin(box[6]) * box[4] / 2
-			line:SetStartPoint("TOPLEFT", self.canvas, cx - dx, -(cy - dy))
-			line:SetEndPoint("TOPLEFT", self.canvas, cx + dx, -(cy + dy))
-			line:SetThickness(box[5])
+			placeGlow(self, line, box)
 			line:SetAlpha(ROOM_ALPHA)
 			line:Show()
 		end
@@ -656,7 +673,7 @@ function View:Refresh()
 end
 
 -- The others in the group ----------------------------------------------------------------------
--- Every addon in the group tells the room its player is in (Group.lua); those rooms light up in
+-- Every addon in the group tells the room its player is in (Group.lua); those rooms glow softly in
 -- blue with the names, as far as the game names rooms there.
 
 local function createLabel(view)
@@ -691,15 +708,10 @@ function View:UpdateMembers()
 				self.numMemberLines = self.numMemberLines + 1
 				local line = self.memberLines[self.numMemberLines]
 				if not line then
-					line = self.canvas:CreateLine(nil, "BORDER")
-					line:SetColorTexture(MEMBER_COLOR[1], MEMBER_COLOR[2], MEMBER_COLOR[3], 1)
+					line = createGlow(self, MEMBER_COLOR)
 					self.memberLines[self.numMemberLines] = line
 				end
-				local cx, cy = box[2] * MAP_W, box[3] * MAP_H
-				local dx, dy = math.cos(box[6]) * box[4] / 2, math.sin(box[6]) * box[4] / 2
-				line:SetStartPoint("TOPLEFT", self.canvas, cx - dx, -(cy - dy))
-				line:SetEndPoint("TOPLEFT", self.canvas, cx + dx, -(cy + dy))
-				line:SetThickness(box[5])
+				placeGlow(self, line, box)
 				line:SetAlpha(MEMBER_ALPHA)
 				line:Show()
 			end

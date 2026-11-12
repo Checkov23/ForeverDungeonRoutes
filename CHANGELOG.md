@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.0.13
+
+- The Shaper's Terrace has a rough route now, from a video guide (the minimap during each fight, matched with the
+  game's own minimap): Titanosaur by the entrance, Izha'Rel and Tor'Rel (the game's Ravasaur Hunters), Direhorn
+  Matriarch, Thunderhoof, Venomridge, Bolt, Snowtalon, Vitrix and Nanaya on the island, in the order of the video.
+  Cinder and King Op from the game's boss list did not show up there and are not placed yet. The places are
+  approximate, corrections are welcome.
+- Your room on the map is off at first now (also after updating): the map still follows you to the level of the
+  room you are in, but the room only glows on the map when you tick "Show your room on the map" in the gear menu.
+- Rooms glow softly instead of the boxes: a gently pulsing golden glow with soft edges for your room, a blue one
+  for the rooms of your group.
+
 ## 1.0.12
 
 - Alcaz Prison has a rough route now, over both levels, from a video guide (the minimap during each fight,

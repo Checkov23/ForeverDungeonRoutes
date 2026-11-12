@@ -936,6 +936,40 @@ DR.DefaultRoutes["shadowfang"] = {
   },
 }
 
+DR.DefaultRoutes["shapersterrace"] = {
+  id = "default",
+  builtin = true,
+  source = "Rough route from a video guide (the minimap during each fight, matched with the game's own minimap), stops approximate",
+  name = "Approximate (from guides)",
+  nameDE = "Ungefähr (aus Guides)",
+  nameFR = "Approximatif (guides)",
+  nameES = "Aproximada (guías)",
+  namePT = "Aproximada (guias)",
+  nameRU = "Примерный (по гайдам)",
+  nameKO = "대략 (공략 기준)",
+  nameCN = "大致路线（据攻略）",
+  nameTW = "大致路線（據攻略）",
+  paths = {
+    {kind="main", floor=1030011, t0=0, t1=1, pts={0.0244,0.3953,0.0739,0.3926,0.0944,0.3931,0.1379,0.3992,0.1836,0.4088,0.2061,0.4115,0.2502,0.4129,0.2692,0.4111,0.285,0.4074,0.2979,0.4019,0.3186,0.3871,0.3589,0.3635,0.3778,0.3577,0.401,0.3542,0.4285,0.353,0.4602,0.3541,0.5371,0.3596,0.5911,0.3681,0.712,0.3975,0.7321,0.4048,0.7715,0.4239,0.7887,0.4361,0.8036,0.4504,0.8162,0.4667,0.8264,0.485,0.8338,0.5035,0.8383,0.5221,0.84,0.541,0.8387,0.56,0.8392,0.6003,0.8436,0.6435,0.8442,0.6648,0.8428,0.6855,0.8392,0.7055,0.8336,0.7249,0.8267,0.7425,0.8184,0.7582,0.8087,0.7721,0.7977,0.7842,0.7861,0.794,0.7739,0.8015,0.7611,0.8067,0.7477,0.8097,0.7208,0.8111,0.694,0.8067,0.6818,0.8015,0.6708,0.794,0.661,0.7842,0.6457,0.7608,0.6407,0.7502,0.6375,0.7403,0.636,0.7311,0.6295,0.7232,0.6179,0.7164,0.6012,0.7108,0.4575,0.6798,0.4358,0.6735,0.4299,0.6684,0.4275,0.6611,0.4285,0.6515,0.437,0.6278,0.448,0.5902,0.4467,0.5811,0.4406,0.5756,0.4297,0.5738,0.4141,0.5756,0.399,0.5747,0.3845,0.571,0.3705,0.5646,0.3571,0.5555,0.3455,0.544,0.3357,0.5303,0.3278,0.5143,0.3003,0.4365,0.2924,0.4228,0.2814,0.4081,0.2673,0.3926,0.2344,0.3592,0.2063,0.3239,0.1708,0.2677,0.1489,0.2279,0.1448,0.2178,0.1472,0.2178,0.1719,0.248,0.1897,0.2654,0.2097,0.28,0.2319,0.2919,0.2563,0.3011,0.3088,0.3152,0.3662,0.3239,0.425,0.3252,0.484,0.3184,0.5098,0.3181,0.5317,0.3217,0.5499,0.3294,0.5643,0.3411,0.597,0.3621,0.7037,0.4125,0.7162,0.4227,0.7254,0.4349,0.7312,0.4493,0.7336,0.4658,0.736,0.5012,0.7334,0.5695}},
+  },
+  stops = {
+    {kind="boss", floor=1030011, x=0.1035, y=0.3909, name="Titanosaur", nameDE="Titanosaurus", nameFR="Titanosaure", nameES="Titanosaurio", namePT="Titanossauro", nameRU="Титанозавр", nameKO="티타노사우루스", nameCN="泰坦巨龙", nameTW="泰坦龍", encounters={3498}, note="First boss, a huge dinosaur right by the entrance, where the stone path begins", noteDE="Erster Boss, ein riesiger Dinosaurier gleich beim Eingang, wo der Steinpfad beginnt", notePT="Primeiro chefe, um dinossauro enorme logo na entrada, onde começa o caminho de pedra"},
+    {kind="boss", floor=1030011, x=0.6396, y=0.3807, name="Ravasaur Hunters", nameDE="Ravasaurusjäger", nameFR="Ravasaures chasseurs", nameES="Ravasaurios cazadores", namePT="Ravassauros Caçadores", nameRU="Равазавры-охотники", nameKO="갈퀴발톱 라바사우루스", nameCN="暴掠龙猎手", nameTW="狩獵暴掠龍", encounters={3499}, note="Izha'Rel and Tor'Rel, north-east of the tar pits on the Walk of Communion", noteDE="Izha'Rel und Tor'Rel, nordöstlich der Teergruben am Pfad der Zwiesprache", notePT="Izha'Rel e Tor'Rel, a nordeste dos poços de piche, no Passeio da Comunhão"},
+    {kind="boss", floor=1030011, x=0.8369, y=0.5886, name="Direhorn Matriarch", nameDE="Terrorhornmatriarchin", nameFR="Matriarche navrecorne", nameES="Matriarca Cuernoatroz", namePT="Matriarca Escornante", nameRU="Дикорог-матриарх", nameKO="암컷 공포뿔", nameCN="恐角龙母", nameTW="恐角龍族母", encounters={3507}, note="East of the lake around the Pillar of Assimilation", noteDE="Östlich des Sees um die Säule der Assimilierung", notePT="A leste do lago ao redor do Pilar da Assimilação"},
+    {kind="boss", floor=1030011, x=0.6338, y=0.7174, name="Thunderhoof", nameFR="Sabot-Tonnerre", nameES="Pezuñatrueno", namePT="Casco do Trovão", nameRU="Громокопыт", nameKO="천둥발굽", nameCN="雷蹄", nameTW="雷蹄", encounters={3500}, note="South-west of the lake", noteDE="Südwestlich des Sees", notePT="A sudoeste do lago"},
+    {kind="boss", floor=1030011, x=0.4219, y=0.6691, name="Venomridge", nameDE="Giftkamm", nameFR="Crête-venin", nameES="Crestaveneno", namePT="Peçonhalta", nameRU="Ядогорб", nameKO="맹독마루", nameCN="毒脊", nameTW="毒脊", encounters={3501}, note="South of the tar pits, before the double gate", noteDE="Südlich der Teergruben, vor dem Doppeltor", notePT="Ao sul dos poços de piche, diante do portão duplo"},
+    {kind="boss", floor=1030011, x=0.4531, y=0.571, name="Bolt", nameFR="Fulguro", nameES="Rayo", namePT="Seta", nameRU="Электр", nameKO="쏜살", nameCN="霹雳", nameTW="螺栓", encounters={3505}, note="In Loris' Tar Pits", noteDE="In den Teergruben (Loris' Tar Pits)", notePT="Nos poços de piche (Loris' Tar Pits)"},
+    {kind="boss", floor=1030011, x=0.1328, y=0.1977, name="Snowtalon", nameDE="Schneekralle", nameFR="Serre-neigeuse", nameES="Garfanieve", namePT="Garra-de-neve", nameRU="Снежнокоготь", nameKO="눈갈퀴", nameCN="雪爪", nameTW="雪爪", encounters={3597}, note="Up in the north-west at the Tribunal of Ages", noteDE="Oben im Nordwesten am Tribunal of Ages", notePT="Lá em cima, a noroeste, no Tribunal of Ages"},
+    {kind="boss", floor=1030011, x=0.5283, y=0.3119, name="Vitrix", nameRU="Витрикс", nameKO="비트릭스", nameCN="翠鳞", nameTW="維崔斯", encounters={3600}, note="At the Regrowth Vestibule north of the tar pits, partly inside", noteDE="Am Regrowth Vestibule nördlich der Teergruben, teils drinnen", notePT="No Regrowth Vestibule, ao norte dos poços de piche, em parte lá dentro"},
+    {kind="boss", floor=1030011, x=0.7334, y=0.5695, name="Nanaya", nameRU="Нанайя", nameKO="나나야", nameCN="娜娜亚", nameTW="娜娜雅", encounters={3502}, note="Last boss, on the island in the lake at the Pillar of Assimilation, over the causeway in the north", noteDE="Letzter Boss, auf der Insel im See an der Säule der Assimilierung, über den Steg im Norden", notePT="Último chefe, na ilha do lago no Pilar da Assimilação, pela passarela ao norte"},
+  },
+  notes = {
+    {floor=1030011, x=0.0586, y=0.3441, text="Not on this route: Cinder and King Op from the game's boss list did not show up in the video run, their places are not known yet", textDE="Nicht auf dieser Route: Zunder (Cinder) und König Op aus der Bossliste des Spiels kamen im Video-Lauf nicht vor, ihre Orte sind noch unbekannt", textPT="Fora desta rota: Brasa (Cinder) e Rei Op, da lista de chefes do jogo, não apareceram na corrida do vídeo; os locais deles ainda não são conhecidos"},
+  },
+  links = {
+  },
+}
+
 DR.DefaultRoutes["sm_armory"] = {
   id = "default",
   builtin = true,

@@ -3,7 +3,7 @@
 A dungeon map with routes for **World of Warcraft: Forever**, for all 34 dungeons and the 7 raids:
 ready routes for the 25 classic dungeons and the 7 raids, maps by Santiago Reyes and rough routes for the first 4
 new Forever dungeons, maps by Santiago Reyes or drawn from the game's files for the 5 newer ones (The
-Drowned City, Krol'dok Stronghold and Alcaz Prison with rough routes too), boss order and notes, bosses that tick themselves off, an editor for your own routes in the spirit of
+Drowned City, Krol'dok Stronghold, Alcaz Prison and The Shaper's Terrace with rough routes too), boss order and notes, bosses that tick themselves off, an editor for your own routes in the spirit of
 Mythic Dungeon Tools, and a route list where players put up their routes for everyone.
 
 ![Inside the Deadmines: the first boss ticked off by the kill, the room you are in lights up, the run time counts](docs/screenshots/dungeon.png)
@@ -19,8 +19,10 @@ Mythic Dungeon Tools, and a route list where players put up their routes for eve
 | ![Ruins of Lordaeron on the map by Santiago Reyes (Atlas de Azeroth: Forever) with the rough route Approximate (from guides), King's Alley lit up](docs/screenshots/new-lordaeron.png) | ![The Hall of Thanes on the map by Santiago Reyes (Atlas de Azeroth: Forever) with the rough route, Infurnus on the side path](docs/screenshots/new-thanes.png) |
 | **City of Dalaran: the rough route over two levels, three bosses down** | **The small map when you enter a dungeon** |
 | ![City of Dalaran on the map by Santiago Reyes with the rough route, Atrexis, Arcane Anomaly and Mana Devourer ticked off, Arcanic Enigma as an optional stop](docs/screenshots/new-dalaran.png) | ![The small map in the Deadmines, slightly transparent at the edge of the screen, with + and X](docs/screenshots/small-map.png) |
-| **The Drowned City: map by Santiago Reyes, rough route since 1.0.7** | **Alcaz Prison, map by Santiago Reyes** |
-| ![The Drowned City on the map by Santiago Reyes (Atlas de Azeroth: Forever) with the rough route Approximate (from guides), the optional Primeval Elemental as a plus](docs/screenshots/new-drownedcity.png) | ![Alcaz Prison on the map by Santiago Reyes (Atlas de Azeroth: Forever), no route yet](docs/screenshots/new-alcazprison.png) |
+| **The Drowned City: map by Santiago Reyes, rough route since 1.0.7** | **Alcaz Prison: map by Santiago Reyes, rough route since 1.0.12** |
+| ![The Drowned City on the map by Santiago Reyes (Atlas de Azeroth: Forever) with the rough route Approximate (from guides), the optional Primeval Elemental as a plus](docs/screenshots/new-drownedcity.png) | ![Alcaz Prison on the map by Santiago Reyes (Atlas de Azeroth: Forever) with the rough route Approximate (from guides), the upper level](docs/screenshots/new-alcazprison.png) |
+| **The Shaper's Terrace: rough route since 1.0.13, nine bosses from a video run** | **Krol'dok Stronghold: rough route since 1.0.10** |
+| ![The Shaper's Terrace on the map by Santiago Reyes (Atlas de Azeroth: Forever) with the rough route Approximate (from guides), nine bosses](docs/screenshots/new-shapersterrace.png) | ![Krol'dok Stronghold on the map by Santiago Reyes (Atlas de Azeroth: Forever) with the rough route Approximate (from guides)](docs/screenshots/new-kroldok.png) |
 | **Or from the game's own minimap pictures (gear button)** | **The Hall of Thanes from the minimap pictures** |
 | ![Ruins of Lordaeron from the game's minimap pictures, King's Alley lit up](docs/screenshots/new-lordaeron-minimap.png) | ![The Hall of Thanes from the game's minimap pictures, Anvilmar's Rest lit up](docs/screenshots/new-thanes-minimap.png) |
 | **The other window styles (gear button): Dark** | **Parchment** |
@@ -57,9 +59,10 @@ replace them.
   from the game's files. Their bosses tick themselves off and their rooms light up where the game names
   them.
   The Drowned City has a rough route since 1.0.7 (the area of each boss from a video guide), Krol'dok
-  Stronghold since 1.0.10 and Alcaz Prison since 1.0.12 (the minimap during each fight in video guides,
-  matched with the game's own minimap); for the other two no standard routes yet: draw your own or use
-  "Route from the last run", and please tell us where the bosses stand (see "Help wanted" below).
+  Stronghold since 1.0.10, Alcaz Prison since 1.0.12 and The Shaper's Terrace since 1.0.13 (the minimap
+  during each fight in video guides, matched with the game's own minimap); for Blackmaw Hold no standard
+  route yet: draw your own or use "Route from the last run", and please tell us where the bosses stand
+  (see "Help wanted" below).
 - All seven raids (Molten Core to Naxxramas): the game's map art, rooms and areas, bosses that tick
   themselves off, and standard routes from the entrance from boss to boss over the walkable floors;
   Zul'Gurub and Ahn'Qiraj with two each ("Full clear" and "Efficient"). In the dungeon list they sit
@@ -73,9 +76,10 @@ replace them.
   note says so.
 - Where you are, as well as the game allows: WoW gives addons no position inside dungeons (since
   patch 7.1), so there is no arrow for you or your group. But the game names the room you are in
-  (the text above the minimap). The addon knows where these rooms lie: the room lights up on the
-  map, its name stands below, and the map follows you to its level. Between named rooms the map
-  follows your run: after a boss kill it shows the level of the next open boss.
+  (the text above the minimap). The addon knows where these rooms lie, and the map follows you to
+  the level of your room. If you like, the room also glows softly on the map with its name below
+  (gear button, "Show your room on the map", off at first). Between named rooms the map follows
+  your run: after a boss kill it shows the level of the next open boss.
 - Your group on the map: the rooms of the others in your group light up blue with their names
   (players with the addon). Ticks by hand reach the whole group, and Alt-click shows a stop to all.
 - Stop list with checkmarks per character. Bosses tick themselves off when the game reports the
@@ -160,10 +164,10 @@ By hand:
 - Above the stop list: the level of the dungeon in the colour of your level, the run time and your
   best time (the mouse on them shows your last ten runs), and outside the dungeon its entrance. A
   click on the entrance sets the map pin.
-- The gear button holds the settings: stop list, arrows, map from the game's minimap, tick off
-  bosses automatically, what shows on entering a dungeon (small map, route map or nothing), button
-  at the minimap, small display in dungeons, route list over the server channel, line width, text
-  size of the stop list, window style (gilded, dark, parchment, classic), opacity.
+- The gear button holds the settings: stop list, arrows, your room on the map, map from the game's
+  minimap, tick off bosses automatically, what shows on entering a dungeon (small map, route map or
+  nothing), button at the minimap, small display in dungeons, route list over the server channel,
+  line width, text size of the stop list, window style (gilded, dark, parchment, classic), opacity.
 
 Stratholme, Maraudon and Dire Maul North come with two standard routes each (living and undead
 side, purple and orange side, full clear and tribute run).
@@ -198,12 +202,12 @@ Lower and Upper Blackrock Spire, Dire Maul (East, West, North), Scholomance, Str
 
 With a rough route from guides ("Approximate (from guides)", places approximate): The Hall of
 Thanes, Ruins of Lordaeron, Excavation Site: Wetlands, City of Dalaran, The Drowned City, Krol'dok
-Stronghold, Alcaz Prison.
+Stronghold, Alcaz Prison, The Shaper's Terrace.
 
-Without a standard route yet (map, rooms and bosses are there): Blackmaw Hold, The Shaper's Terrace.
+Without a standard route yet (map, rooms and bosses are there): Blackmaw Hold.
 
-**Help wanted:** we found no guide yet that places the bosses of these two dungeons. If you ran one
-of them, tell us where each boss stood: its name and the area name the game shows above the minimap
+**Help wanted:** we found no guide yet that places the bosses of Blackmaw Hold, or Cinder and King Op in The
+Shaper's Terrace. If you met them, tell us where each boss stood: its name and the area name the game shows above the minimap
 there; a few words about the spot help too. Post it as an [issue](https://github.com/Checkov23/ForeverDungeonRoutes/issues) or as a comment on
 [CurseForge](https://www.curseforge.com/wow/addons/forever-dungeon-routes). From that we make the standard routes.
 
@@ -270,6 +274,7 @@ In City of Dalaran the places of Mana Devourer, Unstable Sentinel and Arcanic En
 The rough route of The Drowned City takes the area of each boss from the video guide by Uncas ([YouTube](https://www.youtube.com/watch?v=rJU4PkcrRuk)): the area name the game shows above the minimap during each fight. The way to the hidden room of the Primeval Elemental comes from the written guides of [Wowhead](https://www.wowhead.com/forever/guide/the-drowned-city-dungeon-overview-location-rewards) and [Mobalytics](https://mobalytics.gg/wow-forever/profile/fierce-sun-30v6cf/dungeons/drowned-city-complete-dungeon-guide); no map or route from them.
 The rough route of Krol'dok Stronghold places the bosses after two video guides, by Ahmpy ([YouTube](https://www.youtube.com/watch?v=J6vwcCBZMVI), first clear) and by Uncas ([YouTube](https://www.youtube.com/watch?v=ahZZrnzXjng)): the minimap during each fight, matched with the game's own minimap; the boss order and the place of Tunk come from Uncas' written guide on [Mobalytics](https://mobalytics.gg/wow-forever/profile/fierce-sun-30v6cf/dungeons/krol-dok-stronghold-complete-dungeon-guide); no map or route from them.
 The rough route of Alcaz Prison places the bosses after the video guide by Ahmpy ([YouTube](https://www.youtube.com/watch?v=TQ7lSDvQnPs), first clear): the minimap during each fight, matched with the game's own minimap, the level from the area name the game shows; the notes on Wrex's key, Katerina's prisoners, Zarla Ober and Commander Folkar come from the written guide by [ConquestCapped](https://conquestcapped.com/guides/wow-forever/wow-forever-alcaz-prison-guide/); no map or route from them.
+The rough route of The Shaper's Terrace places the bosses after the video guide by Ahmpy ([YouTube](https://www.youtube.com/watch?v=0rSXtUIYa7o), first clear): the minimap during each fight, matched with the game's own minimap, the area name the game shows as a check; Cinder and King Op from the game's boss list did not show up there and are not placed yet; no map or route from it.
 
 ## License
 
