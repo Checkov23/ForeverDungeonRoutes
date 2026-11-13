@@ -344,7 +344,7 @@ local function openSettingsMenu(owner)
 			function() setting("showStops", not DR.db.showStops) end)
 		root:CreateCheckbox(L["Arrows on the route"], function() return DR.db.showArrows end,
 			function() setting("showArrows", not DR.db.showArrows) end)
-		root:CreateCheckbox(L["Show your room on the map"], function() return DR.db.showRoom end,
+		root:CreateCheckbox(L["Show rooms on the map (yours and your group's)"], function() return DR.db.showRoom end,
 			function() setting("showRoom", not DR.db.showRoom) end)
 		root:CreateCheckbox(L["Map from the game's minimap"], function() return DR.db.gameMinimap end,
 			function() setting("gameMinimap", not DR.db.gameMinimap) end)
@@ -1441,6 +1441,10 @@ DR:On("SETTINGS_CHANGED", function(key)
 		layout()
 	elseif key == "gameMinimap" then
 		view:UpdateArt()
+	elseif key == "showRoom" then
+		-- at once, whatever else the refresh below does
+		view:UpdateRoom()
+		view:UpdateMembers()
 	elseif key == "theme" then
 		layout()
 	elseif key == "listScale" then

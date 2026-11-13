@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.14
+
+- The room setting now covers your group too: "Show rooms on the map (yours and your group's)" in the gear menu
+  switches the gold glow of your room and the blue glow and names of your group's rooms together. Off at first.
+- Switching it off takes effect at once, and no glow stays behind on the map if drawing a room was interrupted.
+
 ## 1.0.13
 
 - The Shaper's Terrace has a rough route now, from a video guide (the minimap during each fight, matched with the

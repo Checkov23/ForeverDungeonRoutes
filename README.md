@@ -78,10 +78,11 @@ replace them.
   patch 7.1), so there is no arrow for you or your group. But the game names the room you are in
   (the text above the minimap). The addon knows where these rooms lie, and the map follows you to
   the level of your room. If you like, the room also glows softly on the map with its name below
-  (gear button, "Show your room on the map", off at first). Between named rooms the map follows
-  your run: after a boss kill it shows the level of the next open boss.
+  (gear button, "Show rooms on the map (yours and your group's)", off at first). Between named rooms
+  the map follows your run: after a boss kill it shows the level of the next open boss.
 - Your group on the map: the rooms of the others in your group light up blue with their names
-  (players with the addon). Ticks by hand reach the whole group, and Alt-click shows a stop to all.
+  (players with the addon; the same gear setting as your own room, off at first). Ticks by hand reach
+  the whole group, and Alt-click shows a stop to all.
 - Stop list with checkmarks per character. Bosses tick themselves off when the game reports the
   kill; rares without a boss fight are ticked by hand. "New run" clears the checkmarks, an old run
   is cleared after three hours, and after a reset of the dungeon they start over: when the game
@@ -139,7 +140,7 @@ By hand:
   off by hand, for your whole group. Shift-click a list entry to show it on the map, Alt-click a
   stop to show it to your group (a ring on their map for half a minute).
 - In a group, the rooms the game names for the others light up blue on the map, with their names.
-  This needs the addon on their side too.
+  This needs the addon on their side too, and like your own room it is off at first (gear button).
 - Click the route name to choose a route, create a new one, copy, rename, delete or import.
   "Route from the last run" makes an own route of your last run in this dungeon: the bosses where
   they fell (in the middle of the room the game named, else where the standard route has them) and
@@ -164,7 +165,7 @@ By hand:
 - Above the stop list: the level of the dungeon in the colour of your level, the run time and your
   best time (the mouse on them shows your last ten runs), and outside the dungeon its entrance. A
   click on the entrance sets the map pin.
-- The gear button holds the settings: stop list, arrows, your room on the map, map from the game's
+- The gear button holds the settings: stop list, arrows, rooms on the map, map from the game's
   minimap, tick off bosses automatically, what shows on entering a dungeon (small map, route map or
   nothing), button at the minimap, small display in dungeons, route list over the server channel,
   line width, text size of the stop list, window style (gilded, dark, parchment, classic), opacity.

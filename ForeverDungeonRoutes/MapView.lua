@@ -541,7 +541,8 @@ function View:OnUpdate(elapsed)
 		self.pulse = (self.pulse or 0) + elapsed
 		local alpha = ROOM_ALPHA + ROOM_PULSE * (0.5 + 0.5 * math.sin(self.pulse * 3))
 		for i = 1, self.numRoomLines do
-			self.roomLines[i]:SetAlpha(alpha)
+			local line = self.roomLines[i]
+			if line then line:SetAlpha(alpha) end
 		end
 	end
 end
@@ -569,29 +570,44 @@ local function createGlow(view, color)
 	return line
 end
 
-function View:UpdateRoom()
-	for i = 1, self.numRoomLines do
-		self.roomLines[i]:Hide()
+-- Hides everything of a list ever created (pairs: a list of labels may have gaps), so nothing stays behind
+-- even when an earlier update stopped halfway.
+local function hideAll(list)
+	for _, region in pairs(list) do
+		region:Hide()
 	end
-	self.numRoomLines = 0
-	local room = self.key ~= nil and self.key == DR.currentKey and DR.db.showRoom and DR.Room:Get()
-	self.status:SetShown(room and true or false)
-	self.statusBack:SetShown(room and true or false)
-	if not room then return end
-	self.status:SetText(L["You are in: %s"]:format(DR.LocText(room, "name")))
-	for _, box in ipairs(room.boxes) do
-		if box[1] == self.floor then
-			self.numRoomLines = self.numRoomLines + 1
-			local line = self.roomLines[self.numRoomLines]
+end
+
+-- The soft glow over the parts of a room on the shown floor, from the list of lines (created as needed, stored
+-- before use); returns how many lines of the list are in use.
+local function glowRoom(view, lines, used, room, color, alpha)
+	for _, box in ipairs(room.boxes or {}) do
+		if box[1] == view.floor then
+			local line = lines[used + 1]
 			if not line then
-				line = createGlow(self, ROOM_COLOR)
-				self.roomLines[self.numRoomLines] = line
+				line = createGlow(view, color)
+				lines[used + 1] = line
 			end
-			placeGlow(self, line, box)
-			line:SetAlpha(ROOM_ALPHA)
+			used = used + 1
+			placeGlow(view, line, box)
+			line:SetAlpha(alpha)
 			line:Show()
 		end
 	end
+	return used
+end
+
+function View:UpdateRoom()
+	self.numRoomLines = 0
+	hideAll(self.roomLines)
+	self.status:Hide()
+	self.statusBack:Hide()
+	local room = self.key ~= nil and self.key == DR.currentKey and DR.db.showRoom and DR.Room:Get()
+	if not room then return end
+	self.status:SetText(L["You are in: %s"]:format(DR.LocText(room, "name")))
+	self.status:Show()
+	self.statusBack:Show()
+	self.numRoomLines = glowRoom(self, self.roomLines, 0, room, ROOM_COLOR, ROOM_ALPHA)
 end
 
 -- Content -------------------------------------------------------------------------------------
@@ -666,15 +682,15 @@ function View:Refresh()
 		self:AddMapNotes()
 	end
 	self:Layout()
-	self:UpdateGroup()
 	self:UpdateRoom()
 	self:UpdateMembers()
+	self:UpdateGroup()
 	self:UpdatePing()
 end
 
 -- The others in the group ----------------------------------------------------------------------
--- Every addon in the group tells the room its player is in (Group.lua); those rooms glow softly in
--- blue with the names, as far as the game names rooms there.
+-- Every addon in the group tells the room its player is in (Group.lua); with the setting showRoom those rooms
+-- glow softly in blue with the names, as far as the game names rooms there.
 
 local function createLabel(view)
 	local label = CreateFrame("Frame", nil, view.canvas)
@@ -694,28 +710,14 @@ end
 
 function View:UpdateMembers()
 	if not self.memberLines then return end
-	for i = 1, self.numMemberLines do
-		self.memberLines[i]:Hide()
-	end
 	self.numMemberLines = 0
-	for _, label in ipairs(self.memberLabels) do
-		label:Hide()
-	end
-	if not self.key or not self.floor then return end
+	hideAll(self.memberLines)
+	hideAll(self.memberLabels)
+	-- the same setting as the own room (since 1.0.14): off at first, no glow and no names of the others
+	if not self.key or not self.floor or not DR.db.showRoom then return end
 	for i, entry in ipairs(DR.Group:RoomsOn(self.key, self.floor)) do
-		for _, box in ipairs(entry.room.boxes) do
-			if box[1] == self.floor then
-				self.numMemberLines = self.numMemberLines + 1
-				local line = self.memberLines[self.numMemberLines]
-				if not line then
-					line = createGlow(self, MEMBER_COLOR)
-					self.memberLines[self.numMemberLines] = line
-				end
-				placeGlow(self, line, box)
-				line:SetAlpha(MEMBER_ALPHA)
-				line:Show()
-			end
-		end
+		self.numMemberLines = glowRoom(self, self.memberLines, self.numMemberLines, entry.room, MEMBER_COLOR,
+			MEMBER_ALPHA)
 		local u, v = DR.Room:Center(entry.room, self.floor)
 		if u then
 			local label = self.memberLabels[i]
