@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.15
+
+- The notes on the routes and maps are in Russian too now, in the Russian client: stops, route notes and map notes
+  (207 texts). Names come from the game where it has them; other names (some NPCs and quest items) stay English.
+
 ## 1.0.14
 
 - The room setting now covers your group too: "Show rooms on the map (yours and your group's)" in the gear menu
