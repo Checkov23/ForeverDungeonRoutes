@@ -61,7 +61,7 @@ DR.Dungeons = {
 		name = "Lower Blackrock Spire", nameDE = "Untere Blackrockspitze", nameFR = "Bas du pic Blackrock", nameES = "Cumbre de Roca Negra Inferior", namePT = "Pico da Rocha Negra Inferior", nameRU = "Нижняя часть пика Черной горы", nameKO = "검은바위 첨탑 하층", nameCN = "黑石塔下层", nameTW = "黑石塔下層" },
 	{ key = "upperblackrock", instanceID = 229, floors = { 1002295, 1002296, 1002297 }, levels = { 55, 60 },
 		name = "Upper Blackrock Spire", nameDE = "Obere Blackrockspitze", nameFR = "Sommet du pic Blackrock", nameES = "Cumbre de Roca Negra Superior", namePT = "Pico da Rocha Negra Superior", nameRU = "Верхняя часть пика Черной горы", nameKO = "검은바위 첨탑 상층", nameCN = "黑石塔上层", nameTW = "黑石塔上層" },
-	{ key = "blackmawhold", instanceID = 2974, floors = { 1029741 }, levels = { 55, 60 },
+	{ key = "blackmawhold", instanceID = 2974, floors = { 1029741, 1029742, 1029743, 1029744, 1029745, 1029746 }, levels = { 55, 60 },
 		name = "Blackmaw Hold", nameDE = "Die Schwarzschlundfeste", nameFR = "Repaire des Noiregueules", nameES = "Bastión Faucenegra", namePT = "Gruta Bocanera", nameRU = "Крепость Черночревов", nameKO = "검은아귀 요새", nameCN = "黑喉要塞", nameTW = "黑喉要塞" },
 	{ key = "diremaul_west", instanceID = 429, floors = { 236, 237, 238 }, levels = { 58, 60 },
 		name = "Dire Maul: West", nameDE = "Düsterbruch: West", nameFR = "Hache-tripes: Ouest", nameES = "La Masacre: Oeste", namePT = "Gládio Cruel: Oeste", nameRU = "Забытый Город: Запад", nameKO = "혈투의 전장: 서쪽", nameCN = "厄运之槌：西区", nameTW = "厄運之槌：西區" },

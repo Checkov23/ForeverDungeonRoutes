@@ -54,8 +54,35 @@ DR.Floors[1029942] = { name = "Maximum Security", nameDE = "Der Hochsicherheitst
 	credit = "Santiago Reyes, Atlas de Azeroth: Forever",
 	image = { file = "maps\\alcazprison_maximumsecurity", right = 1, bottom = 0.667 } }
 DR.Floors[1029741] = { name = "Blackmaw Hold", nameDE = "Die Schwarzschlundfeste", nameFR = "Repaire des Noiregueules", nameES = "Bastión Faucenegra", namePT = "Gruta Bocanera", nameRU = "Крепость Черночревов", nameKO = "검은아귀 요새", nameCN = "黑喉要塞", nameTW = "黑喉要塞",
-	world = { 3077.4, 2582.6, 4034.4, 4017.4 },
+	world = { 3085.5, 3041.56, 3868.75, 3954.99 },
+	frame = { -5.70003483e-05, -0.00113399428, 4.66522481, -0.00141047753, 0.000124338584, 4.96943954 },
+	credit = "Santiago Reyes, Atlas de Azeroth: Forever",
 	image = { file = "maps\\blackmawhold", right = 1, bottom = 0.667 } }
+DR.Floors[1029742] = { name = "Festering Grotto", nameDE = "Die Eitergrotte", nameFR = "Grotte Putride", nameES = "Gruta Purulenta", namePT = "Gruta Purulenta", nameRU = "Гнойный грот", nameKO = "썩어가는 소굴", nameCN = "溃烂石窟", nameTW = "腐潰岩洞",
+	world = { 3497.42, 3248.05, 3811.29, 3710.46 },
+	frame = { -2.48700801e-05, -0.00217925774, 8.17307384, -0.00320352038, 1.20675355e-05, 12.1648015 },
+	credit = "Santiago Reyes, Atlas de Azeroth: Forever",
+	image = { file = "maps\\blackmawhold_festeringgrotto", right = 1, bottom = 0.667 } }
+DR.Floors[1029743] = { name = "Depths of the Fallen Grove",
+	world = { 2887.53, 2722.68, 3731.36, 3316.97 },
+	frame = { -0.00119483873, -1.38618623e-05, 4.49611396, 5.08652038e-05, 0.00175491323, -4.96786355 },
+	credit = "Santiago Reyes, Atlas de Azeroth: Forever",
+	image = { file = "maps\\blackmawhold_fallengrove", right = 1, bottom = 0.667 } }
+DR.Floors[1029744] = { name = "Depths of the Elders",
+	world = { 3252.43, 2715.06, 4007.69, 3190.48 },
+	frame = { -0.00135098015, -4.58112629e-05, 5.53940761, -4.63281087e-05, 0.00217396815, -5.7510506 },
+	credit = "Santiago Reyes, Atlas de Azeroth: Forever",
+	image = { file = "maps\\blackmawhold_elders", right = 1, bottom = 0.667 } }
+DR.Floors[1029745] = { name = "Depths of the Burrow",
+	world = { 3174.04, 2788.07, 3845.91, 3234.56 },
+	frame = { -0.00157280251, -0.000150303178, 6.47310645, -0.000131901776, 0.00241486827, -6.30895797 },
+	credit = "Santiago Reyes, Atlas de Azeroth: Forever",
+	image = { file = "maps\\blackmawhold_burrow", right = 1, bottom = 0.667 } }
+DR.Floors[1029746] = { name = "Depths of Forbidden Magic",
+	world = { 3254.06, 2687.04, 3649.82, 3224.76 },
+	frame = { 0.000486125392, 0.0020319731, -7.18438502, 0.00324089969, -0.000711023836, -8.58567472 },
+	credit = "Santiago Reyes, Atlas de Azeroth: Forever",
+	image = { file = "maps\\blackmawhold_forbiddenmagic", right = 1, bottom = 0.667 } }
 DR.Floors[1030011] = { name = "The Shaper's Terrace", nameDE = "Die Terrasse des Formers", nameFR = "La terrasse du Façonneur", nameES = "El Bancal del Creador", namePT = "O Terraço do Moldador", nameRU = "Терраса Создателя", nameKO = "구체자의 정원", nameCN = "塑造者之台", nameTW = "塑造者殿堂",
 	world = { -6215.57, -1949.57, -5289.07, -630.2 },
 	frame = { 2.64059354e-05, -0.000776482686, -0.349678761, -0.00114599326, 4.68149464e-05, -6.03173268 },
@@ -119,11 +146,11 @@ DR.Rooms.alcazprison = {
 	{ name = "Maximum Security", nameDE = "Der Hochsicherheitstrakt", nameFR = "Haute sécurité", nameES = "Máxima seguridad", namePT = "Segurança Máxima", nameRU = "Камера строгого режима", nameKO = "최고 보안 시설", nameCN = "最高戒备区", nameTW = "最高警戒室", boxes = { { 1029942, 0.6573, 0.7034, 222.7482, 211.6929, 0.0098 }, { 1029942, 0.3492, 0.5419, 36.4471, 32.6024, 0.0098 }, { 1029942, 0.3524, 0.4387, 35.3536, 32.6024, 0.0098 }, { 1029942, 0.3822, 0.6991, 111.4514, 106.0587, 0.0098 }, { 1029942, 0.3951, 0.491, 53.1367, 172.7281, 0.0098 }, { 1029942, 0.492, 0.7009, 108.9793, 35.8312, 0.0098 }, { 1029942, 0.4942, 0.6081, 57.5297, 88.9945, 0.0098 }, { 1029942, 0.4894, 0.7938, 57.5297, 88.9944, 0.0098 }, { 1029942, 0.3922, 0.2956, 57.5297, 88.9945, 0.0098 } } },
 }
 DR.Rooms.blackmawhold = {
-	{ name = "Blackmaw Grove", nameDE = "Der Schwarzschlundhain", nameFR = "Bosquet des Noiregueules", nameES = "Arboleda Faucenegra", namePT = "Bosque Bocanera", nameRU = "Роща Черночревов", nameKO = "검은아귀 숲", nameCN = "黑喉林地", nameTW = "黑喉林地", boxes = { { 1029741, 0.3258, 0.4365, 23.2784, 23.267, 0 }, { 1029741, 0.3374, 0.4713, 46.5567, 23.267, 0 }, { 1029741, 0.3722, 0.5062, 116.3919, 23.267, 0 }, { 1029741, 0.3606, 0.541, 93.1135, 23.267, 0 }, { 1029741, 0.2909, 0.5932, 232.7837, 46.534, 0 }, { 1029741, 0.1515, 0.7151, 186.227, 116.3351, 0 }, { 1029741, 0.3955, 0.6455, 23.2784, 23.267, 0 }, { 1029741, 0.2096, 0.8196, 69.8351, 23.267, 0 } } },
-	{ name = "Blackmaw Stillwater", nameDE = "Das Schwarzschlundstillwasser", nameFR = "Étang des Noiregeules", nameES = "Aguaserena Faucenegra", namePT = "Remanso Bocanera", nameRU = "Заводь Черночревов", nameKO = "검은아귀 호수", nameCN = "黑喉静水湖", nameTW = "黑喉靜水池", boxes = { { 1029741, 0.2096, 0.3668, 23.2784, 23.267, 0 }, { 1029741, 0.2328, 0.4017, 69.8351, 23.267, 0 }, { 1029741, 0.2444, 0.4365, 93.1135, 23.267, 0 }, { 1029741, 0.2561, 0.5062, 116.3919, 69.801, 0 } } },
-	{ name = "Bonesnout's Thicket", nameDE = "Knochenschnauzes Dickicht", nameFR = "Fourré de Muflos", nameES = "Fronda Morrohueso", namePT = "Matagal de Focinhosso", nameRU = "Чаща Костерыла", nameKO = "해골주둥이의 숲", nameCN = "幽影之吻灌木丛", nameTW = "骨鼻灌木林", boxes = { { 1029741, 0.4884, 0.5062, 116.3919, 23.267, 0 }, { 1029741, 0.4768, 0.541, 139.6702, 23.267, 0 }, { 1029741, 0.4768, 0.7326, 139.6702, 139.6021, 0 }, { 1029741, 0.4535, 0.5932, 93.1135, 46.534, 0 } } },
-	{ name = "Defiled Peak", nameDE = "Der Entweihte Gipfel", nameFR = "Pic Profané", nameES = "Pico Profanado", namePT = "Pico Profanado", nameRU = "Оскверненный пик", nameKO = "더럽혀진 봉우리", nameCN = "腐化之巅", nameTW = "褻瀆山峰", boxes = { { 1029741, 0.3141, 0.7326, 139.6702, 139.6021, 0 } } },
-	{ name = "Festering Grotto", nameDE = "Die Eitergrotte", nameFR = "Grotte Putride", nameES = "Gruta Purulenta", namePT = "Gruta Purulenta", nameRU = "Гнойный грот", nameKO = "썩어가는 소굴", nameCN = "溃烂石窟", nameTW = "腐潰岩洞", boxes = { { 1029741, 0.4419, 0.3146, 302.6188, 139.6021, 0 }, { 1029741, 0.4652, 0.4365, 256.0621, 23.267, 0 }, { 1029741, 0.4768, 0.4713, 232.7837, 23.267, 0 } } },
+	{ name = "Blackmaw Grove", nameDE = "Der Schwarzschlundhain", nameFR = "Bosquet des Noiregueules", nameES = "Arboleda Faucenegra", namePT = "Bosque Bocanera", nameRU = "Роща Черночревов", nameKO = "검은아귀 숲", nameCN = "黑喉林地", nameTW = "黑喉林地", boxes = { { 1029741, 0.4334, 0.3096, 37.9765, 31.4643, -0.073 }, { 1029741, 0.4542, 0.3546, 75.9529, 31.4643, -0.073 }, { 1029741, 0.5128, 0.3954, 189.8823, 31.4643, -0.073 }, { 1029741, 0.4958, 0.4444, 151.9059, 31.4643, -0.073 }, { 1029741, 0.3852, 0.5274, 379.7646, 62.9286, -0.073 }, { 1029741, 0.1651, 0.7168, 303.8117, 157.3214, -0.073 }, { 1029741, 0.5582, 0.5793, 37.9765, 31.4643, -0.073 }, { 1029741, 0.2653, 0.8475, 113.9294, 31.4643, -0.073 } } },
+	{ name = "Blackmaw Stillwater", nameDE = "Das Schwarzschlundstillwasser", nameFR = "Étang des Noiregeules", nameES = "Aguaserena Faucenegra", namePT = "Remanso Bocanera", nameRU = "Заводь Черночревов", nameKO = "검은아귀 호수", nameCN = "黑喉静水湖", nameTW = "黑喉靜水池", boxes = { { 1029741, 0.2406, 0.2363, 37.9765, 31.4643, -0.073 }, { 1029741, 0.2803, 0.2792, 113.9294, 31.4643, -0.073 }, { 1029741, 0.3011, 0.3241, 151.9059, 31.4643, -0.073 }, { 1029741, 0.3238, 0.4161, 189.8823, 94.3928, -0.073 } } },
+	{ name = "Bonesnout's Thicket", nameDE = "Knochenschnauzes Dickicht", nameFR = "Fourré de Muflos", nameES = "Fronda Morrohueso", namePT = "Matagal de Focinhosso", nameRU = "Чаща Костерыла", nameKO = "해골주둥이의 숲", nameCN = "幽影之吻灌木丛", nameTW = "骨鼻灌木林", boxes = { { 1029741, 0.7018, 0.3746, 189.8823, 31.4643, -0.073 }, { 1029741, 0.6848, 0.4237, 227.8588, 31.4643, -0.073 }, { 1029741, 0.6952, 0.6823, 227.8588, 188.7857, -0.073 }, { 1029741, 0.6498, 0.4984, 151.9059, 62.9286, -0.073 } } },
+	{ name = "Defiled Peak", nameDE = "Der Entweihte Gipfel", nameFR = "Pic Profané", nameES = "Pico Profanado", namePT = "Pico Profanado", nameRU = "Оскверненный пик", nameKO = "더럽혀진 봉우리", nameCN = "腐化之巅", nameTW = "褻瀆山峰", boxes = { { 1029741, 0.4306, 0.7113, 227.8588, 188.7857, -0.073 } } },
+	{ name = "Festering Grotto", nameDE = "Die Eitergrotte", nameFR = "Grotte Putride", nameES = "Gruta Purulenta", namePT = "Gruta Purulenta", nameRU = "Гнойный грот", nameKO = "썩어가는 소굴", nameCN = "溃烂石窟", nameTW = "腐潰岩洞", boxes = { { 1029742, 0.5633, 0.7613, 31.1577, 37.7736, 1.4613 }, { 1029742, 0.8377, 0.6905, 126.0525, 137.2884, 1.4613 }, { 1029742, 0.6356, 0.4022, 300.333, 360.8814, 1.4613 }, { 1029742, 0.8152, 0.6471, 36.3584, 41.5759, 1.4613 }, { 1029742, 0.7814, 0.5566, 102.4259, 91.8286, 1.4613 }, { 1029742, 0.3495, 0.4678, 150.4723, 254.4435, 1.4613 }, { 1029742, 0.4799, 0.3595, 102.5527, 135.9003, 1.4613 }, { 1029742, 0.6484, 0.7155, 119.0413, 145.5099, 1.4613 }, { 1029742, 0.1897, 0.4706, 132.7904, 136.3865, 1.4613 }, { 1029742, 0.5385, 0.7667, 93.7687, 94.8967, 1.4613 } } },
 }
 DR.Rooms.shapersterrace = {
 	{ name = "Botanical Grounds", nameDE = "Botanische Gärten", nameFR = "Champ Botanique", nameES = "Terrenos Botánicos", namePT = "Campos Botânicos", nameRU = "Ботаническая площадка", nameKO = "식물 지대", nameCN = "植物园", nameTW = "植物栽培場", boxes = { { 1030011, 0.4388, 0.6918, 129.7773, 25.5327, -0.0402 }, { 1030011, 0.4379, 0.73, 181.6882, 25.5327, -0.0402 } } },

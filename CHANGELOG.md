@@ -1,5 +1,32 @@
 # Changelog
 
+## 1.1.0
+
+- The notes on the routes and maps are in every language of the game now: French, Spanish, Korean and Chinese
+  (simplified and traditional) are new; Russian and Brazilian Portuguese use more of the game's own names (NPCs, items)
+  and have a few fixes. Names come from the game where it has them.
+- Blackmaw Hold: the maps of Santiago Reyes with all six levels (outside, the Festering Grotto and four levels below
+  ground) and a first route from a video run: Withermaw, Bonesnout, Blackmaw Behemoth, Varrox, Elder Shaman Bloodmane
+  and Unbound Spirit; Impaan the Imprisoner as an optional stop (place from one source only), Moontouched Wanderer and
+  Gortek the Apprentice as rares. Below ground the map does not switch levels by itself, use the level tabs.
+- Better routes for the other new dungeons: the boss spots were compared across guides with maps, other addons, the
+  game's NPC positions and more run videos.
+  - Ruins of Lordaeron: five bosses moved to where they stand; The Butcher is called The Baron in the game.
+  - The Hall of Thanes: the way leads through the Dark Iron cave, because the door north of Anvilmar's Rest only opens
+    after Plunder; Infurnus is called Magmatus in the game.
+  - Excavation Site: Wetlands: the way leads over the Lost Dig Site, Highland Horror (only for an Alliance quest) is
+    north of it.
+  - City of Dalaran: Arcanic Enigma is the boss list's Mana Elemental and ticks itself off.
+  - Krol'dok Stronghold: Handler Ashka is optional (many groups skip her), Tunk and Zalfan Moonshadow are not rares,
+    Overseer Mugg moved east.
+  - Alcaz Prison: new spots for Ca'zass, Katerina, Blazeroar and The Questioner, the stairs at the west junction.
+  - The Drowned City: new spots for Zul'Alai, Var'Taka, Deathless Marrow and the Primeval Elemental (on the round
+    platform at Ataal'Byzal, dive in at the south-east corner of the central pool); the rares Gill and Pyromancer
+    Braxton are on the route.
+  - The Shaper's Terrace: Cinder (summoned with red Power Crystals at Ruby Spring) and King Op (rare, place from one
+    source only) are on the route; the four console bosses are optional; Titanosaur and Bolt moved.
+- Where the game shows another name than its boss list, the note says it.
+
 ## 1.0.15
 
 - The notes on the routes and maps are in Russian too now, in the Russian client: stops, route notes and map notes

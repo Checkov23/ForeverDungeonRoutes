@@ -1,9 +1,9 @@
 # Forever Dungeon Routes
 
 A dungeon map with routes for **World of Warcraft: Forever**, for all 34 dungeons and the 7 raids:
-ready routes for the 25 classic dungeons and the 7 raids, maps by Santiago Reyes and rough routes for the first 4
-new Forever dungeons, maps by Santiago Reyes or drawn from the game's files for the 5 newer ones (The
-Drowned City, Krol'dok Stronghold, Alcaz Prison and The Shaper's Terrace with rough routes too), boss order and notes, bosses that tick themselves off, an editor for your own routes in the spirit of
+ready routes for the 25 classic dungeons and the 7 raids, maps by Santiago Reyes and routes for all 9 new Forever
+dungeons (Blackmaw Hold since 1.1.0 with all six of its levels), boss order and notes in every language of the game,
+bosses that tick themselves off, an editor for your own routes in the spirit of
 Mythic Dungeon Tools, and a route list where players put up their routes for everyone.
 
 ![Inside the Deadmines: the first boss ticked off by the kill, the room you are in lights up, the run time counts](docs/screenshots/dungeon.png)
@@ -15,14 +15,16 @@ Mythic Dungeon Tools, and a route list where players put up their routes for eve
 | ![Blackrock Depths, Shadowforge City, The Grim Guzzler lit up, the small display above the window](docs/screenshots/room.png) | ![Scholomance with the question whether to take over a route](docs/screenshots/share.png) |
 | **Scholomance: blue squares lead to the other map levels** | **German game client** |
 | ![Scholomance, The Upper Study](docs/screenshots/scholomance.png) | ![The Deadmines with German texts (Todesminen)](docs/screenshots/german.png) |
-| **New in WoW: Forever: Ruins of Lordaeron, map by Santiago Reyes, rough route from guide texts** | **The Hall of Thanes with its rough route** |
+| **New in WoW: Forever: Ruins of Lordaeron, map by Santiago Reyes, route since 1.1.0 from guides and addons** | **The Hall of Thanes: the way leads through the Dark Iron cave** |
 | ![Ruins of Lordaeron on the map by Santiago Reyes (Atlas de Azeroth: Forever) with the rough route Approximate (from guides), King's Alley lit up](docs/screenshots/new-lordaeron.png) | ![The Hall of Thanes on the map by Santiago Reyes (Atlas de Azeroth: Forever) with the rough route, Infurnus on the side path](docs/screenshots/new-thanes.png) |
 | **City of Dalaran: the rough route over two levels, three bosses down** | **The small map when you enter a dungeon** |
 | ![City of Dalaran on the map by Santiago Reyes with the rough route, Atrexis, Arcane Anomaly and Mana Devourer ticked off, Arcanic Enigma as an optional stop](docs/screenshots/new-dalaran.png) | ![The small map in the Deadmines, slightly transparent at the edge of the screen, with + and X](docs/screenshots/small-map.png) |
 | **The Drowned City: map by Santiago Reyes, rough route since 1.0.7** | **Alcaz Prison: map by Santiago Reyes, rough route since 1.0.12** |
 | ![The Drowned City on the map by Santiago Reyes (Atlas de Azeroth: Forever) with the rough route Approximate (from guides), the optional Primeval Elemental as a plus](docs/screenshots/new-drownedcity.png) | ![Alcaz Prison on the map by Santiago Reyes (Atlas de Azeroth: Forever) with the rough route Approximate (from guides), the upper level](docs/screenshots/new-alcazprison.png) |
-| **The Shaper's Terrace: rough route since 1.0.13, nine bosses from a video run** | **Krol'dok Stronghold: rough route since 1.0.10** |
-| ![The Shaper's Terrace on the map by Santiago Reyes (Atlas de Azeroth: Forever) with the rough route Approximate (from guides), nine bosses](docs/screenshots/new-shapersterrace.png) | ![Krol'dok Stronghold on the map by Santiago Reyes (Atlas de Azeroth: Forever) with the rough route Approximate (from guides)](docs/screenshots/new-kroldok.png) |
+| **The Shaper's Terrace: route since 1.0.13, Cinder and King Op since 1.1.0** | **Krol'dok Stronghold: rough route since 1.0.10** |
+| ![The Shaper's Terrace on the map by Santiago Reyes (Atlas de Azeroth: Forever) with the route Approximate (from guides), the console bosses as optional stops](docs/screenshots/new-shapersterrace.png) | ![Krol'dok Stronghold on the map by Santiago Reyes (Atlas de Azeroth: Forever) with the rough route Approximate (from guides)](docs/screenshots/new-kroldok.png) |
+| **Blackmaw Hold since 1.1.0: Santiago Reyes' map with the first route** | **Six levels: down in the Depths of the Burrow** |
+| ![Blackmaw Hold on the map by Santiago Reyes (Atlas de Azeroth: Forever) with the first route, the Festering Grotto and the gate below ground](docs/screenshots/new-blackmawhold.png) | ![Blackmaw Hold, the level Depths of the Burrow by Santiago Reyes with the Blackmaw Behemoth and the way down to Varrox](docs/screenshots/new-blackmawhold-depths.png) |
 | **Or from the game's own minimap pictures (gear button)** | **The Hall of Thanes from the minimap pictures** |
 | ![Ruins of Lordaeron from the game's minimap pictures, King's Alley lit up](docs/screenshots/new-lordaeron-minimap.png) | ![The Hall of Thanes from the game's minimap pictures, Anvilmar's Rest lit up](docs/screenshots/new-thanes-minimap.png) |
 | **The other window styles (gear button): Dark** | **Parchment** |
@@ -47,22 +49,22 @@ replace them.
   Wetlands, City of Dalaran): the game has no map art for them, so the addon shows the maps of
   Santiago Reyes (Atlas de Azeroth: Forever), used with his permission; City of Dalaran with the
   Underbelly as a second map level. Their rooms light up and their bosses tick themselves off.
-  Each has a rough standard route, "Approximate (from guides)": where the bosses stand comes from
-  the texts of written guides (Icy Veins), the order from the game's boss list, and the paths follow
-  the floors on Santiago's maps. The places are approximate, and every stop says what is known about
-  it. Highland Horror (Excavation Site) and Lyn the Ignored (City of Dalaran, summoned) are optional
-  stops, placed after warcraft.wiki.gg. Mana Elemental and Mana Wraith (City of Dalaran) are not on the
-  route yet: no source places them.
+  Each has a standard route, "Approximate (from guides)": since 1.1.0 the boss spots come from several
+  sources that agree (guides with their maps, other addons, the game's NPC positions), the order from
+  guides and runs, and the paths follow the floors on Santiago's maps. Every stop says what is known
+  about it, also the name the game shows where it differs from the boss list (Infurnus is called
+  Magmatus, The Butcher The Baron). Highland Horror (Excavation Site, only for an Alliance quest) and Lyn
+  the Ignored (City of Dalaran, summoned) are optional stops; Arcanic Enigma is the boss list's Mana
+  Elemental and ticks itself off. Mana Wraith is not a boss in any guide and has no stop.
 - The five newer dungeons (The Drowned City, Krol'dok Stronghold, Alcaz Prison, Blackmaw Hold, The
-  Shaper's Terrace, levels 35 to 60, in the game client since November 7): four of them show the maps
-  of Santiago Reyes (Alcaz Prison with both of its levels), for Blackmaw Hold the addon draws the map
-  from the game's files. Their bosses tick themselves off and their rooms light up where the game names
-  them.
-  The Drowned City has a rough route since 1.0.7 (the area of each boss from a video guide), Krol'dok
-  Stronghold since 1.0.10, Alcaz Prison since 1.0.12 and The Shaper's Terrace since 1.0.13 (the minimap
-  during each fight in video guides, matched with the game's own minimap); for Blackmaw Hold no standard
-  route yet: draw your own or use "Route from the last run", and please tell us where the bosses stand
-  (see "Help wanted" below).
+  Shaper's Terrace, levels 35 to 60, in the game client since November 7): all of them show the maps
+  of Santiago Reyes (Alcaz Prison with both of its levels, Blackmaw Hold since 1.1.0 with six: outside,
+  the Festering Grotto and four levels below ground, where the map does not switch levels by itself).
+  Their bosses tick themselves off and their rooms light up where the game names them. Each has a route
+  from run videos (the minimap during each fight, matched with the game's own minimap) and guides: The
+  Drowned City since 1.0.7, Krol'dok Stronghold since 1.0.10, Alcaz Prison since 1.0.12, The Shaper's
+  Terrace since 1.0.13 and Blackmaw Hold since 1.1.0. Bosses that need to be summoned (the console
+  bosses of The Shaper's Terrace, with Power Crystals) or that many groups skip are optional stops.
 - All seven raids (Molten Core to Naxxramas): the game's map art, rooms and areas, bosses that tick
   themselves off, and standard routes from the entrance from boss to boss over the walkable floors;
   Zul'Gurub and Ahn'Qiraj with two each ("Full clear" and "Efficient"). In the dungeon list they sit
@@ -113,7 +115,8 @@ replace them.
 - English, German, French, Spanish, Portuguese, Russian, Korean and Chinese (simplified and
   traditional). Names of bosses, dungeons, map levels and rooms come from the game in the language
   of your client; the translations of the addon's own texts are welcome to be corrected (issues).
-  Notes on the maps are English (German, Brazilian Portuguese and Russian in those clients).
+  Since 1.1.0 the notes on the routes and maps are in every language of the game too, with the names
+  the game uses.
 
 ## Install
 
@@ -201,15 +204,14 @@ Razorfen Kraul, Gnomeregan, Scarlet Monastery (Graveyard, Library, Armory, Cathe
 Razorfen Downs, Uldaman, Zul'Farrak, Maraudon, Sunken Temple, Blackrock Depths,
 Lower and Upper Blackrock Spire, Dire Maul (East, West, North), Scholomance, Stratholme.
 
-With a rough route from guides ("Approximate (from guides)", places approximate): The Hall of
-Thanes, Ruins of Lordaeron, Excavation Site: Wetlands, City of Dalaran, The Drowned City, Krol'dok
-Stronghold, Alcaz Prison, The Shaper's Terrace.
+With a route from guides, addons and run videos ("Approximate (from guides)", not checked in the game by
+us): The Hall of Thanes, Ruins of Lordaeron, Excavation Site: Wetlands, City of Dalaran, The Drowned City,
+Krol'dok Stronghold, Alcaz Prison, Blackmaw Hold, The Shaper's Terrace.
 
-Without a standard route yet (map, rooms and bosses are there): Blackmaw Hold.
-
-**Help wanted:** we found no guide yet that places the bosses of Blackmaw Hold, or Cinder and King Op in The
-Shaper's Terrace. If you met them, tell us where each boss stood: its name and the area name the game shows above the minimap
-there; a few words about the spot help too. Post it as an [issue](https://github.com/Checkov23/ForeverDungeonRoutes/issues) or as a comment on
+**Help wanted:** nobody we know of has shown King Op (The Shaper's Terrace) or Impaan the Imprisoner
+(Blackmaw Hold) in a run yet, and the spots below ground in Blackmaw Hold are from one run only. If you met
+them, tell us where each boss stood: its name and the area name the game shows above the minimap there; a
+few words about the spot help too. Post it as an [issue](https://github.com/Checkov23/ForeverDungeonRoutes/issues) or as a comment on
 [CurseForge](https://www.curseforge.com/wow/addons/forever-dungeon-routes). From that we make the standard routes.
 
 Raids: Molten Core, Onyxia's Lair, Blackwing Lair, Naxxramas (in the order of the game's dungeon
@@ -236,11 +238,9 @@ Lower Spire, and the addon shows them there under their own names.
 The entrances (`Data/Entrances.lua`) are WoW: Forever's own map points where it has them, else the
 positions of Blizzard's table of dungeon entrances, placed on Forever's zone maps.
 
-For the new Forever dungeons there is no map art in the game. Eight show Santiago's maps, Blackmaw
-Hold a map the addon draws from the game's files (`maps/*.blp`, `Data/Pictures.lua`):
-the walkable floors of the buildings, the terrain with its slopes and water, the walls as ink lines,
-the names of the areas. No picture from the game is copied. Their rooms are the areas and named building
-parts the game reports there. The game has no entrance data for these dungeons.
+For the new Forever dungeons there is no map art in the game. All nine show Santiago's maps
+(`maps/*.blp`, `Data/Pictures.lua`), fitted to the game's coordinates with the game's minimap pictures.
+Their rooms are the areas and named building parts the game reports there. The game has no entrance data for these dungeons.
 
 Behind the gear button every map level can also show the game's own minimap pictures
 (`Data/Minimaps.lua`, by file ID like the other map art): the pictures of the building parts the game
@@ -258,8 +258,8 @@ the boss positions in the raids from the game's dungeon journal (in Zul'Gurub fr
 and the skulls of its map). The raid paths are searched over the walkable floors in the game's
 files, around lava and deep water.
 
-The maps of the first four new Forever dungeons, of the Underbelly of Dalaran, of The Drowned City,
-Krol'dok Stronghold, The Shaper's Terrace and both levels of Alcaz Prison are by Santiago Reyes,
+The maps of all nine new Forever dungeons, of the Underbelly of Dalaran, both levels of Alcaz Prison
+and all six levels of Blackmaw Hold are by Santiago Reyes,
 from his [Atlas de Azeroth: Forever](https://asguevara433.wixsite.com/srmaps), used with his permission in the
 versions with his watermark.
 
@@ -275,7 +275,7 @@ In City of Dalaran the places of Mana Devourer, Unstable Sentinel and Arcanic En
 The rough route of The Drowned City takes the area of each boss from the video guide by Uncas ([YouTube](https://www.youtube.com/watch?v=rJU4PkcrRuk)): the area name the game shows above the minimap during each fight. The way to the hidden room of the Primeval Elemental comes from the written guides of [Wowhead](https://www.wowhead.com/forever/guide/the-drowned-city-dungeon-overview-location-rewards) and [Mobalytics](https://mobalytics.gg/wow-forever/profile/fierce-sun-30v6cf/dungeons/drowned-city-complete-dungeon-guide); no map or route from them.
 The rough route of Krol'dok Stronghold places the bosses after two video guides, by Ahmpy ([YouTube](https://www.youtube.com/watch?v=J6vwcCBZMVI), first clear) and by Uncas ([YouTube](https://www.youtube.com/watch?v=ahZZrnzXjng)): the minimap during each fight, matched with the game's own minimap; the boss order and the place of Tunk come from Uncas' written guide on [Mobalytics](https://mobalytics.gg/wow-forever/profile/fierce-sun-30v6cf/dungeons/krol-dok-stronghold-complete-dungeon-guide); no map or route from them.
 The rough route of Alcaz Prison places the bosses after the video guide by Ahmpy ([YouTube](https://www.youtube.com/watch?v=TQ7lSDvQnPs), first clear): the minimap during each fight, matched with the game's own minimap, the level from the area name the game shows; the notes on Wrex's key, Katerina's prisoners, Zarla Ober and Commander Folkar come from the written guide by [ConquestCapped](https://conquestcapped.com/guides/wow-forever/wow-forever-alcaz-prison-guide/); no map or route from them.
-The rough route of The Shaper's Terrace places the bosses after the video guide by Ahmpy ([YouTube](https://www.youtube.com/watch?v=0rSXtUIYa7o), first clear): the minimap during each fight, matched with the game's own minimap, the area name the game shows as a check; Cinder and King Op from the game's boss list did not show up there and are not placed yet; no map or route from it.
+The rough route of The Shaper's Terrace places the bosses after the video guide by Ahmpy ([YouTube](https://www.youtube.com/watch?v=0rSXtUIYa7o), first clear): the minimap during each fight, matched with the game's own minimap, the area name the game shows as a check; Cinder, the console bosses and Titanosaur were checked in three more runs in 1.1.0 (Merfin, Magemis, Nekrage); no map or route from them. Since 1.1.0 the boss spots of the new dungeons were compared across more sources: the maps in the guides of Icy Veins, Mobalytics and Warcraft Tavern, the pins of the addons NaowhForever, MapUtils, DungeonsForever and Forever Dungeon Scout, the enemies of Keystone.guru and Forever Dungeon Tools, the NPC positions on Wowhead, and more run videos (Uncas, Merfin, Magemis, Nekrage, Ahmpy); only the places were taken, no map, picture, drawing or code from them. The route of Blackmaw Hold follows Ahmpy's first run ([YouTube](https://www.youtube.com/watch?v=ehrR3BSNQM0)); Impaan the Imprisoner is placed after DungeonsForever only.
 
 ## License
 

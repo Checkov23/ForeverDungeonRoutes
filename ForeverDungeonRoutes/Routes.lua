@@ -14,8 +14,8 @@ local L = DR.L
 
 -- Texts come in the language of the game client: the English text in a field, the other languages
 -- in the same field with a suffix (nameDE, nameFR, ...). The game's own names (bosses, dungeons, map
--- levels, rooms) exist in every language of the client, notes written for the routes in English and
--- German.
+-- levels, rooms) exist in every language of the client; the notes are written for the routes in English and
+-- German and translated into the other languages of the client.
 DR.LOCALE_SUFFIXES = { "DE", "FR", "ES", "PT", "RU", "KO", "CN", "TW" }
 local SUFFIX = ({ deDE = "DE", frFR = "FR", esES = "ES", esMX = "ES", ptBR = "PT", ruRU = "RU",
 	koKR = "KO", zhCN = "CN", zhTW = "TW" })[GetLocale()]
