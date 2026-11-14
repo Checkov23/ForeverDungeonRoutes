@@ -283,7 +283,8 @@ function View:Create(parent)
 	self.frame = frame
 	local background = frame:CreateTexture(nil, "BACKGROUND", nil, -8)
 	background:SetAllPoints()
-	background:SetColorTexture(0, 0, 0, 1)
+	DR.ThemeFill(background, "mapBg") -- black, in the style "Gilded" a warm dark
+	self.background = background
 
 	local canvas = CreateFrame("Frame", nil, frame)
 	canvas:SetSize(MAP_W, MAP_H)

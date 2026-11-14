@@ -100,14 +100,39 @@ function DR:ChooseFloor(key, x, y, preferred)
 	return best.floor, best.u, best.v
 end
 
+-- The wing the game's map names. Inside instances the game hides the position, but
+-- C_Map.GetBestMapForUnit still names the map the player is on (the world map opens on it); in
+-- Scarlet Monastery every wing has a map of its own (302 to 305). A map that only one wing of the
+-- instance has tells the wing, any other map (or none yet) tells nothing.
+function DR:WingFromMap(instanceID)
+	local mapID = C_Map and C_Map.GetBestMapForUnit and DR.Safe(C_Map.GetBestMapForUnit("player"))
+	if type(mapID) ~= "number" then return nil end
+	local found
+	for _, dungeon in ipairs(self:GetDungeonsForInstance(instanceID)) do
+		for _, floor in ipairs(dungeon.floors) do
+			if floor == mapID then
+				if found and found ~= dungeon.key then return nil end
+				found = dungeon.key
+			end
+		end
+	end
+	return found
+end
+
 -- The dungeon the player is in: by instance, and for instances with several wings (Scarlet
--- Monastery, Dire Maul) by position, else the wing seen last.
+-- Monastery, Dire Maul) by the game's map (since 1.2.0; before, entering showed the wing seen last
+-- until a room or a kill told the wing), by position, else the wing seen last.
 function DR:FindCurrentDungeon(instanceID)
 	local x, y, positionInstance = self:GetUnitWorldPosition("player")
 	instanceID = instanceID or positionInstance
 	local list = self:GetDungeonsForInstance(instanceID)
 	if #list == 0 then return nil end
 	if #list == 1 then return list[1].key end
+	local byMap = self:WingFromMap(instanceID)
+	if byMap then
+		self.db.wings[instanceID] = byMap
+		return byMap
+	end
 	if x then
 		local bestKey, bestDist
 		for _, dungeon in ipairs(list) do

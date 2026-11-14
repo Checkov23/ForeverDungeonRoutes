@@ -109,8 +109,9 @@ replace them.
   without the addon, or share routes as text (export and import).
 - Route list: players put their routes up for everyone, a click takes a route over, and good routes
   get recommended. The list comes from your guild, your parties and the server channel FDRoutes.
-- Four window styles: gilded (the default: brick and gold, with a title plate, the map levels as
-  tabs and a footer), dark, parchment (light like the map art) and classic (the game's gold frame).
+- Four window styles: gilded (the default: a beveled gold frame on a dark ground, with a title plate,
+  the map levels as tabs, gold-framed buttons and a footer), dark, parchment (light like the map art)
+  and classic (the game's gold frame).
 - Button at the minimap (right-click for a few switches), slash command and key binding.
 - English, German, French, Spanish, Portuguese, Russian, Korean and Chinese (simplified and
   traditional). Names of bosses, dungeons, map levels and rooms come from the game in the language
@@ -227,8 +228,9 @@ generated from the game's building files: each named part of a dungeon building 
 placed on the map level where the game's own map shows it. Rooms come with all dungeons except
 Shadowfang Keep, Stormwind Stockade, Razorfen Kraul, Zul'Farrak and Dire Maul (there only the entrance
 of East and West); the game names no rooms there. Between rooms the map follows the boss kills the
-game reports. In Scarlet Monastery, Dire Maul and Blackrock Spire a kill also tells which wing you
-are in (Lower or Upper Spire), in Scarlet Monastery and Upper Blackrock Spire already the first room.
+game reports. In Scarlet Monastery and Dire Maul the game's map tells the wing as soon as you enter
+(each wing has a map of its own). There and in Blackrock Spire a kill also tells which wing you are
+in (Lower or Upper Spire), in Scarlet Monastery and Upper Blackrock Spire already the first room.
 
 Upper Blackrock Spire has no map level in today's map tables. Its stadium, furnace and throne room
 are on Blizzard's old seventh map level of Blackrock Spire, which is still in the WoW: Forever

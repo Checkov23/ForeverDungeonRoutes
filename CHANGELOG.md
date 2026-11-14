@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.2.0
+
+- A new look for the default window style "Gilded": a beveled gold frame with a fine inner line, lit from the top, on
+  a dark ground with a faint diamond pattern instead of the brick walls, a soft shadow around the window and red
+  stones on the corners. The title plate on the top edge has pointed ends and lies above the frame: no line runs
+  through the name any more. The map is set into the window with a soft inner shadow, the map levels are tabs standing
+  on it, the next stop of the list sits on a warm row of its own. Gold-framed buttons instead of the red ones (the
+  main button of a dialog a little brighter, disabled buttons look disabled), close and smaller as signs like the gear.
+- Scarlet Monastery and Dire Maul: on entering, the map shows the right wing at once, the game's map tells it. Before,
+  it opened on the wing you saw last and only switched in the first named room.
+- In every window style the choice fields have an arrow instead of a "v", and the text of the buttons keeps its size
+  under the mouse.
+
 ## 1.1.1
 
 - The four levels below ground in Blackmaw Hold have names in every language of the game now, in the level tabs and

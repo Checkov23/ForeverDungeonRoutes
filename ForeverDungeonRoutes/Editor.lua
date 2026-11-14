@@ -392,6 +392,7 @@ function Editor:BuildToolbar(parent)
 		b:SetSize(52, 20)
 		b:SetText(L[TOOL_LABEL[tool]])
 		b:GetFontString():SetFontObject(GameFontNormalSmall)
+		DR.StyleButton(b, { small = true })
 		if previous then
 			b:SetPoint("LEFT", previous, "RIGHT", 2, 0)
 		else
@@ -418,23 +419,26 @@ function Editor:BuildToolbar(parent)
 	bar.Undo:SetText(L["Undo"])
 	bar.Undo:GetFontString():SetFontObject(GameFontNormalSmall)
 	bar.Undo:SetScript("OnClick", function() Editor:Undo() end)
+	DR.StyleButton(bar.Undo, { small = true })
 	bar.DeletePiece = CreateFrame("Button", nil, bar, "UIPanelButtonTemplate")
 	bar.DeletePiece:SetSize(76, 20)
 	bar.DeletePiece:SetText(L["Delete piece"])
 	bar.DeletePiece:GetFontString():SetFontObject(GameFontNormalSmall)
 	bar.DeletePiece:SetScript("OnClick", function() Editor:DeleteActivePath() end)
+	DR.StyleButton(bar.DeletePiece, { small = true })
 	bar.Done = CreateFrame("Button", nil, bar, "UIPanelButtonTemplate")
 	bar.Done:SetSize(56, 20)
 	bar.Done:SetText(L["Done"])
 	bar.Done:GetFontString():SetFontObject(GameFontNormalSmall)
 	bar.Done:SetScript("OnClick", function() Editor:Stop() end)
+	DR.StyleButton(bar.Done, { small = true })
 
 	function bar:Refresh()
 		if not state then return end
 		for tool, b in pairs(self.tools) do
 			b.Selected:SetShown(tool == state.tool)
-			b:GetFontString():SetTextColor(tool == state.tool and 1 or 0.85, tool == state.tool and 0.82 or 0.85,
-				tool == state.tool and 0.3 or 0.85)
+			-- the chosen tool in gold, the others plain (font objects: the colour stays under the mouse)
+			DR.ButtonSelected(b, tool == state.tool)
 		end
 		self.Hint:SetText(L[TOOL_HINT[state.tool]])
 		local hintHeight = self.Hint:GetStringHeight()

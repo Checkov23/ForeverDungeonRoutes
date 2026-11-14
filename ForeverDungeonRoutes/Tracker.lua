@@ -29,7 +29,7 @@ end
 
 local function build()
 	frame = CreateFrame("Button", "ForeverDungeonRoutesTracker", UIParent, "BackdropTemplate")
-	DR.StyleBox(frame, 0.85)
+	DR.StyleBox(frame, 0.85, "small")
 	frame:SetSize(WIDTH, 16 + 3 * LINE)
 	frame:SetFrameStrata("MEDIUM")
 	frame:SetClampedToScreen(true)

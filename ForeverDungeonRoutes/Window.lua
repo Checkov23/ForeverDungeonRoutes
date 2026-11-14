@@ -19,6 +19,7 @@ local WHITE = "Interface\\Buttons\\WHITE8X8"
 -- the route choice on top of the sidebar and a head line over the stops
 local ORNATE_HEADER_H, FOOTER_H = 92, 26
 local ORNATE_ROUTE_Y, ORNATE_LIST_Y = 0, -52
+local ORNATE_PAD = 14 -- at the sides: air between the frame's inner line (6 to 7) and the content
 
 local Window = {}
 DR.Window = Window
@@ -32,11 +33,14 @@ local rows = {}
 
 -- Small helpers ---------------------------------------------------------------------------
 
-local function makeButton(parent, text, width)
+-- A button of the game; in the style "Gilded" a gold-framed box, or with an icon (media file) the
+-- icon alone (Theme.lua: StyleButton).
+local function makeButton(parent, text, width, icon)
 	local b = CreateFrame("Button", nil, parent, "UIPanelButtonTemplate")
 	b:SetSize(width, 20)
 	b:SetText(text)
 	b:GetFontString():SetFontObject(GameFontNormalSmall)
+	DR.StyleButton(b, { icon = icon, size = math.floor(width * 0.74 + 0.5), small = true })
 	return b
 end
 
@@ -50,10 +54,11 @@ local function makeDropButton(parent, width)
 	b.Text:SetJustifyH("LEFT")
 	b.Text:SetWordWrap(false)
 	DR.ThemeText(b.Text, "fieldText")
-	b.Arrow = b:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-	b.Arrow:SetPoint("RIGHT", -6, 0)
-	b.Arrow:SetText("v")
-	DR.ThemeText(b.Arrow, "arrow")
+	b.Arrow = b:CreateTexture(nil, "OVERLAY")
+	b.Arrow:SetTexture(MEDIA .. "chevron")
+	b.Arrow:SetSize(12, 12)
+	b.Arrow:SetPoint("RIGHT", -5, 0)
+	DR.ThemeIcon(b.Arrow, "arrow")
 	b:SetScript("OnEnter", function(self)
 		DR.HoverBox(self, true)
 		if self.tooltip then
@@ -136,19 +141,20 @@ local function layout()
 	end
 	local o = ornate()
 	local top, bottom = o and ORNATE_HEADER_H or HEADER_H, o and (PAD + FOOTER_H) or PAD
+	local side = o and ORNATE_PAD or PAD
 	frame.Header:SetHeight(top)
 	local map = view.frame
 	map:ClearAllPoints()
-	map:SetPoint("TOPLEFT", frame, "TOPLEFT", PAD, -top)
+	map:SetPoint("TOPLEFT", frame, "TOPLEFT", side, -top)
 	sidebar:ClearAllPoints()
-	sidebar:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -PAD, -top)
-	sidebar:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -PAD, o and bottom or (PAD + 10))
+	sidebar:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -side, -top)
+	sidebar:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -side, o and bottom or (PAD + 10))
 	sidebar:SetWidth(SIDEBAR_W - PAD)
 	sidebar.Scroll:SetPoint("TOPLEFT", sidebar, "TOPLEFT", 0, o and ORNATE_LIST_Y or LIST_Y)
 	frame.RouteButton:ClearAllPoints()
 	if DR.db.showStops then
 		sidebar:Show()
-		map:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -(SIDEBAR_W + PAD), bottom)
+		map:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -(SIDEBAR_W + side), bottom)
 		frame.RouteButton:SetParent(sidebar)
 		frame.RouteButton:SetFrameLevel(sidebar:GetFrameLevel() + 2)
 		local y = o and ORNATE_ROUTE_Y or ROUTE_Y
@@ -156,7 +162,7 @@ local function layout()
 		frame.RouteButton:SetPoint("TOPRIGHT", sidebar, "TOPRIGHT", 0, y)
 	else
 		sidebar:Hide()
-		map:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -PAD, bottom)
+		map:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -side, bottom)
 		-- without the stop list the route choice sits on the map
 		frame.RouteButton:SetParent(map)
 		frame.RouteButton:SetFrameLevel(map:GetFrameLevel() + 40)
@@ -411,12 +417,13 @@ local function makeRow(index)
 	row.Band:SetAllPoints()
 	row.Band:Hide()
 	row.NextFill = row:CreateTexture(nil, "BACKGROUND", nil, -1)
+	row.NextFill:SetTexture(MEDIA .. "fade-left")
 	row.NextFill:SetAllPoints()
 	row.NextFill:Hide()
 	row.NextBar = row:CreateTexture(nil, "ARTWORK")
 	row.NextBar:SetPoint("TOPLEFT")
 	row.NextBar:SetPoint("BOTTOMLEFT")
-	row.NextBar:SetWidth(2)
+	row.NextBar:SetWidth(3)
 	row.NextBar:Hide()
 
 	row.Badge = row:CreateTexture(nil, "ARTWORK")
@@ -666,15 +673,16 @@ local function refreshSidebar()
 			row.Check:SetShown(done)
 			if done then doneCount = doneCount + 1 end
 			if orn then
-				local b, f, e, c = orn.band, orn.nextFill, orn.nextBar, orn.check
+				-- the next stop on a warm row of its own (nextBase), the others banded
+				local b, f, e, c = i == nextIndex and orn.nextBase or orn.band, orn.nextFill, orn.nextBar, orn.check
 				row.Band:SetColorTexture(b[1], b[2], b[3], b[4])
-				row.NextFill:SetColorTexture(f[1], f[2], f[3], f[4])
+				row.NextFill:SetVertexColor(f[1], f[2], f[3], f[4])
 				row.NextBar:SetColorTexture(e[1], e[2], e[3], e[4])
 				row.Check:SetVertexColor(c[1], c[2], c[3])
 			else
 				row.Check:SetVertexColor(1, 1, 1)
 			end
-			row.Band:SetShown(orn ~= nil and i % 2 == 0 and i ~= nextIndex)
+			row.Band:SetShown(orn ~= nil and (i == nextIndex or i % 2 == 0))
 			row.NextFill:SetShown(orn ~= nil and i == nextIndex)
 			row.NextBar:SetShown(orn ~= nil and i == nextIndex)
 			local k = theme.kinds[stop.kind] or theme.kinds.boss
@@ -709,40 +717,53 @@ local function refreshSidebar()
 end
 
 -- Style "Gilded" ----------------------------------------------------------------------------------
--- A frame of brick and gold: an inner trim, gems at the corners, a title plate on the top edge, the
--- logo with the dungeon as title (click: choose a dungeon) and below its level and entrance, the
--- floors as tabs, a frame around the map, a head line over the stops and a footer with the run time.
--- Hidden in the other styles, where the header holds the dungeon and floor choice and the sidebar the
--- level, the times and the entrance.
+-- The gold frame is the window's backdrop (Theme.lua). Here: a soft shadow around the window, light
+-- from the top and darker edges, stones on the corners, the title plate on the top edge, the logo with
+-- the dungeon as title (click: choose a dungeon) and below its level and entrance, the floors as tabs
+-- standing on the map's frame, the map set in, a head line over the stops and a footer with the run
+-- time. Hidden in the other styles, where the header holds the dungeon and floor choice and the
+-- sidebar the level, the times and the entrance.
 
+-- A divider: a line fading out at both ends (media\rule), coloured by styleOrnate.
 local function makeLine(parent)
 	local line = parent:CreateTexture(nil, "ARTWORK")
+	line:SetTexture(MEDIA .. "rule")
 	line:SetHeight(1)
 	return line
 end
 
+-- The chosen tab: bright text, a gold line at its foot and a soft round light rising from it; the
+-- others quieter, under the mouse a little brighter with a faint line.
 local function tabColors(tab)
 	local t = DR.Theme()
 	local orn = t.ornate
-	if tab.selected then
-		tab:SetBackdropColor(orn.plate[1], orn.plate[2], orn.plate[3], orn.plate[4])
-		tab:SetBackdropBorderColor(orn.trim[1], orn.trim[2], orn.trim[3], orn.trim[4])
-		tab.Text:SetTextColor(t.title[1], t.title[2], t.title[3])
-	else
-		tab:SetBackdropColor(0, 0, 0, 0)
-		tab:SetBackdropBorderColor(0, 0, 0, 0)
-		local c = tab.hover and t.title or t.accent
-		tab.Text:SetTextColor(c[1], c[2], c[3])
-	end
+	local line, glow = orn.tabLine, orn.tabGlow
+	tab.Line:SetColorTexture(line[1], line[2], line[3], line[4])
+	tab.Line:SetAlpha(tab.selected and 1 or 0.4)
+	tab.Line:SetShown(tab.selected or tab.hover)
+	tab.Glow:SetVertexColor(glow[1], glow[2], glow[3], glow[4])
+	tab.Glow:SetShown(tab.selected)
+	local c = tab.selected and t.title or tab.hover and t.accent or t.dim
+	tab.Text:SetTextColor(c[1], c[2], c[3])
 end
 
 local function makeTab(index)
-	local tab = CreateFrame("Button", nil, frame.Ornate, "BackdropTemplate")
-	tab:SetHeight(22)
-	tab:SetBackdrop({ bgFile = WHITE, edgeFile = WHITE, edgeSize = 1 })
+	local tab = CreateFrame("Button", nil, frame.Ornate)
+	tab:SetHeight(24)
+	-- the upper half of the round light (media\glow): brightest in the middle of the tab's foot
+	tab.Glow = tab:CreateTexture(nil, "BACKGROUND")
+	tab.Glow:SetTexture(MEDIA .. "glow")
+	tab.Glow:SetTexCoord(0, 1, 0, 0.5)
+	tab.Glow:SetPoint("BOTTOMLEFT", 6, 0)
+	tab.Glow:SetPoint("BOTTOMRIGHT", -6, 0)
+	tab.Glow:SetHeight(16)
+	tab.Line = tab:CreateTexture(nil, "ARTWORK")
+	tab.Line:SetPoint("BOTTOMLEFT", 4, 0)
+	tab.Line:SetPoint("BOTTOMRIGHT", -4, 0)
+	tab.Line:SetHeight(2)
 	tab.Text = tab:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-	tab.Text:SetPoint("LEFT", 10, 0)
-	tab.Text:SetPoint("RIGHT", -10, 0)
+	tab.Text:SetPoint("LEFT", 10, 1)
+	tab.Text:SetPoint("RIGHT", -10, 1)
 	tab.Text:SetWordWrap(false)
 	DR.ThemeText(tab.Text)
 	tab:SetScript("OnClick", function(self) Window:SelectFloor(self.floor, true) end)
@@ -763,34 +784,89 @@ local function buildOrnate()
 	o:SetAllPoints()
 	o:SetFrameLevel(frame:GetFrameLevel() + 3)
 	frame.Ornate = o
-	o.Trim = CreateFrame("Frame", nil, o, "BackdropTemplate")
-	o.Trim:SetPoint("TOPLEFT", 3, -3)
-	o.Trim:SetPoint("BOTTOMRIGHT", -3, 3)
-	o.Trim:SetBackdrop({ edgeFile = WHITE, edgeSize = 1 })
+	-- the gold frame itself is the window's backdrop (Theme.lua); on the window, under everything in
+	-- it: darker towards the edges and a soft light from the top
+	o.Vignette = frame:CreateTexture(nil, "BACKGROUND", nil, 1)
+	o.Vignette:SetTexture(MEDIA .. "vignette")
+	o.Vignette:SetPoint("TOPLEFT", 4, -4)
+	o.Vignette:SetPoint("BOTTOMRIGHT", -4, 4)
+	o.Glow = frame:CreateTexture(nil, "BACKGROUND", nil, 2)
+	o.Glow:SetTexture(MEDIA .. "fade-top")
+	o.Glow:SetPoint("TOPLEFT", 4, -4)
+	o.Glow:SetPoint("TOPRIGHT", -4, -4)
+	o.Glow:SetHeight(ORNATE_HEADER_H + 24)
+	-- a soft shadow around the window, outside it and 3 lower (light from the top): four corners (one
+	-- picture, turned by its texture coordinates) and four sides
+	o.Shadow = {}
+	local S, DROP = 14, -3
+	for _, part in ipairs({
+		{ "shadow-corner", "BOTTOMRIGHT", "TOPLEFT", { 0, 0, 0, 1, 1, 0, 1, 1 } },
+		{ "shadow-corner", "BOTTOMLEFT", "TOPRIGHT", { 1, 0, 1, 1, 0, 0, 0, 1 } },
+		{ "shadow-corner", "TOPRIGHT", "BOTTOMLEFT", { 0, 1, 0, 0, 1, 1, 1, 0 } },
+		{ "shadow-corner", "TOPLEFT", "BOTTOMRIGHT", { 1, 1, 1, 0, 0, 1, 0, 0 } },
+		{ "fade-bottom", "BOTTOMLEFT", "TOPLEFT", "BOTTOMRIGHT", "TOPRIGHT" },
+		{ "fade-top", "TOPLEFT", "BOTTOMLEFT", "TOPRIGHT", "BOTTOMRIGHT" },
+		{ "fade-right", "TOPRIGHT", "TOPLEFT", "BOTTOMRIGHT", "BOTTOMLEFT" },
+		{ "fade-left", "TOPLEFT", "TOPRIGHT", "BOTTOMLEFT", "BOTTOMRIGHT" },
+	}) do
+		local shadow = frame:CreateTexture(nil, "BACKGROUND", nil, -8)
+		shadow:SetTexture(MEDIA .. part[1])
+		shadow:SetPoint(part[2], frame, part[3], 0, DROP)
+		if type(part[4]) == "table" then
+			shadow:SetSize(S, S)
+			shadow:SetTexCoord(unpack(part[4]))
+		else
+			shadow:SetPoint(part[4], frame, part[5], 0, DROP)
+			if part[1] == "fade-bottom" or part[1] == "fade-top" then
+				shadow:SetHeight(S)
+			else
+				shadow:SetWidth(S)
+			end
+		end
+		o.Shadow[#o.Shadow + 1] = shadow
+	end
+	-- a stone on each corner, set on the middle of the gold band
 	o.Gems = {}
 	for i, point in ipairs({ "TOPLEFT", "TOPRIGHT", "BOTTOMLEFT", "BOTTOMRIGHT" }) do
 		local gem = o:CreateTexture(nil, "OVERLAY")
-		gem:SetTexture(MEDIA .. "diamond")
-		gem:SetSize(14, 14)
-		gem:SetPoint("CENTER", frame, point, 0, 0)
+		gem:SetTexture(MEDIA .. "gem")
+		gem:SetSize(20, 20)
+		gem:SetPoint("CENTER", frame, point, i % 2 == 1 and 2 or -2, i <= 2 and -2 or 2)
 		o.Gems[i] = gem
 	end
-	-- the title plate on the top edge
-	local plate = CreateFrame("Frame", nil, o, "BackdropTemplate")
-	plate:SetPoint("CENTER", frame, "TOP", 0, 0)
-	plate:SetHeight(24)
-	plate:SetBackdrop({ bgFile = WHITE, edgeFile = WHITE, edgeSize = 1 })
+	-- the title plate on the top edge: pointed ends, dark with a gold rim, the addon's name between
+	-- two small stones. Its own frame level above the decoration and opaque, so the window's gold
+	-- band runs under it and never through the name.
+	local plate = CreateFrame("Frame", nil, o)
+	plate:SetFrameLevel(o:GetFrameLevel() + 8)
+	plate:SetPoint("CENTER", frame, "TOP", 0, -2)
+	plate:SetHeight(26)
+	for key, part in pairs({ Left = { 0, 0.25 }, Middle = { 0.25, 0.75 }, Right = { 0.75, 1 } }) do
+		local tex = plate:CreateTexture(nil, "ARTWORK")
+		tex:SetTexture(MEDIA .. "plate")
+		tex:SetTexCoord(part[1], part[2], 0, 1)
+		plate[key] = tex
+	end
+	plate.Left:SetPoint("TOPLEFT")
+	plate.Left:SetPoint("BOTTOMLEFT")
+	plate.Left:SetWidth(26)
+	plate.Right:SetPoint("TOPRIGHT")
+	plate.Right:SetPoint("BOTTOMRIGHT")
+	plate.Right:SetWidth(26)
+	plate.Middle:SetPoint("TOPLEFT", plate.Left, "TOPRIGHT")
+	plate.Middle:SetPoint("BOTTOMRIGHT", plate.Right, "BOTTOMLEFT")
 	plate.Text = plate:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-	plate.Text:SetPoint("CENTER")
+	plate.Text:SetPoint("CENTER", 0, 0)
 	plate.Text:SetText(L["Forever Dungeon Routes"]:upper())
-	DR.ThemeText(plate.Text, "title")
-	plate:SetWidth(plate.Text:GetStringWidth() + 84)
+	-- quieter than the dungeon's name below it
+	DR.ThemeText(plate.Text, "accent")
+	plate:SetWidth(plate.Text:GetStringWidth() + 96)
 	plate.Gems = {}
 	for i, side in ipairs({ "LEFT", "RIGHT" }) do
 		local gem = plate:CreateTexture(nil, "OVERLAY")
-		gem:SetTexture(MEDIA .. "diamond")
-		gem:SetSize(8, 8)
-		gem:SetPoint("CENTER", plate, side, i == 1 and 16 or -16, 0)
+		gem:SetTexture(MEDIA .. "gem")
+		gem:SetSize(10, 10)
+		gem:SetPoint("CENTER", plate, side, i == 1 and 30 or -30, 0)
 		plate.Gems[i] = gem
 	end
 	o.Plate = plate
@@ -798,7 +874,7 @@ local function buildOrnate()
 	o.Logo = o:CreateTexture(nil, "ARTWORK")
 	o.Logo:SetTexture(MEDIA .. "icon")
 	o.Logo:SetSize(34, 34)
-	o.Logo:SetPoint("TOPLEFT", frame, "TOPLEFT", PAD + 6, -20)
+	o.Logo:SetPoint("TOPLEFT", frame, "TOPLEFT", ORNATE_PAD + 2, -20)
 	local title = CreateFrame("Button", nil, o)
 	title:SetPoint("TOPLEFT", o.Logo, "TOPRIGHT", 10, 3)
 	title:SetHeight(24)
@@ -806,17 +882,24 @@ local function buildOrnate()
 	title.Text:SetPoint("LEFT")
 	title.Text:SetWordWrap(false)
 	DR.ThemeText(title.Text, "title")
-	title.Arrow = title:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-	title.Arrow:SetPoint("LEFT", title.Text, "RIGHT", 8, -1)
-	title.Arrow:SetText("v")
-	DR.ThemeText(title.Arrow, "arrow")
+	title.Arrow = title:CreateTexture(nil, "OVERLAY")
+	title.Arrow:SetTexture(MEDIA .. "chevron")
+	title.Arrow:SetSize(14, 14)
+	title.Arrow:SetPoint("LEFT", title.Text, "RIGHT", 6, -1)
+	DR.ThemeIcon(title.Arrow, "arrow")
 	title:SetScript("OnClick", openDungeonMenu)
 	title:SetScript("OnEnter", function(self)
+		local c = DR.Theme().iconHover
+		self.Arrow:SetVertexColor(c[1], c[2], c[3])
 		GameTooltip:SetOwner(self, "ANCHOR_BOTTOM")
 		GameTooltip:SetText(L["Choose a dungeon"], 1, 1, 1, 1, true)
 		GameTooltip:Show()
 	end)
-	title:SetScript("OnLeave", GameTooltip_Hide)
+	title:SetScript("OnLeave", function(self)
+		local c = DR.Theme().arrow
+		self.Arrow:SetVertexColor(c[1], c[2], c[3])
+		GameTooltip:Hide()
+	end)
 	o.Title = title
 	o.Level = o:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
 	o.Level:SetPoint("TOPLEFT", o.Logo, "TOPRIGHT", 10, -24)
@@ -831,16 +914,32 @@ local function buildOrnate()
 	entrance:SetScript("OnEnter", entranceEnter)
 	entrance:SetScript("OnLeave", entranceLeave)
 	o.Entrance = entrance
-	-- the floors as tabs on a line
+	-- the floors as tabs, standing on the map's frame (refreshOrnate)
 	o.Tabs = {}
-	o.TabLine = makeLine(o)
-	o.TabLine:SetPoint("TOPLEFT", frame, "TOPLEFT", PAD, -(ORNATE_HEADER_H - 6))
-	o.TabLine:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -PAD, -(ORNATE_HEADER_H - 6))
-	-- a frame around the map
+	-- the map set into the window: a gold line and outside it a dark one, inside a soft shadow
 	o.MapFrame = CreateFrame("Frame", nil, o, "BackdropTemplate")
 	o.MapFrame:SetPoint("TOPLEFT", view.frame, "TOPLEFT", -1, 1)
 	o.MapFrame:SetPoint("BOTTOMRIGHT", view.frame, "BOTTOMRIGHT", 1, -1)
 	o.MapFrame:SetBackdrop({ edgeFile = WHITE, edgeSize = 1 })
+	o.MapEdge = CreateFrame("Frame", nil, o, "BackdropTemplate")
+	o.MapEdge:SetPoint("TOPLEFT", view.frame, "TOPLEFT", -2, 2)
+	o.MapEdge:SetPoint("BOTTOMRIGHT", view.frame, "BOTTOMRIGHT", 2, -2)
+	o.MapEdge:SetBackdrop({ edgeFile = WHITE, edgeSize = 1 })
+	o.Shade = {}
+	for i, side in ipairs({ "TOP", "BOTTOM", "LEFT", "RIGHT" }) do
+		local shade = o.MapFrame:CreateTexture(nil, "ARTWORK")
+		shade:SetTexture(MEDIA .. "fade-" .. side:lower())
+		if i <= 2 then
+			shade:SetPoint(side .. "LEFT", view.frame, side .. "LEFT", 0, 0)
+			shade:SetPoint(side .. "RIGHT", view.frame, side .. "RIGHT", 0, 0)
+			shade:SetHeight(12)
+		else
+			shade:SetPoint("TOP" .. side, view.frame, "TOP" .. side, 0, 0)
+			shade:SetPoint("BOTTOM" .. side, view.frame, "BOTTOM" .. side, 0, 0)
+			shade:SetWidth(12)
+		end
+		o.Shade[i] = shade
+	end
 	-- the head line over the stops: how many are done
 	o.StopsHead = sidebar:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
 	o.StopsHead:SetPoint("TOPLEFT", sidebar, "TOPLEFT", 2, -32)
@@ -852,20 +951,20 @@ local function buildOrnate()
 	o.StopsLine = makeLine(sidebar)
 	o.StopsLine:SetPoint("TOPLEFT", sidebar, "TOPLEFT", 0, -46)
 	o.StopsLine:SetPoint("TOPRIGHT", sidebar, "TOPRIGHT", 0, -46)
-	-- the footer: the addon, the run time and the best time
+	-- the footer, above the frame's inner line: the addon, the run time and the best time
 	o.FootLine = makeLine(o)
-	o.FootLine:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", PAD, FOOTER_H)
-	o.FootLine:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -PAD, FOOTER_H)
+	o.FootLine:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", ORNATE_PAD, FOOTER_H)
+	o.FootLine:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -ORNATE_PAD, FOOTER_H)
 	o.FootIcon = o:CreateTexture(nil, "ARTWORK")
 	o.FootIcon:SetTexture(MEDIA .. "icon")
-	o.FootIcon:SetSize(16, 16)
-	o.FootIcon:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", PAD + 2, 6)
+	o.FootIcon:SetSize(14, 14)
+	o.FootIcon:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", ORNATE_PAD + 2, 9)
 	o.FootName = o:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
 	o.FootName:SetPoint("LEFT", o.FootIcon, "RIGHT", 6, 0)
 	o.FootName:SetText(L["Forever Dungeon Routes"])
-	DR.ThemeText(o.FootName, "accent")
+	DR.ThemeText(o.FootName, "muted")
 	o.FootTime = o:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
-	o.FootTime:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -(PAD + 14), 10)
+	o.FootTime:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -(ORNATE_PAD + 16), 11)
 	DR.ThemeText(o.FootTime, "muted")
 	local timeHover = CreateFrame("Frame", nil, o)
 	timeHover:SetPoint("TOPLEFT", o.FootTime, "TOPLEFT", -2, 2)
@@ -881,30 +980,55 @@ styleOrnate = function()
 	local o, t = frame.Ornate, DR.Theme()
 	local orn = t.ornate
 	o:SetShown(orn ~= nil)
-	for _, region in ipairs({ o.StopsHead, o.StopsCount, o.StopsLine }) do
+	for _, region in ipairs({ o.StopsHead, o.StopsCount, o.StopsLine, o.Vignette, o.Glow }) do
 		region:SetShown(orn ~= nil)
+	end
+	for _, shadow in ipairs(o.Shadow) do
+		shadow:SetShown(orn ~= nil)
+		if orn then
+			local c = orn.dropShadow
+			shadow:SetVertexColor(c[1], c[2], c[3], c[4])
+		end
 	end
 	frame.DungeonButton:SetShown(orn == nil)
 	sidebar.Level:SetShown(orn == nil)
 	sidebar.Time:SetShown(orn == nil)
 	sidebar.TimeHover:SetShown(orn == nil)
 	frame.Close:ClearAllPoints()
+	frame.Grip:ClearAllPoints()
 	if orn then
-		frame.Close:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -(PAD + 6), -22)
+		frame.Close:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -(ORNATE_PAD + 2), -22)
+		-- the grip smaller and inside the frame's inner line
+		frame.Grip:SetSize(12, 12)
+		frame.Grip:SetPoint("BOTTOMRIGHT", -10, 10)
+		frame.Grip.Icon:SetAlpha(0.6)
+		-- the plate and the corner stones reach beyond the window: keep them on the screen
+		frame:SetClampRectInsets(-9, 9, 13, -9)
 	else
 		frame.Close:SetPoint("RIGHT", frame.Header, "RIGHT", -PAD, -1)
+		frame.Grip:SetSize(16, 16)
+		frame.Grip:SetPoint("BOTTOMRIGHT", -2, 2)
+		frame.Grip.Icon:SetAlpha(1)
+		frame:SetClampRectInsets(0, 0, 0, 0)
+	end
+	if mini then
+		mini.Grip:ClearAllPoints()
+		mini.Grip:SetPoint("BOTTOMRIGHT", orn and -5 or -1, orn and 5 or 1)
+		if view.frame:GetParent() == mini then
+			Window:AnchorMiniMap()
+		end
 	end
 	if not orn then return end
-	local gold, trim = t.border, orn.trim
-	o.Trim:SetBackdropBorderColor(trim[1], trim[2], trim[3], trim[4])
+	local trim = orn.trim
 	o.MapFrame:SetBackdropBorderColor(trim[1], trim[2], trim[3], trim[4])
-	for _, line in ipairs({ o.TabLine, o.FootLine, o.StopsLine }) do
-		line:SetColorTexture(trim[1], trim[2], trim[3], trim[4])
+	o.MapEdge:SetBackdropBorderColor(0, 0, 0, 0.85)
+	for _, line in ipairs({ o.FootLine, o.StopsLine }) do
+		line:SetVertexColor(trim[1], trim[2], trim[3], trim[4])
 	end
-	for _, gem in ipairs(o.Gems) do gem:SetVertexColor(gold[1], gold[2], gold[3]) end
-	o.Plate:SetBackdropColor(orn.plate[1], orn.plate[2], orn.plate[3], orn.plate[4])
-	o.Plate:SetBackdropBorderColor(gold[1], gold[2], gold[3], gold[4])
-	for _, gem in ipairs(o.Plate.Gems) do gem:SetVertexColor(gold[1], gold[2], gold[3]) end
+	local v, g, s = orn.vignette, orn.glow, orn.shade
+	o.Vignette:SetVertexColor(v[1], v[2], v[3], v[4])
+	o.Glow:SetVertexColor(g[1], g[2], g[3], g[4])
+	for _, shade in ipairs(o.Shade) do shade:SetVertexColor(s[1], s[2], s[3], s[4]) end
 	for _, tab in ipairs(o.Tabs) do tabColors(tab) end
 end
 
@@ -917,7 +1041,7 @@ local function refreshOrnate(dungeon, index)
 	o.Title:SetWidth(o.Title.Text:GetStringWidth() + 22)
 	local floors = dungeon.floors
 	local several = #floors > 1
-	local x = PAD
+	local x = ORNATE_PAD
 	for i = 1, math.max(#floors, #o.Tabs) do
 		local tab = o.Tabs[i]
 		if several and i <= #floors then
@@ -928,7 +1052,8 @@ local function refreshOrnate(dungeon, index)
 			local w = math.min(tab.Text:GetStringWidth() + 22, 230)
 			tab:SetWidth(w)
 			tab:ClearAllPoints()
-			tab:SetPoint("BOTTOMLEFT", frame, "TOPLEFT", x, -(ORNATE_HEADER_H - 6))
+			-- standing on the map's frame (2 above the map: its dark and its gold line)
+			tab:SetPoint("BOTTOMLEFT", frame, "TOPLEFT", x, -(ORNATE_HEADER_H - 2))
 			x = x + w + 4
 			tabColors(tab)
 			tab:Show()
@@ -936,7 +1061,7 @@ local function refreshOrnate(dungeon, index)
 			tab:Hide()
 		end
 	end
-	local fits = several and x - 4 <= frame:GetWidth() - PAD
+	local fits = several and x - 4 <= frame:GetWidth() - ORNATE_PAD
 	if several and not fits then
 		for i = 1, #floors do o.Tabs[i]:Hide() end
 	end
@@ -1004,14 +1129,14 @@ local function build()
 	frame.FloorNext:SetPoint("LEFT", frame.FloorButton, "RIGHT", 2, 0)
 	frame.FloorNext:SetScript("OnClick", function() Window:StepFloor(1) end)
 
-	frame.Close = makeButton(header, "X", 22)
+	frame.Close = makeButton(header, "X", 22, "close")
 	frame.Close:SetHeight(22)
 	frame.Close:SetPoint("RIGHT", -PAD, -1)
 	frame.Close:SetScript("OnClick", function() frame:Hide() end)
 	frame.Gear = makeIconButton(header, "gear", 20)
 	frame.Gear:SetPoint("RIGHT", frame.Close, "LEFT", -8, 0)
 	frame.Gear:SetScript("OnClick", openSettingsMenu)
-	frame.Smaller = makeButton(header, "-", 22)
+	frame.Smaller = makeButton(header, "-", 22, "minus")
 	frame.Smaller:SetHeight(22)
 	frame.Smaller:SetPoint("RIGHT", frame.Gear, "LEFT", -8, 0)
 	frame.Smaller:SetScript("OnClick", function() Window:OpenMini(shown.key) end)
@@ -1038,9 +1163,11 @@ local function build()
 	grip.Icon = grip:CreateTexture(nil, "OVERLAY")
 	grip.Icon:SetTexture("Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Up")
 	grip.Icon:SetAllPoints()
+	DR.ThemeIcon(grip.Icon, "grip")
 	grip.Highlight = grip:CreateTexture(nil, "HIGHLIGHT")
 	grip.Highlight:SetTexture("Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Highlight")
 	grip.Highlight:SetAllPoints()
+	DR.ThemeIcon(grip.Highlight, "gripHover")
 	grip:SetScript("OnMouseDown", function() frame:StartSizing("BOTTOMRIGHT") end)
 	grip:SetScript("OnMouseUp", function()
 		frame:StopMovingOrSizing()
@@ -1082,7 +1209,7 @@ end
 
 local function buildMini()
 	mini = CreateFrame("Frame", "ForeverDungeonRoutesMini", UIParent, "BackdropTemplate")
-	DR.StyleBox(mini, 0.9)
+	DR.StyleBox(mini, 0.9, "small")
 	mini:SetFrameStrata("MEDIUM")
 	mini:SetClampedToScreen(true)
 	mini:SetMovable(true)
@@ -1113,11 +1240,11 @@ local function buildMini()
 		mini:StopMovingOrSizing()
 		saveMiniGeometry()
 	end)
-	mini.Close = makeButton(bar, "X", 18)
+	mini.Close = makeButton(bar, "X", 18, "close")
 	mini.Close:SetHeight(16)
 	mini.Close:SetPoint("RIGHT", -3, 0)
 	mini.Close:SetScript("OnClick", function() Window:CloseMini() end)
-	mini.Larger = makeButton(bar, "+", 18)
+	mini.Larger = makeButton(bar, "+", 18, "plus")
 	mini.Larger:SetHeight(16)
 	mini.Larger:SetPoint("RIGHT", mini.Close, "LEFT", -3, 0)
 	mini.Larger:SetScript("OnClick", function() Window:Open(shown.key, shown.floor) end)
@@ -1142,9 +1269,11 @@ local function buildMini()
 	grip.Icon = grip:CreateTexture(nil, "OVERLAY")
 	grip.Icon:SetTexture("Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Up")
 	grip.Icon:SetAllPoints()
+	DR.ThemeIcon(grip.Icon, "grip")
 	grip.Highlight = grip:CreateTexture(nil, "HIGHLIGHT")
 	grip.Highlight:SetTexture("Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Highlight")
 	grip.Highlight:SetAllPoints()
+	DR.ThemeIcon(grip.Highlight, "gripHover")
 	grip:SetScript("OnMouseDown", function() mini:StartSizing("BOTTOMRIGHT") end)
 	grip:SetScript("OnMouseUp", function()
 		mini:StopMovingOrSizing()
@@ -1211,7 +1340,7 @@ function Window:Refresh()
 	local tabs = refreshOrnate(dungeon, index)
 	frame.FloorPrev:ClearAllPoints()
 	if ornate() then
-		frame.FloorPrev:SetPoint("BOTTOMLEFT", frame, "TOPLEFT", PAD, -(ORNATE_HEADER_H - 8))
+		frame.FloorPrev:SetPoint("BOTTOMLEFT", frame, "TOPLEFT", ORNATE_PAD, -(ORNATE_HEADER_H - 6))
 	else
 		frame.FloorPrev:SetPoint("LEFT", frame.DungeonButton, "RIGHT", 8, 0)
 	end
@@ -1385,15 +1514,22 @@ function Window:OpenMini(key)
 		following = true
 	end
 	frame:Hide()
-	local map = view.frame
-	map:SetParent(mini)
-	map:ClearAllPoints()
-	map:SetPoint("TOPLEFT", mini, "TOPLEFT", 3, -MINI_BAR)
-	map:SetPoint("BOTTOMRIGHT", mini, "BOTTOMRIGHT", -3, 3)
+	view.frame:SetParent(mini)
+	self:AnchorMiniMap()
 	frame.RouteButton:Hide()
 	mini:Show()
 	self:ShowDungeon(key)
 	view:Layout()
+end
+
+-- The map inside the small map: under its bar, at the sides inside the frame (in the style "Gilded"
+-- inside the gold band).
+function Window:AnchorMiniMap()
+	local inset = ornate() and 5 or 3
+	local map = view.frame
+	map:ClearAllPoints()
+	map:SetPoint("TOPLEFT", mini, "TOPLEFT", inset, -MINI_BAR)
+	map:SetPoint("BOTTOMRIGHT", mini, "BOTTOMRIGHT", -inset, inset)
 end
 
 -- Closes the small map; the map view goes back into the closed window.

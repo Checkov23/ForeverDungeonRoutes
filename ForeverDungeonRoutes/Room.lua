@@ -84,8 +84,19 @@ function Room:At(key, floor, x, y)
 	return nil
 end
 
--- Reads the subzone. A room of another wing of the instance tells the wing.
+-- Reads the subzone. A room of another wing of the instance tells the wing. Before that the game's
+-- map, which can come a moment after entering (Scarlet Monastery: each wing has its own map).
 function Room:Update()
+	local id = DR.currentInstanceID
+	if DR.currentKey and id and #DR:GetDungeonsForInstance(id) > 1 then
+		local wing = DR:WingFromMap(id)
+		if wing and wing ~= DR.currentKey then
+			DR.currentKey = wing
+			DR.db.wings[id] = wing
+			DR:Fire("DUNGEON_CHANGED", wing) -- calls Room:Update again, now for the right wing
+			return
+		end
+	end
 	local room, key
 	if DR.currentKey then
 		room, key = roomNamed(DR.Safe(GetSubZoneText()))
@@ -109,8 +120,10 @@ frame:RegisterEvent("PLAYER_ENTERING_WORLD")
 frame:SetScript("OnEvent", function(_, event)
 	if not DR.db then return end
 	if event == "ZONE_CHANGED_NEW_AREA" or event == "PLAYER_ENTERING_WORLD" then
-		-- after Core has found the dungeon for the new zone
+		-- after Core has found the dungeon for the new zone, and once more a second later for a map
+		-- the game names late after the loading screen
 		C_Timer.After(0, function() Room:Update() end)
+		C_Timer.After(1, function() Room:Update() end)
 	else
 		Room:Update()
 	end
