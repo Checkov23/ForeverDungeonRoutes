@@ -119,16 +119,66 @@ function DR:WingFromMap(instanceID)
 	return found
 end
 
+-- The wing by the door used (since 1.2.2). In the antechambers of Scarlet Monastery the game names
+-- neither a room nor the wing's map (Oliver, 14.11.2026), but outside, right before the loading
+-- screen, the player stood in one of the wings' portals (Data/Entrances.lua: WingPortals). Where the
+-- player stands on a zone map with such portals is noted before each loading screen and twice a
+-- second outside instances; the portal nearest to it (within PORTAL_NEAR yards, seen in the last
+-- PORTAL_FRESH seconds) tells the wing.
+local PORTAL_NEAR, PORTAL_FRESH = 15, 120
+local outside -- { map, x, y, t }: where the player last stood on a zone map with wing portals
+
+function DR:NoteOutside()
+	if DR.Safe(IsInInstance()) or not C_Map or not C_Map.GetPlayerMapPosition then return end
+	for _, portals in pairs(DR.WingPortals or {}) do
+		local pos = C_Map.GetPlayerMapPosition(portals.map, "player")
+		local x, y = pos and DR.Safe(pos.x), pos and DR.Safe(pos.y)
+		if type(x) == "number" and type(y) == "number" then
+			outside = { map = portals.map, x = x, y = y, t = time() }
+			return
+		end
+	end
+end
+
+-- Used once, on entering: the wing found is remembered (db.wings) and holds after that.
+function DR:WingFromPortal(instanceID)
+	local portals = DR.WingPortals and DR.WingPortals[instanceID]
+	if not portals then return nil end
+	local seen = outside
+	outside = nil
+	if not seen or seen.map ~= portals.map or time() - seen.t > PORTAL_FRESH then return nil end
+	local best, bestDist
+	for _, p in ipairs(portals) do
+		local d = math.sqrt(((seen.x - p.x) * portals.w) ^ 2 + ((seen.y - p.y) * portals.h) ^ 2)
+		if not bestDist or d < bestDist then best, bestDist = p.key, d end
+	end
+	if bestDist and bestDist <= PORTAL_NEAR then return best end
+	return nil
+end
+
+local portalFrame = CreateFrame("Frame")
+portalFrame:RegisterEvent("PLAYER_LEAVING_WORLD")
+portalFrame:SetScript("OnEvent", function() DR:NoteOutside() end)
+local sinceNote = 0
+portalFrame:SetScript("OnUpdate", function(_, elapsed)
+	sinceNote = sinceNote + elapsed
+	if sinceNote >= 0.5 then
+		sinceNote = 0
+		DR:NoteOutside()
+	end
+end)
+
 -- The dungeon the player is in: by instance, and for instances with several wings (Scarlet
 -- Monastery, Dire Maul) by the game's map (since 1.2.0; before, entering showed the wing seen last
--- until a room or a kill told the wing), by position, else the wing seen last.
+-- until a room or a kill told the wing), by the door used (since 1.2.2), by position, else the wing
+-- seen last.
 function DR:FindCurrentDungeon(instanceID)
 	local x, y, positionInstance = self:GetUnitWorldPosition("player")
 	instanceID = instanceID or positionInstance
 	local list = self:GetDungeonsForInstance(instanceID)
 	if #list == 0 then return nil end
 	if #list == 1 then return list[1].key end
-	local byMap = self:WingFromMap(instanceID)
+	local byMap = self:WingFromMap(instanceID) or self:WingFromPortal(instanceID)
 	if byMap then
 		self.db.wings[instanceID] = byMap
 		return byMap

@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.2
+
+- Scarlet Monastery and Dire Maul: the door you came through tells the wing, already in the antechambers. In there
+  the game names neither a room nor the wing's map, so until now the map showed the wing you saw last until the
+  first named room (Scarlet Monastery) or the first kill (Dire Maul). The addon notes where you stood outside right
+  before the loading screen and takes the wing whose portal is there.
+
 ## 1.2.1
 
 - The crosshair on the map finds the dungeon and its wing anew when clicked, and it is there in every dungeon the

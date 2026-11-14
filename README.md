@@ -231,9 +231,12 @@ generated from the game's building files: each named part of a dungeon building 
 placed on the map level where the game's own map shows it. Rooms come with all dungeons except
 Shadowfang Keep, Stormwind Stockade, Razorfen Kraul, Zul'Farrak and Dire Maul (there only the entrance
 of East and West); the game names no rooms there. Between rooms the map follows the boss kills the
-game reports. In Scarlet Monastery and Dire Maul the game's map tells the wing as soon as you enter
-(each wing has a map of its own). There and in Blackrock Spire a kill also tells which wing you are
-in (Lower or Upper Spire), in Scarlet Monastery and Upper Blackrock Spire already the first room.
+game reports. In Scarlet Monastery and Dire Maul the door you came through tells the wing as soon
+as you enter: the addon notes where you stood outside before the loading screen and takes the wing
+whose portal is there (the portals of the classic world, from the game's own trigger table of
+Classic Era), else the game's map of the wing. There and in Blackrock Spire a kill also tells which
+wing you are in (Lower or Upper Spire), in Scarlet Monastery and Upper Blackrock Spire already the
+first room.
 
 Upper Blackrock Spire has no map level in today's map tables. Its stadium, furnace and throne room
 are on Blizzard's old seventh map level of Blackrock Spire, which is still in the WoW: Forever

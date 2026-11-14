@@ -37,3 +37,23 @@ DR.Entrances = {
 	ruinsofahnqiraj = { map = 1451, x = 0.2954, y = 0.995 },
 	templeofahnqiraj = { map = 1451, x = 0.1528, y = 0.9781 },
 }
+
+-- [instanceID] = the doors of the wings outside, for instances with several wings: each wing's portal
+-- (AreaTrigger of the classic world, Classic Era 1.15.9.70576) on the zone map, w and h the zone map's
+-- size in yards (across, down). The game names no wing in the antechambers; the door used tells it.
+DR.WingPortals = {
+	[189] = { map = 1420, w = 4518.7499, h = 3012.4998,
+		{ key = "sm_graveyard", x = 0.848, y = 0.3031 }, -- AreaTrigger 45
+		{ key = "sm_cathedral", x = 0.8529, y = 0.3028 }, -- AreaTrigger 610
+		{ key = "sm_armory", x = 0.857, y = 0.3185 }, -- AreaTrigger 612
+		{ key = "sm_library", x = 0.8538, y = 0.3246 }, -- AreaTrigger 614
+	},
+	[429] = { map = 1444, w = 6949.9998, h = 4633.333,
+		{ key = "diremaul_east", x = 0.6486, y = 0.2943 }, -- AreaTrigger 3183
+		{ key = "diremaul_east", x = 0.672, y = 0.3485 }, -- AreaTrigger 3184
+		{ key = "diremaul_east", x = 0.7651, y = 0.3586 }, -- AreaTrigger 3185
+		{ key = "diremaul_west", x = 0.6031, y = 0.3175 }, -- AreaTrigger 3186
+		{ key = "diremaul_west", x = 0.6032, y = 0.2968 }, -- AreaTrigger 3187
+		{ key = "diremaul_north", x = 0.6292, y = 0.2491 }, -- AreaTrigger 3189
+	},
+}
