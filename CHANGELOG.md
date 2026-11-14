@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.2.1
+
+- The crosshair on the map finds the dungeon and its wing anew when clicked, and it is there in every dungeon the
+  addon knows, also while the map shows another one: one click shows where you are. Handy for whoever loads the
+  addon inside a dungeon and sees another one. Two seconds after login or /reload the addon also looks once more, as
+  the game may name the instance only after the loading screen.
+- Big rooms (the Chapel Gardens in the Cathedral, Ironclad Cove, Shadowforge City, the Spiral of Thorns and a few
+  more) glow faint and still when "Show rooms on the map" is on; before, the whole map pulsed there.
+
 ## 1.2.0
 
 - A new look for the default window style "Gilded": a beveled gold frame with a fine inner line, lit from the top, on

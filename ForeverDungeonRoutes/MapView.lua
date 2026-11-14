@@ -17,6 +17,9 @@ local ROOM_ALPHA = 0.45     -- the room the player is in: lowest opacity of its 
 local ROOM_PULSE = 0.3      -- ... and how much brighter it gets
 local ROOM_COLOR = { 1.00, 0.80, 0.30 }
 local ROOM_GLOW = 1.35      -- the soft glow over a part of a room is this much larger, its edge fades out
+-- A room whose glow covers more of the map than this (Chapel Gardens in the Cathedral, Ironclad Cove, Shadowforge
+-- City, the Spiral of Thorns ...) glows faint and still: pulsing it would pulse the whole map (Oliver, 14.11.2026).
+local BIG_ROOM, BIG_ROOM_ALPHA = 0.3, 0.2
 local ADDON_PATH = "Interface\\AddOns\\ForeverDungeonRoutes\\"
 local MEDIA = ADDON_PATH .. "media\\"
 
@@ -376,7 +379,8 @@ function View:Create(parent)
 	locate.Highlight:SetTexture(MEDIA .. "glow")
 	locate.Highlight:SetBlendMode("ADD")
 	locate.Highlight:SetAllPoints()
-	locate:SetScript("OnClick", function() DR.Window:FollowPlayer() end)
+	-- finds the dungeon and its wing once more (as on entering) and shows where the player is
+	locate:SetScript("OnClick", function() DR:Redetect() end)
 	locate:SetScript("OnEnter", function(button)
 		GameTooltip:SetOwner(button, "ANCHOR_LEFT")
 		GameTooltip:SetText(L["Show where you are"], 1, 1, 1)
@@ -538,7 +542,7 @@ function View:OnUpdate(elapsed)
 			self.ping:Hide()
 		end
 	end
-	if self.numRoomLines > 0 then
+	if self.numRoomLines > 0 and not self.roomStill then
 		self.pulse = (self.pulse or 0) + elapsed
 		local alpha = ROOM_ALPHA + ROOM_PULSE * (0.5 + 0.5 * math.sin(self.pulse * 3))
 		for i = 1, self.numRoomLines do
@@ -580,8 +584,15 @@ local function hideAll(list)
 end
 
 -- The soft glow over the parts of a room on the shown floor, from the list of lines (created as needed, stored
--- before use); returns how many lines of the list are in use.
+-- before use); returns how many lines of the list are in use, and whether the room is big (then its glow is
+-- faint and does not pulse).
 local function glowRoom(view, lines, used, room, color, alpha)
+	local area = 0
+	for _, box in ipairs(room.boxes or {}) do
+		if box[1] == view.floor then area = area + box[4] * box[5] * ROOM_GLOW * ROOM_GLOW end
+	end
+	local big = area > BIG_ROOM * MAP_W * MAP_H
+	if big then alpha = math.min(alpha, BIG_ROOM_ALPHA) end
 	for _, box in ipairs(room.boxes or {}) do
 		if box[1] == view.floor then
 			local line = lines[used + 1]
@@ -595,7 +606,7 @@ local function glowRoom(view, lines, used, room, color, alpha)
 			line:Show()
 		end
 	end
-	return used
+	return used, big
 end
 
 function View:UpdateRoom()
@@ -608,7 +619,7 @@ function View:UpdateRoom()
 	self.status:SetText(L["You are in: %s"]:format(DR.LocText(room, "name")))
 	self.status:Show()
 	self.statusBack:Show()
-	self.numRoomLines = glowRoom(self, self.roomLines, 0, room, ROOM_COLOR, ROOM_ALPHA)
+	self.numRoomLines, self.roomStill = glowRoom(self, self.roomLines, 0, room, ROOM_COLOR, ROOM_ALPHA)
 end
 
 -- Content -------------------------------------------------------------------------------------
@@ -1058,7 +1069,9 @@ end
 
 function View:UpdateGroup()
 	local inside = self.key ~= nil and self.key == DR.currentKey
-	self.locate:SetShown(inside)
+	-- the crosshair inside every dungeon the addon knows, also while the map shows another one: a click finds
+	-- the dungeon again (for a player who loaded the addon inside and sees the wrong one)
+	self.locate:SetShown(inside or DR:InKnownInstance())
 	if not inside or not DR.db.showPlayer then
 		self:HideGroup()
 		return

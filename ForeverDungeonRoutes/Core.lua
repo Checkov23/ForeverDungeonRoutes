@@ -179,8 +179,31 @@ frame:SetScript("OnEvent", function(_, event, arg1, arg2, _, _, arg5)
 		frame:UnregisterEvent("ADDON_LOADED")
 	elseif DR.db then
 		DR:OnZoneChanged()
+		if event == "PLAYER_ENTERING_WORLD" then
+			-- once more a little later: after login or reload inside a dungeon the game may name the instance
+			-- and its map only after the loading screen (since 1.2.1)
+			C_Timer.After(2, function() DR:OnZoneChanged() end)
+		end
 	end
 end)
+
+-- Whether the player is in a dungeon or raid the addon knows (Window: the crosshair stays there).
+function DR:InKnownInstance()
+	local inInstance, instanceType, instanceID = DR.CurrentInstance()
+	return inInstance == true and (instanceType == "party" or instanceType == "raid")
+		and #self:GetDungeonsForInstance(instanceID) > 0
+end
+
+-- Finds the dungeon and its wing once more, as on entering (instance and the game's map, else the rooms and
+-- kills), and the map shows where the player is: an "internal reload" for a player who loaded the addon
+-- inside a dungeon and sees another one (Oliver, 14.11.2026). The crosshair on the map does this.
+function DR:Redetect()
+	self:OnZoneChanged()
+	if self.currentKey then
+		self.Room:Update()
+	end
+	self.Window:FollowPlayer()
+end
 
 -- Called on login, reload and zone changes: find the dungeon the player is in, start a fresh run
 -- when the last one is old, and open the map if wanted.

@@ -80,7 +80,8 @@ replace them.
   patch 7.1), so there is no arrow for you or your group. But the game names the room you are in
   (the text above the minimap). The addon knows where these rooms lie, and the map follows you to
   the level of your room. If you like, the room also glows softly on the map with its name below
-  (gear button, "Show rooms on the map (yours and your group's)", off at first). Between named rooms
+  (gear button, "Show rooms on the map (yours and your group's)", off at first; big rooms such as
+  the Chapel Gardens glow faint and still instead of pulsing). Between named rooms
   the map follows your run: after a boss kill it shows the level of the next open boss.
 - Your group on the map: the rooms of the others in your group light up blue with their names
   (players with the addon; the same gear setting as your own room, off at first). Ticks by hand reach
@@ -139,7 +140,9 @@ By hand:
   level of the room you are in, else of the next open boss.
 - Mouse wheel zooms, dragging moves the map, right-click zooms out. After you choose a level by
   hand the map stays there; the crosshair button shows where you are (your room, else the next
-  open boss) and lets the map follow you again.
+  open boss) and lets the map follow you again. Inside a dungeon it is there also while the map
+  shows another one, and a click finds the dungeon and its wing anew (handy after loading the
+  addon inside a dungeon).
 - Bosses tick themselves off when they die. A click on a boss on the map or in the list ticks it
   off by hand, for your whole group. Shift-click a list entry to show it on the map, Alt-click a
   stop to show it to your group (a ring on their map for half a minute).
