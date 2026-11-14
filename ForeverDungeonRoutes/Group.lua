@@ -99,12 +99,26 @@ function Group:RoomsOn(key, floor)
 	return out
 end
 
--- Group members in a dungeon (for the tooltip of the map): { name = room or false }.
-function Group:Members(key)
+-- The others in a dungeon, sorted by name (the legend of the map, since 1.2.4): { { player, name, room }, ... };
+-- room is a room of Data/Rooms.lua, nil where the game names none for them or names one the addon does not know.
+function Group:InDungeon(key)
 	local out = {}
 	for player, m in pairs(members) do
-		if m.key == key then out[DR.Share.SenderName(player)] = m.room or false end
+		if m.key == key then
+			local found
+			for _, room in ipairs(DR.Rooms[key] or {}) do
+				if room.name == m.room then
+					found = room
+					break
+				end
+			end
+			out[#out + 1] = { player = player, name = DR.Share.SenderName(player), room = found }
+		end
 	end
+	table.sort(out, function(a, b)
+		if a.name ~= b.name then return a.name < b.name end
+		return a.player < b.player
+	end)
 	return out
 end
 

@@ -83,9 +83,12 @@ replace them.
   (gear button, "Show rooms on the map (yours and your group's)", off at first; big rooms such as
   the Chapel Gardens glow faint and still instead of pulsing). Between named rooms
   the map follows your run: after a boss kill it shows the level of the next open boss.
-- Your group on the map: the rooms of the others in your group light up blue with their names
-  (players with the addon; the same gear setting as your own room, off at first). Ticks by hand reach
-  the whole group, and Alt-click shows a stop to all.
+- Your group on the map: the others in your group who also use the addon show as a small blue number
+  in the room the game names for them, with a legend in the lower left corner (number, name, room;
+  grey when they are on another level or the game names no room), so nothing else covers the map. On
+  at first (gear button, "Show your group on the map (players with this addon)"); with "Show rooms on
+  the map" their rooms glow blue as well. Ticks by hand reach the whole group, and Alt-click shows a
+  stop to all.
 - Stop list with checkmarks per character. Bosses tick themselves off when the game reports the
   kill; rares without a boss fight are ticked by hand. "New run" clears the checkmarks, an old run
   is cleared after three hours, and after a reset of the dungeon they start over: when the game
@@ -172,8 +175,8 @@ By hand:
 - Above the stop list: the level of the dungeon in the colour of your level, the run time and your
   best time (the mouse on them shows your last ten runs), and outside the dungeon its entrance. A
   click on the entrance sets the map pin.
-- The gear button holds the settings: stop list, arrows, rooms on the map, map from the game's
-  minimap, tick off bosses automatically, what shows on entering a dungeon (small map, route map or
+- The gear button holds the settings: stop list, arrows, rooms on the map, your group on the map,
+  map from the game's minimap, tick off bosses automatically, what shows on entering a dungeon (small map, route map or
   nothing), button at the minimap, small display in dungeons, route list over the server channel,
   line width, text size of the stop list, window style (gilded, dark, parchment, classic), opacity.
 

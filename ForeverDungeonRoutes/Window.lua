@@ -352,6 +352,8 @@ local function openSettingsMenu(owner)
 			function() setting("showArrows", not DR.db.showArrows) end)
 		root:CreateCheckbox(L["Show rooms on the map (yours and your group's)"], function() return DR.db.showRoom end,
 			function() setting("showRoom", not DR.db.showRoom) end)
+		root:CreateCheckbox(L["Show your group on the map (players with this addon)"], function() return DR.db.showGroup end,
+			function() setting("showGroup", not DR.db.showGroup) end)
 		root:CreateCheckbox(L["Map from the game's minimap"], function() return DR.db.gameMinimap end,
 			function() setting("gameMinimap", not DR.db.gameMinimap) end)
 		root:CreateCheckbox(L["Tick off bosses automatically"], function() return DR.db.autoCheck end,
@@ -1577,7 +1579,7 @@ DR:On("SETTINGS_CHANGED", function(key)
 		layout()
 	elseif key == "gameMinimap" then
 		view:UpdateArt()
-	elseif key == "showRoom" then
+	elseif key == "showRoom" or key == "showGroup" then
 		-- at once, whatever else the refresh below does
 		view:UpdateRoom()
 		view:UpdateMembers()

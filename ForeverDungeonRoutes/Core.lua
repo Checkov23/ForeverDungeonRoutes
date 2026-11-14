@@ -10,8 +10,10 @@ local DB_DEFAULTS = {
 	gameMinimap = false, -- the game's minimap pictures instead of the map art (Data/Minimaps.lua)
 	showPlayer = true,  -- own position and group on the map, where the game reveals it (not in dungeons)
 	showStops = true,   -- stop list beside the map
-	showRoom = false,   -- rooms on the map: the player's own (gold) and the group's (blue, with names); since
-	                    -- 1.0.13 off at first, since 1.0.14 for the group too; the map follows the rooms either way
+	showRoom = false,   -- rooms glow on the map: the player's own (gold) and, with showGroup, the group's (blue);
+	                    -- since 1.0.13 off at first, since 1.0.14 for the group too; the map follows the rooms either way
+	showGroup = true,   -- the others in the group with this addon (since 1.2.4): a small number in their room and a
+	                    -- legend in the corner of the map with name and room
 	onEnter = "mini",   -- on entering a dungeon: "mini" (small map), "window" (the route map) or "none"
 	mini = {},          -- point, relativePoint, x, y, width, height of the small map
 	autoCheck = true,   -- tick bosses off when the game reports the kill

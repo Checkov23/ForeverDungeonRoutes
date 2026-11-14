@@ -344,8 +344,19 @@ function View:Create(parent)
 	self.statusBack:SetPoint("BOTTOMRIGHT", self.status, "BOTTOMRIGHT", 7, -5)
 	self.statusBack:SetColorTexture(0.05, 0.05, 0.06, 0.85)
 	self.statusBack:Hide()
+	-- the legend of the group (since 1.2.4): lower left, above the room name
+	self.overlay = overlay
+	self.legend = overlay:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+	self.legend:SetJustifyH("LEFT")
+	self.legend:SetTextColor(MEMBER_COLOR[1], MEMBER_COLOR[2], MEMBER_COLOR[3])
+	self.legend:Hide()
+	self.legendBack = overlay:CreateTexture(nil, "BACKGROUND")
+	self.legendBack:SetPoint("TOPLEFT", self.legend, "TOPLEFT", -7, 5)
+	self.legendBack:SetPoint("BOTTOMRIGHT", self.legend, "BOTTOMRIGHT", 7, -5)
+	self.legendBack:SetColorTexture(0.05, 0.05, 0.06, 0.85)
+	self.legendBack:Hide()
 	self.roomLines, self.numRoomLines = {}, 0
-	-- rooms of the others in the group with their names, and a stop someone shows to the group
+	-- rooms of the others in the group (their numbers of the legend), and a stop someone shows to the group
 	self.memberLines, self.numMemberLines, self.memberLabels = {}, 0, {}
 	self.ping = createMarker(self, 44, 21)
 	self.ping.Dot:Hide()
@@ -615,11 +626,13 @@ function View:UpdateRoom()
 	self.status:Hide()
 	self.statusBack:Hide()
 	local room = self.key ~= nil and self.key == DR.currentKey and DR.db.showRoom and DR.Room:Get()
-	if not room then return end
-	self.status:SetText(L["You are in: %s"]:format(DR.LocText(room, "name")))
-	self.status:Show()
-	self.statusBack:Show()
-	self.numRoomLines, self.roomStill = glowRoom(self, self.roomLines, 0, room, ROOM_COLOR, ROOM_ALPHA)
+	if room then
+		self.status:SetText(L["You are in: %s"]:format(DR.LocText(room, "name")))
+		self.status:Show()
+		self.statusBack:Show()
+		self.numRoomLines, self.roomStill = glowRoom(self, self.roomLines, 0, room, ROOM_COLOR, ROOM_ALPHA)
+	end
+	self:PlaceLegend()
 end
 
 -- Content -------------------------------------------------------------------------------------
@@ -701,8 +714,13 @@ function View:Refresh()
 end
 
 -- The others in the group ----------------------------------------------------------------------
--- Every addon in the group tells the room its player is in (Group.lua); with the setting showRoom those rooms
--- glow softly in blue with the names, as far as the game names rooms there.
+-- Every addon in the group tells the room its player is in (Group.lua). Since 1.2.4 a setting of its own (showGroup,
+-- on at first), and nothing over the map but a small number in each room someone is in (as far as the game names
+-- rooms there), with a legend in the lower left corner: number, name, room (Oliver, 14.11.2026: nothing over the
+-- map, rather a legend). Where the rooms glow (showRoom) their rooms glow blue as well.
+
+local LEGEND_LINES = 5              -- players in the legend, the others count as "+n"
+local LEGEND_ELSEWHERE = "ff9aa3ad" -- a player on another floor or in a room the game does not name: no number here
 
 local function createLabel(view)
 	local label = CreateFrame("Frame", nil, view.canvas)
@@ -720,16 +738,70 @@ local function createLabel(view)
 	return label
 end
 
+-- Places the legend in the lower left corner, above the name of the player's room where that stands.
+function View:PlaceLegend()
+	local legend = self.legend
+	if not legend then return end
+	legend:ClearAllPoints()
+	if self.status:IsShown() then
+		legend:SetPoint("BOTTOMLEFT", self.status, "TOPLEFT", 0, 11)
+	else
+		legend:SetPoint("BOTTOMLEFT", self.overlay, "BOTTOMLEFT", 14, 13)
+	end
+end
+
+-- The legend: one line per player of the group in the shown dungeon, numbered as on the map; grey where this floor
+-- shows no number for them.
+function View:UpdateLegend(list)
+	if #list == 0 then
+		self.legend:Hide()
+		self.legendBack:Hide()
+		return
+	end
+	local lines = {}
+	for i, m in ipairs(list) do
+		if i > LEGEND_LINES then
+			lines[#lines + 1] = "+" .. (#list - LEGEND_LINES)
+			break
+		end
+		local line = L["%d %s: %s"]:format(i, m.name, m.room and DR.LocText(m.room, "name") or L["room unknown"])
+		if not (m.room and self.floor and DR.Room:OnFloor(m.room, self.floor)) then
+			line = "|c" .. LEGEND_ELSEWHERE .. line .. "|r"
+		end
+		lines[#lines + 1] = line
+	end
+	self.legend:SetText(table.concat(lines, "\n"))
+	self.legend:Show()
+	self.legendBack:Show()
+	self:PlaceLegend()
+end
+
 function View:UpdateMembers()
 	if not self.memberLines then return end
 	self.numMemberLines = 0
 	hideAll(self.memberLines)
 	hideAll(self.memberLabels)
-	-- the same setting as the own room (since 1.0.14): off at first, no glow and no names of the others
-	if not self.key or not self.floor or not DR.db.showRoom then return end
-	for i, entry in ipairs(DR.Group:RoomsOn(self.key, self.floor)) do
-		self.numMemberLines = glowRoom(self, self.memberLines, self.numMemberLines, entry.room, MEMBER_COLOR,
-			MEMBER_ALPHA)
+	local list = self.key and DR.db.showGroup and DR.Group:InDungeon(self.key) or {}
+	self:UpdateLegend(list)
+	if not self.floor then return end
+	-- the numbers of the legend by room, on the shown floor
+	local rooms, byRoom = {}, {}
+	for i, m in ipairs(list) do
+		if m.room and DR.Room:OnFloor(m.room, self.floor) then
+			local entry = byRoom[m.room]
+			if not entry then
+				entry = { room = m.room, numbers = {} }
+				byRoom[m.room] = entry
+				rooms[#rooms + 1] = entry
+			end
+			table.insert(entry.numbers, i)
+		end
+	end
+	for i, entry in ipairs(rooms) do
+		if DR.db.showRoom then
+			self.numMemberLines = glowRoom(self, self.memberLines, self.numMemberLines, entry.room, MEMBER_COLOR,
+				MEMBER_ALPHA)
+		end
 		local u, v = DR.Room:Center(entry.room, self.floor)
 		if u then
 			local label = self.memberLabels[i]
@@ -737,7 +809,7 @@ function View:UpdateMembers()
 				label = createLabel(self)
 				self.memberLabels[i] = label
 			end
-			label.Text:SetText(table.concat(entry.names, ", "))
+			label.Text:SetText(table.concat(entry.numbers, ","))
 			label:Show()
 			self:PlacePin(label, u, v)
 		end

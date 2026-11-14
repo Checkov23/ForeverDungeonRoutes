@@ -176,6 +176,9 @@ if locale == "deDE" then
 	L["You already have this route; it is now active."] = "Diese Route hast du schon, sie ist jetzt aktiv."
 	L["You are in: %s"] = "Du bist in: %s"
 	L["You are not in a group."] = "Du bist in keiner Gruppe."
+	L["Show your group on the map (players with this addon)"] = "Gruppe auf der Karte zeigen (Mitspieler mit diesem Addon)"
+	L["%d %s: %s"] = "%d %s: %s"
+	L["room unknown"] = "Raum unbekannt"
 	L["You are not in a guild."] = "Du bist in keiner Gilde."
 elseif locale == "frFR" then
 	L["%s by %s, %d stops"] = "%s par %s, %d étapes"
@@ -346,6 +349,9 @@ elseif locale == "frFR" then
 	L["You already have this route; it is now active."] = "Vous avez déjà cet itinéraire ; il est maintenant actif."
 	L["You are in: %s"] = "Vous êtes dans : %s"
 	L["You are not in a group."] = "Vous n’êtes pas en groupe."
+	L["Show your group on the map (players with this addon)"] = "Afficher le groupe sur la carte (joueurs ayant cet addon)"
+	L["%d %s: %s"] = "%d %s : %s"
+	L["room unknown"] = "salle inconnue"
 	L["You are not in a guild."] = "Vous n’êtes pas dans une guilde."
 elseif locale == "esES" or locale == "esMX" then
 	L["%s by %s, %d stops"] = "%s de %s, %d paradas"
@@ -516,6 +522,9 @@ elseif locale == "esES" or locale == "esMX" then
 	L["You already have this route; it is now active."] = "Ya tienes esta ruta; ahora está activa."
 	L["You are in: %s"] = "Estás en: %s"
 	L["You are not in a group."] = "No estás en un grupo."
+	L["Show your group on the map (players with this addon)"] = "Mostrar el grupo en el mapa (jugadores con este addon)"
+	L["%d %s: %s"] = "%d %s: %s"
+	L["room unknown"] = "sala desconocida"
 	L["You are not in a guild."] = "No estás en una hermandad."
 elseif locale == "ptBR" then
 	L["%s by %s, %d stops"] = "%s de %s, %d paradas"
@@ -686,6 +695,9 @@ elseif locale == "ptBR" then
 	L["You already have this route; it is now active."] = "Você já tem esta rota; agora ela está ativa."
 	L["You are in: %s"] = "Você está em: %s"
 	L["You are not in a group."] = "Você não está em um grupo."
+	L["Show your group on the map (players with this addon)"] = "Mostrar o grupo no mapa (jogadores com este addon)"
+	L["%d %s: %s"] = "%d %s: %s"
+	L["room unknown"] = "sala desconhecida"
 	L["You are not in a guild."] = "Você não está em uma guilda."
 elseif locale == "ruRU" then
 	L["%s by %s, %d stops"] = "%s от %s, остановок: %d"
@@ -856,6 +868,9 @@ elseif locale == "ruRU" then
 	L["You already have this route; it is now active."] = "У вас уже есть этот маршрут; теперь он активен."
 	L["You are in: %s"] = "Вы здесь: %s"
 	L["You are not in a group."] = "Вы не в группе."
+	L["Show your group on the map (players with this addon)"] = "Показывать группу на карте (игроки с этим аддоном)"
+	L["%d %s: %s"] = "%d %s: %s"
+	L["room unknown"] = "зал неизвестен"
 	L["You are not in a guild."] = "Вы не состоите в гильдии."
 elseif locale == "koKR" then
 	L["%s by %s, %d stops"] = "%s (%s), 지점 %d개"
@@ -1026,6 +1041,9 @@ elseif locale == "koKR" then
 	L["You already have this route; it is now active."] = "이미 있는 경로입니다. 이제 활성화되었습니다."
 	L["You are in: %s"] = "현재 위치: %s"
 	L["You are not in a group."] = "파티에 속해 있지 않습니다."
+	L["Show your group on the map (players with this addon)"] = "지도에 파티 표시 (이 애드온 사용자)"
+	L["%d %s: %s"] = "%d %s: %s"
+	L["room unknown"] = "방 알 수 없음"
 	L["You are not in a guild."] = "길드에 속해 있지 않습니다."
 elseif locale == "zhCN" then
 	L["%s by %s, %d stops"] = "%s（%s），%d 个站点"
@@ -1196,6 +1214,9 @@ elseif locale == "zhCN" then
 	L["You already have this route; it is now active."] = "你已经有这条路线，现在已启用。"
 	L["You are in: %s"] = "你在：%s"
 	L["You are not in a group."] = "你不在队伍中。"
+	L["Show your group on the map (players with this addon)"] = "在地图上显示队友（使用本插件的玩家）"
+	L["%d %s: %s"] = "%d %s：%s"
+	L["room unknown"] = "房间未知"
 	L["You are not in a guild."] = "你不在公会中。"
 elseif locale == "zhTW" then
 	L["%s by %s, %d stops"] = "%s（%s），%d 個站點"
@@ -1366,5 +1387,8 @@ elseif locale == "zhTW" then
 	L["You already have this route; it is now active."] = "你已經有這條路線，現在已啟用。"
 	L["You are in: %s"] = "你在：%s"
 	L["You are not in a group."] = "你不在隊伍中。"
+	L["Show your group on the map (players with this addon)"] = "在地圖上顯示隊友（使用本插件的玩家）"
+	L["%d %s: %s"] = "%d %s：%s"
+	L["room unknown"] = "房間未知"
 	L["You are not in a guild."] = "你不在公會中。"
 end

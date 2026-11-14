@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.2.4
+
+- Your group on the map: the others in your group who also use the addon show as a small blue number in the room
+  the game names for them, with a legend in the lower left corner of the map: number, name and room ("room unknown"
+  where the game names none, grey when they are on another level). Nothing else covers the map. On at first; the gear
+  menu has "Show your group on the map (players with this addon)". Exact positions are not possible: inside dungeons
+  the game gives addons no positions, and it has no dungeon maps of its own to draw the group on.
+- "Show rooms on the map" still lets the rooms glow, your own in gold and, while the group is shown, theirs in blue;
+  their names are in the legend now instead of on the map.
+
 ## 1.2.3
 
 - After an update with /reload only, the game does not know the addon's new pictures yet and showed the window style
