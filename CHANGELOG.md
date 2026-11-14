@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.1
+
+- The four levels below ground in Blackmaw Hold have names in every language of the game now, in the level tabs and
+  in the notes. The game itself does not name them; the names follow Santiago Reyes' maps and the words the game uses
+  for its own places (depths, elders, groves).
+
 ## 1.1.0
 
 - The notes on the routes and maps are in every language of the game now: French, Spanish, Korean and Chinese

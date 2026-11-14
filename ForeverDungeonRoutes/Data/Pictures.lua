@@ -63,22 +63,22 @@ DR.Floors[1029742] = { name = "Festering Grotto", nameDE = "Die Eitergrotte", na
 	frame = { -2.48700801e-05, -0.00217925774, 8.17307384, -0.00320352038, 1.20675355e-05, 12.1648015 },
 	credit = "Santiago Reyes, Atlas de Azeroth: Forever",
 	image = { file = "maps\\blackmawhold_festeringgrotto", right = 1, bottom = 0.667 } }
-DR.Floors[1029743] = { name = "Depths of the Fallen Grove",
+DR.Floors[1029743] = { name = "Depths of the Fallen Grove", nameDE = "Tiefen des Gefallenen Hains", nameFR = "Profondeurs du Bosquet déchu", nameES = "Profundidades de la Arboleda Caída", namePT = "Abismo do Bosque Caído", nameRU = "Глубины Павшей рощи", nameKO = "몰락한 숲의 나락", nameCN = "陨落林地深渊", nameTW = "殞落林地深淵",
 	world = { 2887.53, 2722.68, 3731.36, 3316.97 },
 	frame = { -0.00119483873, -1.38618623e-05, 4.49611396, 5.08652038e-05, 0.00175491323, -4.96786355 },
 	credit = "Santiago Reyes, Atlas de Azeroth: Forever",
 	image = { file = "maps\\blackmawhold_fallengrove", right = 1, bottom = 0.667 } }
-DR.Floors[1029744] = { name = "Depths of the Elders",
+DR.Floors[1029744] = { name = "Depths of the Elders", nameDE = "Tiefen der Ältesten", nameFR = "Profondeurs des Anciens", nameES = "Profundidades de los Ancestros", namePT = "Abismo dos Anciãos", nameRU = "Глубины Старейшин", nameKO = "장로의 나락", nameCN = "长者深渊", nameTW = "長者深淵",
 	world = { 3252.43, 2715.06, 4007.69, 3190.48 },
 	frame = { -0.00135098015, -4.58112629e-05, 5.53940761, -4.63281087e-05, 0.00217396815, -5.7510506 },
 	credit = "Santiago Reyes, Atlas de Azeroth: Forever",
 	image = { file = "maps\\blackmawhold_elders", right = 1, bottom = 0.667 } }
-DR.Floors[1029745] = { name = "Depths of the Burrow",
+DR.Floors[1029745] = { name = "Depths of the Burrow", nameDE = "Tiefen des Baus", nameFR = "Profondeurs du Terrier", nameES = "Profundidades de la Madriguera", namePT = "Abismo da Toca", nameRU = "Глубины Логова", nameKO = "굴의 나락", nameCN = "巢穴深渊", nameTW = "巢穴深淵",
 	world = { 3174.04, 2788.07, 3845.91, 3234.56 },
 	frame = { -0.00157280251, -0.000150303178, 6.47310645, -0.000131901776, 0.00241486827, -6.30895797 },
 	credit = "Santiago Reyes, Atlas de Azeroth: Forever",
 	image = { file = "maps\\blackmawhold_burrow", right = 1, bottom = 0.667 } }
-DR.Floors[1029746] = { name = "Depths of Forbidden Magic",
+DR.Floors[1029746] = { name = "Depths of Forbidden Magic", nameDE = "Tiefen der Verbotenen Magie", nameFR = "Profondeurs de la Magie interdite", nameES = "Profundidades de la Magia Prohibida", namePT = "Abismo da Magia Proibida", nameRU = "Глубины Запретной магии", nameKO = "금지된 마법의 나락", nameCN = "禁忌魔法深渊", nameTW = "禁忌魔法深淵",
 	world = { 3254.06, 2687.04, 3649.82, 3224.76 },
 	frame = { 0.000486125392, 0.0020319731, -7.18438502, 0.00324089969, -0.000711023836, -8.58567472 },
 	credit = "Santiago Reyes, Atlas de Azeroth: Forever",
