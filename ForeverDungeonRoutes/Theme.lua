@@ -40,7 +40,7 @@ DR.THEMES = {
 		-- a beveled gold frame on a dark ground, the title plate on the top edge, gold stones at the
 		-- corners, the dungeon as title, the floors as tabs, the map set in, gold-framed buttons and a
 		-- footer (Window.lua draws these where a style has "ornate"; since 1.2.0, before brick walls)
-		key = "gilded", name = "Gilded",
+		key = "gilded", name = "Gilded", needsMedia = true,
 		window = GILDED_FRAME, small = GILDED_SMALL, bg = { 1, 1, 1 }, border = { 1, 1, 1, 1 }, -- the frame's own colours
 		field = SOLID, fieldBg = { 0.05, 0.037, 0.025, 1 }, fieldBorder = { 0.62, 0.48, 0.21, 1 },
 		hover = { 0.98, 0.82, 0.44, 1 }, fieldText = { 0.95, 0.91, 0.82 }, arrow = { 0.88, 0.72, 0.38 },
@@ -127,8 +127,33 @@ DR.THEMES = {
 local byKey = {}
 for _, theme in ipairs(DR.THEMES) do byKey[theme.key] = theme end
 
+-- The pictures of the style "Gilded" (since 1.2.0, media\frame, panel, chevron ...) are files the game
+-- finds only after a start: after an update with /reload only they are missing, and the game shows such
+-- pictures bright green (Oliver, 14.11.2026). Whether the game has them: SetTexture tells (success).
+local mediaOk, hinted
+function DR.MediaReady(recheck)
+	if mediaOk == nil or recheck then
+		local probe = UIParent:CreateTexture(nil, "BACKGROUND")
+		probe:Hide()
+		mediaOk = probe:SetTexture(MEDIA .. "frame") ~= false and probe:SetTexture(MEDIA .. "panel") ~= false
+			and probe:SetTexture(MEDIA .. "chevron") ~= false
+		probe:SetTexture(nil)
+	end
+	return mediaOk
+end
+
+-- The chosen style; "Gilded" without its pictures shows as "Dark" until the next start, with a hint once.
 function DR.Theme()
-	return byKey[DR.db and DR.db.theme] or DR.THEMES[1]
+	local theme = byKey[DR.db and DR.db.theme] or DR.THEMES[1]
+	if theme.needsMedia and not DR.MediaReady() then
+		if not hinted and DR.db then
+			hinted = true
+			DR:Print(L["Please restart the game once (quit and start again; /reload is not enough): the pictures of the window style %s are new files the game only finds after a start. Until then the window shows in the style %s."],
+				L[theme.name], L[byKey.dark.name])
+		end
+		return byKey.dark
+	end
+	return theme
 end
 
 function DR.ThemeName(theme)
@@ -199,6 +224,8 @@ local BLACK = { 0, 0, 0, 1 }
 local function tintIcon(tex, role)
 	local c = DR.Theme()[role] or WHITE
 	tex:SetVertexColor(c[1], c[2], c[3])
+	-- the arrows of the choice fields are a picture of 1.2.0 (media\chevron): hidden while the game lacks it
+	if role == "arrow" then tex:SetShown(DR.MediaReady()) end
 end
 
 -- An icon tinted in the colour of the style ("icon"; a style without the role leaves it white).

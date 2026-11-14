@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.3
+
+- After an update with /reload only, the game does not know the addon's new pictures yet and showed the window style
+  "Gilded" bright green. The addon now checks whether the game has its pictures; if not, the window shows in the style
+  "Dark" until the next start of the game, and the chat says once to restart the game (quit and start again).
+
 ## 1.2.2
 
 - Scarlet Monastery and Dire Maul: the door you came through tells the wing, already in the antechambers. In there
