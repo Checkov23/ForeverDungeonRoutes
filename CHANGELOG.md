@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.2.6
+
+- Broker bars: with a display addon for LibDataBroker (Titan Panel, ChocolateBar, ElvUI datatexts and the like)
+  "Forever Dungeon Routes" now shows up in its bar with the addon's icon. A click shows or hides the map, a
+  right-click opens the same switches as the minimap button. The addon does not ship LibDataBroker: the display
+  brings it along, and without one nothing changes. Thanks for the suggestion on CurseForge.
+- Controller mode: a menu opens upwards when its button sits in the lower half of the screen, for example in a
+  broker bar at the bottom.
+
 ## 1.2.5
 
 - Controller mode: choosing a map in the dropdown no longer ends with "ForeverDungeonRoutes has been blocked from an

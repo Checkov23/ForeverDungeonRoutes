@@ -371,15 +371,21 @@ function DR.Menu.Open(owner, generator)
 	generator(owner, root)
 	list:Hide()
 	list.owner, list.root = owner, root
-	-- below its button; on the right half of the screen it opens to the left (like the game's menus)
+	-- below its button, above it in the lower half of the screen (a broker bar at the bottom, since 1.2.6);
+	-- on the right half of the screen it opens to the left (like the game's menus)
 	list:ClearAllPoints()
-	local x = owner and owner:GetCenter()
+	local x, y
+	if owner then x, y = owner:GetCenter() end
 	if not x then
 		list:SetPoint("CENTER")
-	elseif x * owner:GetEffectiveScale() > UIParent:GetWidth() * UIParent:GetEffectiveScale() / 2 then
-		list:SetPoint("TOPRIGHT", owner, "BOTTOMRIGHT", 0, -2)
 	else
-		list:SetPoint("TOPLEFT", owner, "BOTTOMLEFT", 0, -2)
+		local scale = owner:GetEffectiveScale() / UIParent:GetEffectiveScale()
+		local side = x * scale > UIParent:GetWidth() / 2 and "RIGHT" or "LEFT"
+		if y * scale < UIParent:GetHeight() / 2 then
+			list:SetPoint("BOTTOM" .. side, owner, "TOP" .. side, 0, 2)
+		else
+			list:SetPoint("TOP" .. side, owner, "BOTTOM" .. side, 0, -2)
+		end
 	end
 	list:Show()
 	show(root)

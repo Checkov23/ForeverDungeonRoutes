@@ -1,9 +1,11 @@
-local _, DR = ...
+local ADDON, DR = ...
 local L = DR.L
 
 -- Round button at the edge of the minimap: a click shows or hides the map, dragging moves it
 -- around the minimap. It can be switched off behind the gear button. Ring, background and
 -- highlight are the game's own minimap button art (file IDs, present in the Forever client).
+-- With a broker display (Titan Panel, ChocolateBar, ElvUI datatexts and the like) the same
+-- clicks work from its bar too (LibDataBroker launcher, since 1.2.6).
 
 local ICON = "Interface\\AddOns\\ForeverDungeonRoutes\\media\\icon"
 local RING, BACKGROUND, HIGHLIGHT = 136430, 136467, 136477
@@ -24,6 +26,31 @@ local function followCursor()
 	local scale = Minimap:GetEffectiveScale()
 	DR.db.minimapAngle = math.deg(math.atan2(py / scale - my, px / scale - mx)) % 360
 	place()
+end
+
+-- a few switches without opening the map
+local function options(_, root)
+	root:CreateTitle(L["Forever Dungeon Routes"])
+	root:CreateButton(L["Show or hide the route map"], function() DR.Window:Toggle() end)
+	root:CreateCheckbox(L["Small display in dungeons"], function() return DR.db.showTracker end, function()
+		DR.db.showTracker = not DR.db.showTracker
+		DR:Fire("SETTINGS_CHANGED", "showTracker")
+	end)
+	root:CreateCheckbox(L["Route list over the server channel"], function() return DR.db.listChannel end, function()
+		DR.db.listChannel = not DR.db.listChannel
+		DR:Fire("SETTINGS_CHANGED", "listChannel")
+		DR.RouteList:SetChannel(DR.db.listChannel)
+	end)
+end
+
+-- minimap button and broker entry: a click shows or hides the map, a right-click opens the switches
+local function click(owner, mouse)
+	if mouse ~= "RightButton" then
+		DR.Window:Toggle()
+		return
+	end
+	GameTooltip:Hide()
+	DR.OpenMenu(owner, options)
 end
 
 local function build()
@@ -47,27 +74,7 @@ local function build()
 	ring:SetTexture(RING)
 	ring:SetSize(50, 50)
 	ring:SetPoint("TOPLEFT")
-	button:SetScript("OnClick", function(self, mouse)
-		if mouse ~= "RightButton" then
-			DR.Window:Toggle()
-			return
-		end
-		GameTooltip:Hide()
-		-- a few switches without opening the map
-		DR.OpenMenu(self, function(_, root)
-			root:CreateTitle(L["Forever Dungeon Routes"])
-			root:CreateButton(L["Show or hide the route map"], function() DR.Window:Toggle() end)
-			root:CreateCheckbox(L["Small display in dungeons"], function() return DR.db.showTracker end, function()
-				DR.db.showTracker = not DR.db.showTracker
-				DR:Fire("SETTINGS_CHANGED", "showTracker")
-			end)
-			root:CreateCheckbox(L["Route list over the server channel"], function() return DR.db.listChannel end, function()
-				DR.db.listChannel = not DR.db.listChannel
-				DR:Fire("SETTINGS_CHANGED", "listChannel")
-				DR.RouteList:SetChannel(DR.db.listChannel)
-			end)
-		end)
-	end)
+	button:SetScript("OnClick", click)
 	button:SetScript("OnDragStart", function(self)
 		GameTooltip:Hide()
 		self:SetScript("OnUpdate", followCursor)
@@ -100,3 +107,25 @@ DR:On("SETTINGS_CHANGED", function(key)
 		DR:UpdateMinimapButton()
 	end
 end)
+
+-- Entry for broker displays. They bring LibDataBroker along themselves; the addon does not ship it and
+-- only uses it when it is there. PLAYER_LOGIN comes after all addons are loaded, also those listed later.
+local function addBroker()
+	local ldb = DR.Broker == nil and LibStub and LibStub("LibDataBroker-1.1", true)
+	if not ldb then return end
+	DR.Broker = ldb:NewDataObject(ADDON, {
+		type = "launcher",
+		label = L["Forever Dungeon Routes"],
+		icon = ICON,
+		iconCoords = { 0.1, 0.9, 0.1, 0.9 },
+		OnClick = click,
+		OnTooltipShow = function(tooltip)
+			tooltip:AddLine(L["Forever Dungeon Routes"], 1, 1, 1)
+			tooltip:AddLine(L["Click: show or hide the map\nRight-click: options"], 0.4, 0.8, 1)
+		end,
+	})
+end
+
+local login = CreateFrame("Frame")
+login:RegisterEvent("PLAYER_LOGIN")
+login:SetScript("OnEvent", addBroker)

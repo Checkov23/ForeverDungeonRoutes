@@ -116,7 +116,8 @@ replace them.
 - Four window styles: gilded (the default: a beveled gold frame on a dark ground, with a title plate,
   the map levels as tabs, gold-framed buttons and a footer), dark, parchment (light like the map art)
   and classic (the game's gold frame).
-- Button at the minimap (right-click for a few switches), slash command and key binding.
+- Button at the minimap (right-click for a few switches), an entry in broker bars (Titan Panel, ChocolateBar,
+  ElvUI datatexts and the like), slash command and key binding.
 - English, German, French, Spanish, Portuguese, Russian, Korean and Chinese (simplified and
   traditional). Names of bosses, dungeons, map levels and rooms come from the game in the language
   of your client; the translations of the addon's own texts are welcome to be corrected (issues).
@@ -139,6 +140,9 @@ By hand:
 - The button at the minimap or `/fdr` opens or closes the map. Drag the button to move it around
   the minimap; right-click it for the small display and the route list channel. There is also a
   key binding (Key Bindings, section AddOns).
+- With a display addon for LibDataBroker (Titan Panel, ChocolateBar, ElvUI datatexts and the like) the addon
+  also shows up in its bar: a click and a right-click work there as on the minimap button. The display brings
+  LibDataBroker along; the addon does not ship it.
 - Choose the dungeon and the map level in the header. Inside a dungeon the window opens on the
   level of the room you are in, else of the next open boss.
 - Mouse wheel zooms, dragging moves the map, right-click zooms out. After you choose a level by
@@ -181,7 +185,8 @@ By hand:
   line width, text size of the stop list, window style (gilded, dark, parchment, classic), opacity.
 - With a controller (the game's controller mode) the menus of the addon show as a list of its own: the game steers
   its own menus there itself and blocks them when an addon opens them. A submenu opens in place with a line back at
-  the top ("< ..."); a click beside the list, Escape or a second click on the same button closes it.
+  the top ("< ..."); a click beside the list, Escape or a second click on the same button closes it. From a button
+  in the lower half of the screen (a broker bar at the bottom) the list opens upwards.
 
 Stratholme, Maraudon and Dire Maul North come with two standard routes each (living and undead
 side, purple and orange side, full clear and tribute run).
