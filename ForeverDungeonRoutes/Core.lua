@@ -276,6 +276,10 @@ SlashCmdList.FOREVERDUNGEONROUTES = function(input)
 			DR:ResetProgress(key)
 			DR:Print(L["Progress reset."])
 		end
+	elseif cmd == "menu" then
+		-- the addon's own menu list of controller mode (Dialogs.lua) also with the mouse, to try it; until /reload
+		DR.ownMenu = not DR.ownMenu
+		DR:Print("menu list as in controller mode: %s", DR.ownMenu and "on" or "off")
 	elseif cmd == "pos" then
 		local _, _, instanceID = DR.CurrentInstance()
 		local x, y, mapInstance = DR:GetUnitWorldPosition("player")

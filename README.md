@@ -179,6 +179,9 @@ By hand:
   map from the game's minimap, tick off bosses automatically, what shows on entering a dungeon (small map, route map or
   nothing), button at the minimap, small display in dungeons, route list over the server channel,
   line width, text size of the stop list, window style (gilded, dark, parchment, classic), opacity.
+- With a controller (the game's controller mode) the menus of the addon show as a list of its own: the game steers
+  its own menus there itself and blocks them when an addon opens them. A submenu opens in place with a line back at
+  the top ("< ..."); a click beside the list, Escape or a second click on the same button closes it.
 
 Stratholme, Maraudon and Dire Maul North come with two standard routes each (living and undead
 side, purple and orange side, full clear and tribute run).
@@ -202,7 +205,8 @@ Your own routes work for every dungeon: choose the dungeon and "New route".
 
 `/fdr` shows or hides the map, `/fdr send` sends the active route to your group, `/fdr way` sets the
 map pin at the entrance of the shown dungeon, `/fdr reset` clears the checkmarks and starts a new
-run, `/fdr pos` prints the position data and the room the game reports (helps with bug reports).
+run, `/fdr pos` prints the position data and the room the game reports (helps with bug reports),
+`/fdr menu` shows the menus as in controller mode also with the mouse, until the next `/reload`.
 
 ## Dungeons with a standard route
 

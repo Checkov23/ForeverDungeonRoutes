@@ -54,7 +54,7 @@ local function build()
 		end
 		GameTooltip:Hide()
 		-- a few switches without opening the map
-		MenuUtil.CreateContextMenu(self, function(_, root)
+		DR.OpenMenu(self, function(_, root)
 			root:CreateTitle(L["Forever Dungeon Routes"])
 			root:CreateButton(L["Show or hide the route map"], function() DR.Window:Toggle() end)
 			root:CreateCheckbox(L["Small display in dungeons"], function() return DR.db.showTracker end, function()

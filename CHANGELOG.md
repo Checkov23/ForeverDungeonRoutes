@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.2.5
+
+- Controller mode: choosing a map in the dropdown no longer ends with "ForeverDungeonRoutes has been blocked from an
+  action only available to the Blizzard UI". In controller mode the game steers its own menus itself and blocks
+  them when an addon opens them, so there all menus of the addon (dungeon, map level, route, gear, minimap button,
+  editor) now show as a list of the addon's own: the same entries, a submenu opens in place with a line back at the
+  top ("< ..."). A click beside the list, Escape or a second click on the same button closes it. With mouse and
+  keyboard nothing changes. Thanks to the players who reported it.
+
 ## 1.2.4
 
 - Your group on the map: the others in your group who also use the addon show as a small blue number in the room

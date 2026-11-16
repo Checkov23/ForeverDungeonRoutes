@@ -227,7 +227,7 @@ end
 local function openRouteMenu(owner)
 	local key = shown.key
 	local current = DR:GetActiveRoute(key)
-	MenuUtil.CreateContextMenu(owner, function(_, root)
+	DR.OpenMenu(owner, function(_, root)
 		root:CreateTitle(L["Routes"])
 		for _, route in ipairs(DR:GetRoutes(key)) do
 			root:CreateRadio(DR:GetRouteName(route), function() return route == DR:GetActiveRoute(key) end,
@@ -293,7 +293,7 @@ local function openRouteMenu(owner)
 end
 
 local function openDungeonMenu(owner)
-	MenuUtil.CreateContextMenu(owner, function(_, root)
+	DR.OpenMenu(owner, function(_, root)
 		local level = DR.PlayerLevel()
 		root:CreateTitle(level and L["Dungeons (level %d)"]:format(level) or L["Dungeons"])
 		local raids -- the raids in a submenu at the end, so the list stays short
@@ -329,7 +329,7 @@ end
 local function openFloorMenu(owner)
 	local dungeon = DR:GetDungeon(shown.key)
 	if not dungeon then return end
-	MenuUtil.CreateContextMenu(owner, function(_, root)
+	DR.OpenMenu(owner, function(_, root)
 		root:CreateTitle(L["Map level"])
 		for i, floor in ipairs(dungeon.floors) do
 			root:CreateRadio(i .. ". " .. DR:GetFloorName(floor), function() return shown.floor == floor end,
@@ -344,7 +344,7 @@ local function setting(key, value)
 end
 
 local function openSettingsMenu(owner)
-	MenuUtil.CreateContextMenu(owner, function(_, root)
+	DR.OpenMenu(owner, function(_, root)
 		root:CreateTitle(L["Settings"])
 		root:CreateCheckbox(L["Stop list beside the map"], function() return DR.db.showStops end,
 			function() setting("showStops", not DR.db.showStops) end)

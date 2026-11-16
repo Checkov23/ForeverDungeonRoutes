@@ -298,7 +298,7 @@ function Editor:OnStopClicked(pin, button)
 	end
 	local stop = stops[index]
 	local key = state.key
-	MenuUtil.CreateContextMenu(pin, function(_, root)
+	DR.OpenMenu(pin, function(_, root)
 		local shown = DR.LocText(stop, "name") or ""
 		root:CreateTitle(shown ~= "" and shown or L["Stop"])
 		root:CreateButton(L["Rename"], function()
