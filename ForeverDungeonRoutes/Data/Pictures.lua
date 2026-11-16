@@ -38,6 +38,11 @@ DR.Floors[1029701] = { name = "The Drowned City", nameDE = "Die Versunkene Stadt
 	frame = { -3.44032576e-05, -0.000591689328, 1.70637256, -0.000778133752, -6.22158621e-05, -9.65997596 },
 	credit = "Santiago Reyes, Atlas de Azeroth: Forever",
 	image = { file = "maps\\drownedcity", right = 1, bottom = 0.667 } }
+DR.Floors[1029702] = { name = "Ataal'Byzal", nameFR = "Ataal’Byzal", namePT = "Atal'Byzal", nameRU = "Атал'Байзал", nameKO = "아탈바이잘", nameCN = "阿塔尔拜扎尔", nameTW = "阿塔拜佐",
+	world = { -13790.97, 2415.45, -13283.76, 2907.67 },
+	frame = { 0.00185345066, -0.00145505076, 29.4635405, -0.00219185131, -0.00271341026, -21.9499762 },
+	credit = "Santiago Reyes, Atlas de Azeroth: Forever",
+	image = { file = "maps\\drownedcity_atalbyzal", right = 1, bottom = 0.667 } }
 DR.Floors[1030391] = { name = "Krol'dok Stronghold", nameDE = "Feste Krol'dok", nameFR = "Bastion Krol’dok", nameES = "Bastión Krol'dok", namePT = "Fortaleza de Krol'Dok", nameRU = "Крепость Крол'док", nameKO = "크롤도크 보루", nameCN = "克罗多克要塞", nameTW = "克羅多克要塞",
 	world = { -7838.04, -5142.26, -6625.65, -3350.54 },
 	frame = { -1.66400088e-05, -0.000569247816, -2.03759388, -0.00082965958, 3.41339902e-06, -5.48547463 },
@@ -135,6 +140,7 @@ DR.Rooms.dalaran = {
 DR.Rooms.drownedcity = {
 	{ name = "Abyssal Dais", nameDE = "Abgrundpodium", nameFR = "Estrade Abyssale", nameES = "Estrado Abisal", namePT = "Tribuna Abissal", nameRU = "Пучинный помост", nameKO = "심연의 연단", nameCN = "深渊祭台", nameTW = "深淵講臺", boxes = { { 1029701, 0.1928, 0.5078, 118.8655, 138.916, 0.07 } } },
 	{ name = "Altar of the Serpent", nameDE = "Altar der Schlange", nameFR = "Autel du Serpent", nameES = "Altar de la Serpiente", namePT = "Altar da Serpente", nameRU = "Святилище змеи", nameKO = "뱀의 제단", nameCN = "巨蛇祭坛", nameTW = "毒蛇祭壇", boxes = { { 1029701, 0.5479, 0.3256, 138.6764, 121.5515, 0.07 } } },
+	{ name = "Ataal'Byzal", nameFR = "Ataal’Byzal", namePT = "Atal'Byzal", nameRU = "Атал'Байзал", nameKO = "아탈바이잘", nameCN = "阿塔尔拜扎尔", nameTW = "阿塔拜佐", boxes = { { 1029702, 0.3195, 0.7702, 82.6733, 81.3688, 0.6281 }, { 1029702, 0.6308, 0.2408, 61.7751, 203.0106, 0.6281 }, { 1029702, 0.5513, 0.4639, 154.5963, 149.409, 0.6281 }, { 1029702, 0.4507, 0.6535, 199.7534, 230.7992, 0.6281 }, { 1029702, 0.6584, 0.3535, 73.2074, 96.5259, 0.6281 }, { 1029702, 0.678, 0.1336, 69.6049, 86.0317, 0.6281 }, { 1029702, 0.2857, 0.7784, 73.675, 73.2082, 0.6281 }, { 1029702, 0.6736, 0.5583, 117.4785, 117.1486, 0.6281 }, { 1029702, 0.723, 0.5631, 4.8918, 4.7464, 0.6281 }, { 1029702, 0.6489, 0.4798, 4.8918, 4.7463, 0.6281 }, { 1029702, 0.6791, 0.6225, 2.9567, 5.7745, 0.6281 } } },
 	{ name = "Deep Archives", nameDE = "Archive der Tiefe", nameFR = "Archives des Profondeurs", nameES = "Archivos de las Profundidades", namePT = "Arquivos Profundos", nameRU = "Глубинные архивы", nameKO = "심층 기록 보관소", nameCN = "深渊档案馆", nameTW = "深海文庫", boxes = { { 1029701, 0.5437, 0.6737, 138.6764, 34.729, 0.07 }, { 1029701, 0.5575, 0.7656, 158.4874, 86.8225, 0.07 }, { 1029701, 0.5906, 0.8465, 99.0546, 17.3645, 0.07 } } },
 	{ name = "Eternal Amphitheater", nameDE = "Ewiges Amphitheater", nameFR = "Amphitéâtre Éternel", nameES = "Anfiteatro Eterno", namePT = "Anfiteatro Eterno", nameRU = "Вечный амфитеатр", nameKO = "영원의 투기장", nameCN = "永恒竞技场", nameTW = "永恆露天劇場", boxes = { { 1029701, 0.3111, 0.5202, 118.8655, 104.187, 0.07 } } },
 	{ name = "Flooded Shrine", nameDE = "Überfluteter Schrein", nameFR = "Sanctuaire Inondé", nameES = "Santuario Inundado", namePT = "Santuário Inundado", nameRU = "Затопленное святилище", nameKO = "침수된 제단", nameCN = "积水神殿", nameTW = "淹沒聖壇", boxes = { { 1029701, 0.5275, 0.53, 118.8655, 86.8225, 0.07 } } },

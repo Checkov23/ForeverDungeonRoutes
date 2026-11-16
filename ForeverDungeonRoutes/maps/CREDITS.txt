@@ -1,5 +1,5 @@
 Map pictures in this folder (hallofthanes, ruinsoflordaeron, excavationsite, dalaran,
-dalaran_underbelly, drownedcity, kroldok, shapersterrace, alcazprison,
+dalaran_underbelly, drownedcity, drownedcity_atalbyzal, kroldok, shapersterrace, alcazprison,
 alcazprison_maximumsecurity, blackmawhold, blackmawhold_festeringgrotto, blackmawhold_fallengrove,
 blackmawhold_elders, blackmawhold_burrow, blackmawhold_forbiddenmagic): Santiago Reyes,
 Atlas de Azeroth: Forever

@@ -58,8 +58,9 @@ replace them.
   Elemental and ticks itself off. Mana Wraith is not a boss in any guide and has no stop.
 - The five newer dungeons (The Drowned City, Krol'dok Stronghold, Alcaz Prison, Blackmaw Hold, The
   Shaper's Terrace, levels 35 to 60, in the game client since November 7): all of them show the maps
-  of Santiago Reyes (Alcaz Prison with both of its levels, Blackmaw Hold since 1.1.0 with six: outside,
-  the Festering Grotto and four levels below ground, where the map does not switch levels by itself).
+  of Santiago Reyes (Alcaz Prison with both of its levels, The Drowned City since 1.2.7 with the sunken
+  temple Ataal'Byzal as a second level, Blackmaw Hold since 1.1.0 with six: outside, the Festering Grotto
+  and four levels below ground, where the map does not switch levels by itself).
   Their bosses tick themselves off and their rooms light up where the game names them. Each has a route
   from run videos (the minimap during each fight, matched with the game's own minimap) and guides: The
   Drowned City since 1.0.7, Krol'dok Stronghold since 1.0.10, Alcaz Prison since 1.0.12, The Shaper's
@@ -278,8 +279,8 @@ the boss positions in the raids from the game's dungeon journal (in Zul'Gurub fr
 and the skulls of its map). The raid paths are searched over the walkable floors in the game's
 files, around lava and deep water.
 
-The maps of all nine new Forever dungeons, of the Underbelly of Dalaran, both levels of Alcaz Prison
-and all six levels of Blackmaw Hold are by Santiago Reyes,
+The maps of all nine new Forever dungeons, of the Underbelly of Dalaran, of Ataal'Byzal in The Drowned
+City, both levels of Alcaz Prison and all six levels of Blackmaw Hold are by Santiago Reyes,
 from his [Atlas de Azeroth: Forever](https://asguevara433.wixsite.com/srmaps), used with his permission in the
 versions with his watermark.
 
@@ -293,7 +294,7 @@ are placed after warcraft.wiki.gg ([Highland Horror](https://warcraft.wiki.gg/wi
 [Lyn the Ignored](https://warcraft.wiki.gg/wiki/Lyn_the_Ignored)).
 In City of Dalaran the places of Mana Devourer, Unstable Sentinel and Arcanic Enigma and the way out of the sewers come from the video guide by Jurdi ([YouTube](https://www.youtube.com/watch?v=BT_73jJlqNo), beta footage): the minimap during each fight, matched with the game's own minimap; the turn towards the surface after [wow.gg](https://wow.gg/guides/city-of-dalaran).
 The rough route of The Drowned City takes the area of each boss from the video guide by Uncas ([YouTube](https://www.youtube.com/watch?v=rJU4PkcrRuk)): the area name the game shows above the minimap during each fight. The way to the hidden room of the Primeval Elemental comes from the written guides of [Wowhead](https://www.wowhead.com/forever/guide/the-drowned-city-dungeon-overview-location-rewards) and [Mobalytics](https://mobalytics.gg/wow-forever/profile/fierce-sun-30v6cf/dungeons/drowned-city-complete-dungeon-guide); no map or route from them.
-The rough route of Krol'dok Stronghold places the bosses after two video guides, by Ahmpy ([YouTube](https://www.youtube.com/watch?v=J6vwcCBZMVI), first clear) and by Uncas ([YouTube](https://www.youtube.com/watch?v=ahZZrnzXjng)): the minimap during each fight, matched with the game's own minimap; the boss order and the place of Tunk come from Uncas' written guide on [Mobalytics](https://mobalytics.gg/wow-forever/profile/fierce-sun-30v6cf/dungeons/krol-dok-stronghold-complete-dungeon-guide); no map or route from them.
+The rough route of Krol'dok Stronghold places the bosses after two video guides, by Ahmpy ([YouTube](https://www.youtube.com/watch?v=J6vwcCBZMVI), first clear) and by Uncas ([YouTube](https://www.youtube.com/watch?v=ahZZrnzXjng)): the minimap during each fight, matched with the game's own minimap; the boss order and the place of Tunk come from Uncas' written guide on [Mobalytics](https://mobalytics.gg/wow-forever/profile/fierce-sun-30v6cf/dungeons/krol-dok-stronghold-complete-dungeon-guide); no map or route from them. Since 1.2.7 Slavecrusher Grox stands in the middle of the area east of the entrance where he wanders back and forth in the game (marked by a player who saw him there), between the ends of two side roads off the main road.
 The rough route of Alcaz Prison places the bosses after the video guide by Ahmpy ([YouTube](https://www.youtube.com/watch?v=TQ7lSDvQnPs), first clear): the minimap during each fight, matched with the game's own minimap, the level from the area name the game shows; the notes on Wrex's key, Katerina's prisoners, Zarla Ober and Commander Folkar come from the written guide by [ConquestCapped](https://conquestcapped.com/guides/wow-forever/wow-forever-alcaz-prison-guide/); no map or route from them.
 The rough route of The Shaper's Terrace places the bosses after the video guide by Ahmpy ([YouTube](https://www.youtube.com/watch?v=0rSXtUIYa7o), first clear): the minimap during each fight, matched with the game's own minimap, the area name the game shows as a check; Cinder, the console bosses and Titanosaur were checked in three more runs in 1.1.0 (Merfin, Magemis, Nekrage); no map or route from them. Since 1.1.0 the boss spots of the new dungeons were compared across more sources: the maps in the guides of Icy Veins, Mobalytics and Warcraft Tavern, the pins of the addons NaowhForever, MapUtils, DungeonsForever and Forever Dungeon Scout, the enemies of Keystone.guru and Forever Dungeon Tools, the NPC positions on Wowhead, and more run videos (Uncas, Merfin, Magemis, Nekrage, Ahmpy); only the places were taken, no map, picture, drawing or code from them. The route of Blackmaw Hold follows Ahmpy's first run ([YouTube](https://www.youtube.com/watch?v=ehrR3BSNQM0)); Impaan the Imprisoner is placed after DungeonsForever only.
 

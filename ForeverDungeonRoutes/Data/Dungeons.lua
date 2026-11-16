@@ -33,7 +33,7 @@ DR.Dungeons = {
 		name = "Scarlet Monastery: Graveyard", nameDE = "Scharlachrotes Kloster: Friedhof", nameFR = "Monastère écarlate: Cimetière", nameES = "Monasterio Escarlata: Cementerio", namePT = "Monastério Escarlate: Cemitério", nameRU = "Монастырь Алого ордена: Кладбище", nameKO = "붉은십자군 수도원: 무덤", nameCN = "血色修道院：墓地", nameTW = "血色修道院：墓地" },
 	{ key = "sm_library", instanceID = 189, floors = { 303 }, levels = { 34, 40 },
 		name = "Scarlet Monastery: Library", nameDE = "Scharlachrotes Kloster: Bibliothek", nameFR = "Monastère écarlate: Bibliothèque", nameES = "Monasterio Escarlata: Biblioteca", namePT = "Monastério Escarlate: Biblioteca", nameRU = "Монастырь Алого ордена: Библиотека", nameKO = "붉은십자군 수도원: 도서관", nameCN = "血色修道院：图书馆", nameTW = "血色修道院：圖書館" },
-	{ key = "drownedcity", instanceID = 2970, floors = { 1029701 }, levels = { 35, 40 },
+	{ key = "drownedcity", instanceID = 2970, floors = { 1029701, 1029702 }, levels = { 35, 40 },
 		name = "The Drowned City", nameDE = "Die Versunkene Stadt", nameFR = "La cité Submergée", nameES = "La Ciudad Sumergida", namePT = "A Cidade Afogada", nameRU = "Затонувший город", nameKO = "가라앉은 도시", nameCN = "沉没之城", nameTW = "沉沒之城" },
 	{ key = "sm_armory", instanceID = 189, floors = { 304 }, levels = { 37, 43 },
 		name = "Scarlet Monastery: Armory", nameDE = "Scharlachrotes Kloster: Waffenkammer", nameFR = "Monastère écarlate: Armurerie", nameES = "Monasterio Escarlata: Arsenal", namePT = "Monastério Escarlate: Armaria", nameRU = "Монастырь Алого ордена: Оружейная", nameKO = "붉은십자군 수도원: 무기고", nameCN = "血色修道院：军械库", nameTW = "血色修道院：軍械庫" },

@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.2.7
+
+- The Drowned City: a second map level, Ataal'Byzal, the sunken temple of the Primeval Elemental, on a map by
+  Santiago Reyes. The map switches to it when the game names the area; the Primeval Elemental now stands on the
+  round platform in there, and the city map marks the spot where you dive down.
+- Krol'dok Stronghold: Slavecrusher Grox wanders back and forth east of the entrance, between the ends of two side
+  roads off the main road. His stop moved to the middle of that area; the route goes down the lower road and back up
+  the upper one to the main road.
+
+After the update, restart the game once (quit and start again): the new map file is not loaded by /reload.
+
 ## 1.2.6
 
 - Broker bars: with a display addon for LibDataBroker (Titan Panel, ChocolateBar, ElvUI datatexts and the like)
