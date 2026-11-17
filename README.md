@@ -207,7 +207,9 @@ By hand:
   in the lower half of the screen (a broker bar at the bottom) the list opens upwards.
 
 Stratholme, Maraudon and Dire Maul North come with two standard routes each (living and undead
-side, purple and orange side, full clear and tribute run).
+side, purple and orange side, full clear and tribute run). In Stratholme the map picks the side by itself: on
+Crusader's Square the living side, on The Gauntlet the undead side, and a boss fight of the other side switches over
+as well. Own routes are never switched.
 
 ## Own routes
 
@@ -297,7 +299,8 @@ the boss positions in the raids from the game's dungeon journal (in Zul'Gurub fr
 and the skulls of its map). The raid paths are searched over the walkable floors in the game's
 files, around lava and deep water. In 1.3.0 every route was checked once more against the game's own
 minimap pictures and building files: paths on walkable floor, bosses in their rooms, level changes at
-the stairs and ramps where you really take them.
+the stairs and ramps where you really take them. The short tips at the bosses follow the WoW: Forever
+guides of method.gg, wow.gg and Warcraft Tavern and the Warcraft Wiki, in our own words.
 
 The maps of all nine new Forever dungeons, of the Underbelly of Dalaran, of Ataal'Byzal in The Drowned
 City, both levels of Alcaz Prison and all six levels of Blackmaw Hold are by Santiago Reyes,

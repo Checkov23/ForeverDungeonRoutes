@@ -217,6 +217,63 @@ function DR:IsBuiltIn(route)
 	return route ~= nil and route.builtin == true
 end
 
+-- Standard routes for separate parts of one dungeon (Stratholme: the living side on one floor, the undead side on the
+-- other). Since 1.3.1 the addon switches between them by itself: on a floor shown where the active standard route has
+-- no stop, and at the fight or kill of a boss that only the other route has. Only between standard routes whose stops
+-- share no floor, so variants of the same ground (Maraudon, Dire Maul North, the raids' "all bosses" and "efficient")
+-- stay as chosen, and never away from an own route. A run clock that is running goes over to the new route; the ticks
+-- belong to one route and stay behind with the old one.
+local function stopFloors(route)
+	local floors = {}
+	for _, stop in ipairs(route and route.stops or {}) do
+		if stop.floor then floors[stop.floor] = true end
+		for _, other in ipairs(stop.alt or {}) do floors[other] = true end
+	end
+	return floors
+end
+
+function DR:RouteHasStopOn(route, floor)
+	return floor ~= nil and stopFloors(route)[floor] == true
+end
+
+local function separateParts(a, b)
+	local floorsA = stopFloors(a)
+	for floor in pairs(stopFloors(b)) do
+		if floorsA[floor] then return false end
+	end
+	return true
+end
+
+-- The standard route for another part of the dungeon that passes test, when the active one is a standard route
+-- that does not; also returns the active route.
+local function otherPart(key, test)
+	local active = DR:GetActiveRoute(key)
+	if not DR:IsBuiltIn(active) or test(active) then return nil end
+	for _, route in ipairs(DR:GetBuiltInRoutes(key)) do
+		if route ~= active and test(route) and separateParts(active, route) then
+			return route, active
+		end
+	end
+	return nil
+end
+
+local function switchPart(key, from, to)
+	local progress = DR.cdb and DR.cdb.progress[key]
+	if progress and progress.routeId == from.id and progress.started and not progress.finished then
+		DR.cdb.progress[key] = { routeId = to.id, done = {}, time = time(), started = progress.started }
+	end
+	DR:SetActiveRoute(key, to.id)
+	return to
+end
+
+-- A floor is shown (window or small map): the standard route with stops there, if the active one has none (see
+-- above). Returns the route switched to, or nil.
+function DR:MatchRouteToFloor(key, floor)
+	if not key or not floor then return nil end
+	local route, active = otherPart(key, function(r) return self:RouteHasStopOn(r, floor) end)
+	return route and switchPart(key, active, route)
+end
+
 function DR:GetRouteName(route)
 	if not route then return "" end
 	if route.builtin then
@@ -405,6 +462,14 @@ local function killedBefore(key, route, encounterID, encounterName)
 	return false
 end
 
+-- The fight or kill of a boss that only the standard route for another part of the dungeon has (Stratholme): that
+-- route becomes the active one (see MatchRouteToFloor). Returns the route switched to, or nil.
+function DR:MatchRouteToEncounter(key, encounterID, encounterName)
+	if not key then return nil end
+	local route, active = otherPart(key, function(r) return hasEncounter(r, encounterID, encounterName) end)
+	return route and switchPart(key, active, route)
+end
+
 -- A boss of the current dungeon died: tick its stop off. In instances with several wings
 -- (Scarlet Monastery, Dire Maul) a kill that belongs to another wing shows where the player
 -- is, since the game gives no position there: the current dungeon switches to that wing.
@@ -422,6 +487,7 @@ function DR:MarkEncounterKilled(encounterID, encounterName)
 			end
 		end
 	end
+	self:MatchRouteToEncounter(key, encounterID, encounterName)
 	local route = self:GetActiveRoute(key)
 	if not route then return 0 end
 	if killedBefore(key, route, encounterID, encounterName) then
@@ -446,6 +512,7 @@ function DR:OnEncounterStart(encounterID, encounterName)
 	encounterID, encounterName = DR.Safe(encounterID), DR.Safe(encounterName)
 	if type(encounterID) ~= "number" or not self.currentKey then return end
 	if type(encounterName) ~= "string" then encounterName = nil end
+	self:MatchRouteToEncounter(self.currentKey, encounterID, encounterName)
 	local keys = { self.currentKey }
 	for _, wing in ipairs(self:GetDungeonsForInstance(self.currentInstanceID)) do
 		if wing.key ~= self.currentKey then keys[#keys + 1] = wing.key end

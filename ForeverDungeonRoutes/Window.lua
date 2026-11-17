@@ -232,7 +232,14 @@ local function openRouteMenu(owner)
 		root:CreateTitle(L["Routes"])
 		for _, route in ipairs(DR:GetRoutes(key)) do
 			root:CreateRadio(DR:GetRouteName(route), function() return route == DR:GetActiveRoute(key) end,
-				function() DR:SetActiveRoute(key, route.id) end)
+				function()
+					DR:SetActiveRoute(key, route.id)
+					-- a route with no stop on the floor shown opens where it starts (since 1.3.1, Stratholme's sides)
+					local start = DR:GetRouteStartFloor(route)
+					if shown.key == key and start and route.stops[1] and not DR:RouteHasStopOn(route, shown.floor) then
+						Window:SelectFloor(start)
+					end
+				end)
 		end
 		root:CreateDivider()
 		root:CreateButton(L["New route"], newRoute)
@@ -1501,6 +1508,8 @@ function Window:ShowDungeon(key, floor)
 		end
 	end
 	shown.key, shown.floor = key, floor
+	-- since 1.3.1: Stratholme's other side shows its own standard route (Routes.lua)
+	DR:MatchRouteToFloor(key, floor)
 	if newKey then
 		DR:Fire("SHOWN_CHANGED", key)
 	end
@@ -1516,6 +1525,7 @@ function Window:SelectFloor(floor, byHand)
 	end
 	if floor == shown.floor then return end
 	shown.floor = floor
+	DR:MatchRouteToFloor(shown.key, floor)
 	self:Refresh()
 end
 

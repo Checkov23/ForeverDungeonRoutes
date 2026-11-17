@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.3.1
+
+Short tips from guides for many more bosses, shown when you point at a stop, and Stratholme shows the side you are on.
+
+- Stratholme: the map shows the standard route of the side you are on, the living side on Crusader's Square and the
+  undead side on The Gauntlet. A boss fight of the other side switches over as well, and the run time goes on.
+  Choosing a side in the route menu opens its map level. Own routes are never switched; variants on the same ground
+  (Maraudon, Dire Maul North, the raids) stay as chosen.
+- New short tips for 62 bosses, following the WoW: Forever guides of method.gg, wow.gg and Warcraft Tavern: what a
+  group must know so it does not wipe or get stuck, such as the adds to kill first, curses to remove, spells to
+  interrupt and events to start. For example Mr. Smite and Edwin VanCleef (their guards first), Archmage Arugal (do not
+  kill the cursed player), Ambassador Flamelash (stop the fire spirits), Baron Rivendare (kill his skeletons at once),
+  The Drowned City (at least three waves of adds before Deathless Marrow) and most bosses of the new dungeons.
+- Fixed notes: the Avatar of Hakkar starts with the Egg of Hakkar, not the Ancient Egg; Finkle Einhorn is called Pip
+  Quickwit; Immol'thar's pylons shut down when the elementals around them die; Knot Thimblejack makes the ogre suit
+  before you free him; Mekgineer Thermaplugg keeps switching on bomb machines; Lady Anacondra's place varies. In
+  German, the quest giver and the room for Kirtonos carry the game's names.
+- All new tips in every language of the addon. No new files: /reload is enough.
+
 ## 1.3.0
 
 Thank you for more than 100,000 downloads! This version brings wishes from the comments and checks every
