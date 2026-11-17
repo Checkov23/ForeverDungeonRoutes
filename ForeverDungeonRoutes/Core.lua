@@ -11,7 +11,8 @@ local DB_DEFAULTS = {
 	showPlayer = true,  -- own position and group on the map, where the game reveals it (not in dungeons)
 	showStops = true,   -- stop list beside the map
 	showRoom = false,   -- rooms glow on the map: the player's own (gold) and, with showGroup, the group's (blue);
-	                    -- since 1.0.13 off at first, since 1.0.14 for the group too; the map follows the rooms either way
+	                    -- since 1.0.13 off at first, since 1.0.14 for the group too; the map follows the rooms either way,
+	                    -- and since 1.3.0 the name of the player's room stands on the map either way
 	showGroup = true,   -- the others in the group with this addon (since 1.2.4): a small number in their room and a
 	                    -- legend in the corner of the map with name and room
 	onEnter = "mini",   -- on entering a dungeon: "mini" (small map), "window" (the route map) or "none"
@@ -30,6 +31,8 @@ local DB_DEFAULTS = {
 	listScale = 1,      -- text size of the stop list
 	theme = "gilded",   -- window style (Theme.lua); new installs since 0.5.18, a style chosen before stays
 	lineWidth = 4,
+	lineColor = "gradient", -- colour of the route line (since 1.3.0): "gradient" (turquoise to orange), "white",
+	                        -- "magenta" or "cyan" (MapView.lua, LINE_COLORS)
 	alpha = 1,
 	window = {},        -- point, relativePoint, x, y, width, height
 	active = {},        -- [dungeonKey] = routeId ("default" or a user route id)

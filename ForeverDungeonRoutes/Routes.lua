@@ -440,7 +440,8 @@ function DR:MarkEncounterKilled(encounterID, encounterName)
 	return count
 end
 
--- A boss fight starts: was this boss killed earlier in the run, the player is in a new copy.
+-- A boss fight starts: was this boss killed earlier in the run, the player is in a new copy. Since 1.3.0 the map
+-- also shows the floor of the boss (Window.lua), a secret fight shows nothing.
 function DR:OnEncounterStart(encounterID, encounterName)
 	encounterID, encounterName = DR.Safe(encounterID), DR.Safe(encounterName)
 	if type(encounterID) ~= "number" or not self.currentKey then return end
@@ -454,6 +455,20 @@ function DR:OnEncounterStart(encounterID, encounterName)
 			self:NewInstance(key)
 		end
 	end
+	self:Fire("ENCOUNTER_STARTED", encounterID, encounterName)
+end
+
+-- The stop of a route for one of the game's boss fights: the first that is still open, else the first one.
+function DR:GetEncounterStop(key, route, encounterID, encounterName)
+	local first
+	for i, stop in ipairs(route and route.stops or {}) do
+		if stopMatches(stop, encounterID, encounterName) then
+			if not self:IsStopDone(key, route, i) then return stop, i end
+			first = first or i
+		end
+	end
+	if first then return route.stops[first], first end
+	return nil
 end
 
 -- The ticks of the old copy go; the new run started when the player entered.
@@ -636,4 +651,23 @@ function DR:GetNextStopIndex(key, route)
 		end
 	end
 	return nil
+end
+
+-- The bosses down and all bosses of a route (the numbered stops), and how many optional and rare stops are ticked
+-- off besides. The window and the small display count the same since 1.3.0 (the window counted every stop before),
+-- in step with "All bosses down" and the end of a run.
+function DR:CountBosses(key, route)
+	local done, total, optional, rare = 0, 0, 0, 0
+	for i, stop in ipairs(route and route.stops or {}) do
+		local ticked = self:IsStopDone(key, route, i)
+		if stop.kind == "boss" then
+			total = total + 1
+			if ticked then done = done + 1 end
+		elseif ticked and stop.kind == "rare" then
+			rare = rare + 1
+		elseif ticked then
+			optional = optional + 1
+		end
+	end
+	return done, total, optional, rare
 end

@@ -78,29 +78,23 @@ local function build()
 	end)
 end
 
-local function bossCount(key, route)
-	local done, total = 0, 0
-	for i, stop in ipairs(route.stops) do
-		if stop.kind == "boss" then
-			total = total + 1
-			if DR:IsStopDone(key, route, i) then done = done + 1 end
-		end
-	end
-	return done, total
-end
-
+-- Bosses down as in the window (DR:CountBosses, since 1.3.0 the same count there), then the run time; a route
+-- without bosses shows the time alone.
 function Tracker:UpdateTime()
 	if not frame or not frame:IsShown() then return end
 	local key = DR.currentKey
 	local route = key and DR:GetActiveRoute(key)
 	if not route then return end
-	local done, total = bossCount(key, route)
-	local text = done .. "/" .. total
+	local done, total = DR:CountBosses(key, route)
+	local parts = {}
+	if total > 0 then
+		parts[#parts + 1] = done .. "/" .. total
+	end
 	local started, finished = DR:GetRunTimes(key)
 	if started then
-		text = text .. "  " .. DR.FormatDuration((finished or time()) - started)
+		parts[#parts + 1] = DR.FormatDuration((finished or time()) - started)
 	end
-	frame.Count:SetText(text)
+	frame.Count:SetText(table.concat(parts, "  "))
 end
 
 function Tracker:Update()

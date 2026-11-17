@@ -29,6 +29,7 @@ local mini             -- the small map (see "Small map" below)
 local restoreMiniGeometry
 local shown = {}       -- key, floor
 local following = true
+local chosenAt         -- time() when the player last chose a floor by hand (a boss fight then leaves it, since 1.3.0)
 local rows = {}
 
 -- Small helpers ---------------------------------------------------------------------------
@@ -343,14 +344,18 @@ local function setting(key, value)
 	DR:Fire("SETTINGS_CHANGED", key)
 end
 
+-- The colours of the route line (MapView.lua, DR.LineColor), since 1.3.0: the gradient as before, or one colour
+-- that stands out on the drawn maps and on the game's dark minimap pictures alike.
+local LINE_COLOR_CHOICES = { { "gradient", L["Turquoise to orange"] }, { "white", L["White"] },
+	{ "magenta", L["Magenta"] }, { "cyan", L["Cyan"] } }
+
 local function openSettingsMenu(owner)
 	DR.OpenMenu(owner, function(_, root)
 		root:CreateTitle(L["Settings"])
 		root:CreateCheckbox(L["Stop list beside the map"], function() return DR.db.showStops end,
 			function() setting("showStops", not DR.db.showStops) end)
-		root:CreateCheckbox(L["Arrows on the route"], function() return DR.db.showArrows end,
-			function() setting("showArrows", not DR.db.showArrows) end)
-		root:CreateCheckbox(L["Show rooms on the map (yours and your group's)"], function() return DR.db.showRoom end,
+		-- since 1.3.0 the name of the room stands on the map either way, the setting only lets the rooms glow
+		root:CreateCheckbox(L["Rooms glow on the map (yours and your group's)"], function() return DR.db.showRoom end,
 			function() setting("showRoom", not DR.db.showRoom) end)
 		root:CreateCheckbox(L["Show your group on the map (players with this addon)"], function() return DR.db.showGroup end,
 			function() setting("showGroup", not DR.db.showGroup) end)
@@ -373,10 +378,22 @@ local function openSettingsMenu(owner)
 				setting("listChannel", not DR.db.listChannel)
 				DR.RouteList:SetChannel(DR.db.listChannel)
 			end)
-		local width = root:CreateButton(L["Line width"])
+		-- the route line in one submenu (since 1.3.0, before "Line width" here and the arrows on top): width, colour
+		-- and arrows, so the menu has one entry less on top
+		local line = root:CreateButton(L["Route line"])
+		line:CreateTitle(L["Line width"])
 		for _, w in ipairs({ 3, 4, 5, 6 }) do
-			width:CreateRadio(tostring(w), function() return DR.db.lineWidth == w end, function() setting("lineWidth", w) end)
+			line:CreateRadio(tostring(w), function() return DR.db.lineWidth == w end, function() setting("lineWidth", w) end)
 		end
+		line:CreateDivider()
+		line:CreateTitle(L["Color"])
+		for _, choice in ipairs(LINE_COLOR_CHOICES) do
+			line:CreateRadio(choice[2], function() return DR.LineColorKey() == choice[1] end,
+				function() setting("lineColor", choice[1]) end)
+		end
+		line:CreateDivider()
+		line:CreateCheckbox(L["Arrows on the route"], function() return DR.db.showArrows end,
+			function() setting("showArrows", not DR.db.showArrows) end)
 		local size = root:CreateButton(L["Text size of the stop list"])
 		for _, scale in ipairs({ 0.9, 1, 1.15, 1.3 }) do
 			size:CreateRadio(math.floor(scale * 100 + 0.5) .. "%", function() return DR.db.listScale == scale end,
@@ -497,6 +514,21 @@ local function showLastRuns(self)
 	GameTooltip:Show()
 end
 
+-- Bosses down, and the optional and rare stops ticked off besides (mouse on the count, since 1.3.0).
+local function showCount(self)
+	local key = shown.key
+	local route = key and DR:GetActiveRoute(key)
+	if not route then return end
+	local done, total, optional, rare = DR:CountBosses(key, route)
+	if total == 0 then return end
+	GameTooltip:SetOwner(self, "ANCHOR_BOTTOMLEFT")
+	GameTooltip:SetText(L["Bosses down: %d/%d"]:format(done, total), 1, 1, 1)
+	if optional > 0 or rare > 0 then
+		GameTooltip:AddLine(L["+ %d optional, %d rare"]:format(optional, rare), 0.7, 0.7, 0.7)
+	end
+	GameTooltip:Show()
+end
+
 local function entranceEnter(self)
 	local c = DR.Theme().linkHover
 	self.Text:SetTextColor(c[1], c[2], c[3])
@@ -535,6 +567,19 @@ local function buildSidebar()
 	timeHover:SetScript("OnEnter", showLastRuns)
 	timeHover:SetScript("OnLeave", GameTooltip_Hide)
 	sidebar.TimeHover = timeHover
+	-- the bosses down beside the level (since 1.3.0, placeCount; in the style "Gilded" on the head line over the
+	-- stops), the mouse on it tells the optional and rare stops ticked off besides
+	sidebar.Count = sidebar:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
+	sidebar.Count:SetPoint("TOPLEFT", 2, 0)
+	sidebar.Count:SetJustifyH("LEFT")
+	DR.ThemeText(sidebar.Count, "muted")
+	local countHover = CreateFrame("Frame", nil, sidebar)
+	countHover:SetPoint("TOPLEFT", sidebar.Count, "TOPLEFT", -2, 2)
+	countHover:SetPoint("BOTTOMRIGHT", sidebar.Count, "BOTTOMRIGHT", 2, -2)
+	countHover:SetMouseMotionEnabled(true)
+	countHover:SetScript("OnEnter", showCount)
+	countHover:SetScript("OnLeave", GameTooltip_Hide)
+	sidebar.CountHover = countHover
 	-- the way to the entrance, outside the dungeon
 	local entrance = CreateFrame("Button", nil, sidebar)
 	entrance:SetPoint("TOPLEFT", 2, -14)
@@ -611,6 +656,27 @@ local function buildSidebar()
 	sidebar.Toolbar:SetPoint("BOTTOMRIGHT", 0, 0)
 end
 
+-- Dark, Parchment, Classic (since 1.3.0): the bosses down beside the level. Where the times on that line leave no
+-- room for it (longer words in some languages), it stands on the line below at the right, free inside the dungeon.
+local function placeCount()
+	local count, text = sidebar.Count, sidebar.countText or ""
+	count:ClearAllPoints()
+	if text == "" then
+		count:SetText("")
+		return
+	end
+	local level, times = sidebar.Level:GetText() or "", sidebar.Time:GetText() or ""
+	local x = level ~= "" and (2 + sidebar.Level:GetStringWidth() + 8) or 2
+	count:SetText(level ~= "" and ("\194\183  " .. text) or text)
+	local room = sidebar:GetWidth() - x - (times ~= "" and (sidebar.Time:GetStringWidth() + 6) or 0)
+	if count:GetStringWidth() <= room then
+		count:SetPoint("TOPLEFT", sidebar, "TOPLEFT", x, 0)
+	else
+		count:SetText(text)
+		count:SetPoint("TOPRIGHT", sidebar, "TOPRIGHT", 0, -14)
+	end
+end
+
 local function refreshSidebar()
 	local key = shown.key
 	local route = DR:GetActiveRoute(key)
@@ -645,6 +711,7 @@ local function refreshSidebar()
 
 	local y = 0
 	frame.Ornate.StopsCount:SetText("")
+	sidebar.countText = nil
 	if not route then
 		sidebar.Empty:SetText(L["No route for this dungeon yet. Create one or import a route text."])
 		sidebar.Empty:Show()
@@ -656,7 +723,7 @@ local function refreshSidebar()
 		local labels = DR:GetStopLabels(route)
 		local nextIndex = DR:GetNextStopIndex(key, route)
 		local theme = DR.Theme()
-		local height, doneCount = rowHeight(), 0
+		local height = rowHeight()
 		for i, stop in ipairs(route.stops) do
 			local row = rows[i] or makeRow(i)
 			row:SetHeight(height)
@@ -673,7 +740,6 @@ local function refreshSidebar()
 			row.Name:SetText(row.stopName)
 			local done = DR:IsStopDone(key, route, i)
 			row.Check:SetShown(done)
-			if done then doneCount = doneCount + 1 end
 			if orn then
 				-- the next stop on a warm row of its own (nextBase), the others banded
 				local b, f, e, c = i == nextIndex and orn.nextBase or orn.band, orn.nextFill, orn.nextBar, orn.check
@@ -699,7 +765,10 @@ local function refreshSidebar()
 			row:Show()
 			y = y - height
 		end
-		frame.Ornate.StopsCount:SetText(#route.stops > 0 and (doneCount .. "/" .. #route.stops) or "")
+		-- bosses down of all bosses, as the small display counts (since 1.3.0; before every stop counted here)
+		local doneBosses, bosses = DR:CountBosses(key, route)
+		sidebar.countText = bosses > 0 and (doneBosses .. "/" .. bosses) or ""
+		frame.Ornate.StopsCount:SetText(sidebar.countText)
 		if #route.stops == 0 then
 			sidebar.Empty:SetText(L["This route has no stops yet."])
 			sidebar.Empty:Show()
@@ -716,6 +785,7 @@ local function refreshSidebar()
 		end
 	end
 	sidebar.List:SetHeight(math.max(10, -y))
+	placeCount()
 end
 
 -- Style "Gilded" ----------------------------------------------------------------------------------
@@ -950,6 +1020,14 @@ local function buildOrnate()
 	o.StopsCount = sidebar:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
 	o.StopsCount:SetPoint("TOPRIGHT", sidebar, "TOPRIGHT", -2, -32)
 	DR.ThemeText(o.StopsCount, "muted")
+	-- the mouse on the count: the optional and rare stops ticked off besides (since 1.3.0)
+	local countHover = CreateFrame("Frame", nil, sidebar)
+	countHover:SetPoint("TOPLEFT", o.StopsCount, "TOPLEFT", -2, 2)
+	countHover:SetPoint("BOTTOMRIGHT", o.StopsCount, "BOTTOMRIGHT", 2, -2)
+	countHover:SetMouseMotionEnabled(true)
+	countHover:SetScript("OnEnter", showCount)
+	countHover:SetScript("OnLeave", GameTooltip_Hide)
+	o.CountHover = countHover
 	o.StopsLine = makeLine(sidebar)
 	o.StopsLine:SetPoint("TOPLEFT", sidebar, "TOPLEFT", 0, -46)
 	o.StopsLine:SetPoint("TOPRIGHT", sidebar, "TOPRIGHT", 0, -46)
@@ -982,9 +1060,11 @@ styleOrnate = function()
 	local o, t = frame.Ornate, DR.Theme()
 	local orn = t.ornate
 	o:SetShown(orn ~= nil)
-	for _, region in ipairs({ o.StopsHead, o.StopsCount, o.StopsLine, o.Vignette, o.Glow }) do
+	for _, region in ipairs({ o.StopsHead, o.StopsCount, o.CountHover, o.StopsLine, o.Vignette, o.Glow }) do
 		region:SetShown(orn ~= nil)
 	end
+	sidebar.Count:SetShown(orn == nil)
+	sidebar.CountHover:SetShown(orn == nil)
 	for _, shadow in ipairs(o.Shadow) do
 		shadow:SetShown(orn ~= nil)
 		if orn then
@@ -1376,6 +1456,7 @@ function Window:UpdateTime()
 	end
 	sidebar.Time:SetText(table.concat(parts, "  "))
 	frame.Ornate.FootTime:SetText(table.concat(parts, "   \194\183   "))
+	placeCount()
 end
 
 -- The floor of the next boss still open in the route of a dungeon.
@@ -1431,6 +1512,7 @@ function Window:SelectFloor(floor, byHand)
 	if not floor or not dungeon or DR:GetDungeonForFloor(floor) ~= dungeon then return end
 	if byHand then
 		following = false
+		chosenAt = time()
 	end
 	if floor == shown.floor then return end
 	shown.floor = floor
@@ -1612,6 +1694,20 @@ DR:On("ROOM_CHANGED", function(room)
 		Window:SelectFloor(DR.Room:MainFloor(room))
 	else
 		view:UpdateRoom()
+	end
+end)
+-- A boss fight starts (since 1.3.0): the map (window or small map) shows the floor of that boss's stop in the active
+-- route, where the game names no room (Blackmaw Hold, Alcaz Prison) the only sign of where the player is. Not within
+-- HAND_CHOICE seconds after a floor chosen by hand: that is the player looking at the map right now (a tab, the
+-- arrows, a box on the map), and a pull must not take the floor away while they read it; a choice older than that is
+-- from an earlier part of the run.
+local HAND_CHOICE = 30
+DR:On("ENCOUNTER_STARTED", function(encounterID, encounterName)
+	if not Window:IsShown() or not shown.key or shown.key ~= DR.currentKey then return end
+	if chosenAt and time() - chosenAt < HAND_CHOICE then return end
+	local stop = DR:GetEncounterStop(shown.key, DR:GetActiveRoute(shown.key), encounterID, encounterName)
+	if stop and stop.floor and not DR.OnFloor(stop, shown.floor) then
+		Window:SelectFloor(stop.floor)
 	end
 end)
 DR:On("STOP_HOVER", function(index)

@@ -1,12 +1,12 @@
 # Forever Dungeon Routes
 
-A dungeon map with routes for **World of Warcraft: Forever**, for all 34 dungeons and the 7 raids:
-ready routes for the 25 classic dungeons and the 7 raids, maps by Santiago Reyes and routes for all 9 new Forever
+A dungeon map with routes for **World of Warcraft: Forever**, for all 34 dungeons and seven classic raids:
+ready routes for the 25 classic dungeons and the seven raids, maps by Santiago Reyes and routes for all 9 new Forever
 dungeons (Blackmaw Hold since 1.1.0 with all six of its levels), boss order and notes in every language of the game,
 bosses that tick themselves off, an editor for your own routes in the spirit of
 Mythic Dungeon Tools, and a route list where players put up their routes for everyone.
 
-![Inside the Deadmines: the first boss ticked off by the kill, the room you are in lights up, the run time counts](docs/screenshots/dungeon.png)
+![Inside the Deadmines: the mouse on the next boss shows how to beat it, the first boss ticked itself off, the room you are in is named below the map, the run time counts](docs/screenshots/dungeon.png)
 
 | Browsing Blackrock Depths: level and entrance | Editing a copy of a standard route |
 |---|---|
@@ -15,22 +15,28 @@ Mythic Dungeon Tools, and a route list where players put up their routes for eve
 | ![Blackrock Depths, Shadowforge City, The Grim Guzzler lit up, the small display above the window](docs/screenshots/room.png) | ![Scholomance with the question whether to take over a route](docs/screenshots/share.png) |
 | **Scholomance: blue squares lead to the other map levels** | **German game client** |
 | ![Scholomance, The Upper Study](docs/screenshots/scholomance.png) | ![The Deadmines with German texts (Todesminen)](docs/screenshots/german.png) |
-| **New in WoW: Forever: Ruins of Lordaeron, map by Santiago Reyes, route since 1.1.0 from guides and addons** | **The Hall of Thanes: the way leads through the Dark Iron cave** |
-| ![Ruins of Lordaeron on the map by Santiago Reyes (Atlas de Azeroth: Forever) with the rough route Approximate (from guides), King's Alley lit up](docs/screenshots/new-lordaeron.png) | ![The Hall of Thanes on the map by Santiago Reyes (Atlas de Azeroth: Forever) with the rough route, Infurnus on the side path](docs/screenshots/new-thanes.png) |
+| **The `?` on the map explains the signs; the route line in a colour of your choice** | **Your group on the map** |
+| ![Razorfen Downs with the route line in magenta (gear button, Route line) and the key to the signs open at the ? in the lower right corner](docs/screenshots/signs.png) | ![The Deadmines in a group: Aldric's number in the Goblin Foundry, his room glowing blue, the legend with Aldric and Bruni in the lower left, the small display above the window](docs/screenshots/group.png) |
+| **New in WoW: Forever: Ruins of Lordaeron, map by Santiago Reyes, route from guides and addons** | **The Hall of Thanes: the way leads through the Dark Iron cave** |
+| ![Ruins of Lordaeron on the map by Santiago Reyes (Atlas de Azeroth: Forever) with the rough route Approximate (from guides), King's Alley lit up](docs/screenshots/new-lordaeron.png) | ![The Hall of Thanes on the map by Santiago Reyes (Atlas de Azeroth: Forever) with the rough route, Infurnus on the way through the Dark Iron cave](docs/screenshots/new-thanes.png) |
 | **City of Dalaran: the rough route over two levels, three bosses down** | **The small map when you enter a dungeon** |
-| ![City of Dalaran on the map by Santiago Reyes with the rough route, Atrexis, Arcane Anomaly and Mana Devourer ticked off, Arcanic Enigma as an optional stop](docs/screenshots/new-dalaran.png) | ![The small map in the Deadmines, slightly transparent at the edge of the screen, with + and X](docs/screenshots/small-map.png) |
-| **The Drowned City: map by Santiago Reyes, rough route since 1.0.7** | **Alcaz Prison: map by Santiago Reyes, rough route since 1.0.12** |
-| ![The Drowned City on the map by Santiago Reyes (Atlas de Azeroth: Forever) with the rough route Approximate (from guides), the optional Primeval Elemental as a plus](docs/screenshots/new-drownedcity.png) | ![Alcaz Prison on the map by Santiago Reyes (Atlas de Azeroth: Forever) with the rough route Approximate (from guides), the upper level](docs/screenshots/new-alcazprison.png) |
-| **The Shaper's Terrace: route since 1.0.13, Cinder and King Op since 1.1.0** | **Krol'dok Stronghold: rough route since 1.0.10** |
+| ![City of Dalaran on the map by Santiago Reyes with the rough route, Atrexis, Arcane Anomaly and Mana Devourer ticked off, Lyn the Ignored as an optional stop](docs/screenshots/new-dalaran.png) | ![The small map in the Deadmines, slightly transparent at the edge of the screen, with + and X](docs/screenshots/small-map.png) |
+| **The Drowned City: map by Santiago Reyes, route from guides and videos** | **Alcaz Prison: map by Santiago Reyes, the upper of two levels** |
+| ![The Drowned City on the map by Santiago Reyes (Atlas de Azeroth: Forever) with the rough route Approximate (from guides), the blue square where you dive down to Ataal'Byzal](docs/screenshots/new-drownedcity.png) | ![Alcaz Prison on the map by Santiago Reyes (Atlas de Azeroth: Forever) with the rough route Approximate (from guides), the upper level](docs/screenshots/new-alcazprison.png) |
+| **The dungeon list, coloured by your level** | **The Drowned City: Ataal'Byzal, the sunken temple below** |
+| ![The dungeon list of a level 38 character in The Drowned City, sorted by level, the names coloured like quests; shown here as the list of controller mode, with the mouse the game's own menu has the same entries](docs/screenshots/dungeon-list.png) | ![The Drowned City, the second map level Ataal'Byzal on the map by Santiago Reyes, Ataal'Byzal lit up, the side path to the Primeval Elemental on its round platform](docs/screenshots/new-atalbyzal.png) |
+| **The Shaper's Terrace: optional bosses as a plus, King Op as a rare** | **Krol'dok Stronghold: map by Santiago Reyes, rough route** |
 | ![The Shaper's Terrace on the map by Santiago Reyes (Atlas de Azeroth: Forever) with the route Approximate (from guides), the console bosses as optional stops](docs/screenshots/new-shapersterrace.png) | ![Krol'dok Stronghold on the map by Santiago Reyes (Atlas de Azeroth: Forever) with the rough route Approximate (from guides)](docs/screenshots/new-kroldok.png) |
-| **Blackmaw Hold since 1.1.0: Santiago Reyes' map with the first route** | **Six levels: down in the Depths of the Burrow** |
-| ![Blackmaw Hold on the map by Santiago Reyes (Atlas de Azeroth: Forever) with the first route, the Festering Grotto and the gate below ground](docs/screenshots/new-blackmawhold.png) | ![Blackmaw Hold, the level Depths of the Burrow by Santiago Reyes with the Blackmaw Behemoth and the way down to Varrox](docs/screenshots/new-blackmawhold-depths.png) |
+| **Blackmaw Hold: Santiago Reyes' map, the level outside** | **Six levels: down in the Depths of the Burrow** |
+| ![Blackmaw Hold on the map by Santiago Reyes (Atlas de Azeroth: Forever) with the route, the Festering Grotto and the gate below ground](docs/screenshots/new-blackmawhold.png) | ![Blackmaw Hold, the level Depths of the Burrow by Santiago Reyes with the Blackmaw Behemoth and the way down to Varrox](docs/screenshots/new-blackmawhold-depths.png) |
 | **Or from the game's own minimap pictures (gear button)** | **The Hall of Thanes from the minimap pictures** |
 | ![Ruins of Lordaeron from the game's minimap pictures, King's Alley lit up](docs/screenshots/new-lordaeron-minimap.png) | ![The Hall of Thanes from the game's minimap pictures, Anvilmar's Rest lit up](docs/screenshots/new-thanes-minimap.png) |
 | **The other window styles (gear button): Dark** | **Parchment** |
 | ![The Deadmines in the window style Dark, the small display above the window](docs/screenshots/style-dark.png) | ![The Deadmines in the window style Parchment, light like the map art](docs/screenshots/style-parchment.png) |
 | **Raids with paths: Molten Core** | **Zul'Gurub, the route "Full clear"** |
 | ![Molten Core with the standard route from the entrance to Ragnaros](docs/screenshots/raid-moltencore.png) | ![Zul'Gurub with the route Full clear, optional bosses marked](docs/screenshots/raid-zulgurub.png) |
+| **Onyxia's Lair, a raid of WoW: Forever** | **Naxxramas: one map level per quarter** |
+| ![Onyxia's Lair with the standard route from the entrance to Onyxia; the mouse on her stop in the list: every raid member needs the Drakefire Amulet to enter](docs/screenshots/raid-onyxia.png) | ![Naxxramas, map level 2 of 6, the Arachnid Quarter, with the route to Maexxna](docs/screenshots/raid-naxxramas.png) |
 | **The minimap pictures for every dungeon: the Deadmines** | **Blackrock Depths, The Grim Guzzler lit up** |
 | ![The Deadmines from the game's minimap pictures, with the standard route](docs/screenshots/minimap-deadmines.png) | ![Blackrock Depths from the game's minimap pictures, The Grim Guzzler lit up](docs/screenshots/minimap-blackrockdepths.png) |
 
@@ -44,7 +50,8 @@ replace them.
 - Own map window with the game's dungeon map art. WoW: Forever has no dungeon maps of its own, but
   the art files are still in the game client; the addon draws them itself. No other addon needed.
 - Standard routes for all 25 classic dungeons. The line color runs from the entrance to the last
-  boss, arrows show the walking direction, dashed lines mark side paths.
+  boss, arrows show the walking direction, dashed lines mark side paths. Since 1.3.0 the line can also
+  have one colour of your choice: white, magenta or cyan (gear button, "Route line").
 - The four new dungeons of WoW: Forever (The Hall of Thanes, Ruins of Lordaeron, Excavation Site:
   Wetlands, City of Dalaran): the game has no map art for them, so the addon shows the maps of
   Santiago Reyes (Atlas de Azeroth: Forever), used with his permission; City of Dalaran with the
@@ -60,34 +67,39 @@ replace them.
   Shaper's Terrace, levels 35 to 60, in the game client since November 7): all of them show the maps
   of Santiago Reyes (Alcaz Prison with both of its levels, The Drowned City since 1.2.7 with the sunken
   temple Ataal'Byzal as a second level, Blackmaw Hold since 1.1.0 with six: outside, the Festering Grotto
-  and four levels below ground, where the map does not switch levels by itself).
+  and four levels below ground, where the game names no rooms; since 1.3.0 the map switches there to the
+  level of a boss when its fight starts).
   Their bosses tick themselves off and their rooms light up where the game names them. Each has a route
   from run videos (the minimap during each fight, matched with the game's own minimap) and guides: The
   Drowned City since 1.0.7, Krol'dok Stronghold since 1.0.10, Alcaz Prison since 1.0.12, The Shaper's
   Terrace since 1.0.13 and Blackmaw Hold since 1.1.0. Bosses that need to be summoned (the console
   bosses of The Shaper's Terrace, with Power Crystals) or that many groups skip are optional stops.
-- All seven raids (Molten Core to Naxxramas): the game's map art, rooms and areas, bosses that tick
+- Seven classic raids (Molten Core to Naxxramas): the game's map art, rooms and areas, bosses that tick
   themselves off, and standard routes from the entrance from boss to boss over the walkable floors;
   Zul'Gurub and Ahn'Qiraj with two each ("Full clear" and "Efficient"). In the dungeon list they sit
-  in the submenu "Raids".
+  in the submenu "Raids". Of these, only Onyxia's Lair is part of WoW: Forever. It opens on December 9,
+  together with the two new raids Barrow Deeps and Hyjal Summit, which are not in the addon yet. The
+  other six are not open in WoW: Forever; their maps come from the map files in the game client.
 - Or the game's own minimap pictures (gear button, "Map from the game's minimap"): every dungeon and
   raid put together from the pictures the minimap shows there, one map per level, with the same
   routes, rooms and notes.
 - Numbered bosses in route order, rares (`R`), optional bosses (`+`) and notes (`!`) with keys,
-  events and quest items. Blue squares switch to the next map level. Where the drawn map of a dungeon
+  events and quest items. Blue squares switch to the next map level. The round `?` beside the
+  crosshair on the map explains these signs. Where the drawn map of a dungeon
   comes from a later version of the game and marks a boss that WoW: Forever does not have there, a
   note says so.
 - Where you are, as well as the game allows: WoW gives addons no position inside dungeons (since
   patch 7.1), so there is no arrow for you or your group. But the game names the room you are in
-  (the text above the minimap). The addon knows where these rooms lie, and the map follows you to
-  the level of your room. If you like, the room also glows softly on the map with its name below
-  (gear button, "Show rooms on the map (yours and your group's)", off at first; big rooms such as
-  the Chapel Gardens glow faint and still instead of pulsing). Between named rooms
-  the map follows your run: after a boss kill it shows the level of the next open boss.
+  (the text above the minimap). The addon knows where these rooms lie: the name of your room stands
+  below the map ("You are in: ..."), and the map follows you to the level of your room. If you like,
+  the room also glows softly on the map (gear button, "Rooms glow on the map (yours and your
+  group's)", off at first; big rooms such as the Chapel Gardens glow faint and still instead of
+  pulsing). Between named rooms the map follows your run: after a boss kill it shows the level of
+  the next open boss, and when a boss fight starts the level of that boss.
 - Your group on the map: the others in your group who also use the addon show as a small blue number
   in the room the game names for them, with a legend in the lower left corner (number, name, room;
   grey when they are on another level or the game names no room), so nothing else covers the map. On
-  at first (gear button, "Show your group on the map (players with this addon)"); with "Show rooms on
+  at first (gear button, "Show your group on the map (players with this addon)"); with "Rooms glow on
   the map" their rooms glow blue as well. Ticks by hand reach the whole group, and Alt-click shows a
   stop to all.
 - Stop list with checkmarks per character. Bosses tick themselves off when the game reports the
@@ -147,15 +159,17 @@ By hand:
 - Choose the dungeon and the map level in the header. Inside a dungeon the window opens on the
   level of the room you are in, else of the next open boss.
 - Mouse wheel zooms, dragging moves the map, right-click zooms out. After you choose a level by
-  hand the map stays there; the crosshair button shows where you are (your room, else the next
-  open boss) and lets the map follow you again. Inside a dungeon it is there also while the map
+  hand the map stays there (a boss fight that starts more than half a minute later shows the level
+  of that boss); the crosshair button shows where you are (your room, else the next open boss) and
+  lets the map follow you again. The `?` beside it explains the signs on the map. Inside a dungeon it is there also while the map
   shows another one, and a click finds the dungeon and its wing anew (handy after loading the
   addon inside a dungeon).
 - Bosses tick themselves off when they die. A click on a boss on the map or in the list ticks it
   off by hand, for your whole group. Shift-click a list entry to show it on the map, Alt-click a
   stop to show it to your group (a ring on their map for half a minute).
-- In a group, the rooms the game names for the others light up blue on the map, with their names.
-  This needs the addon on their side too, and like your own room it is off at first (gear button).
+- In a group, the others show on the map with a number in the room the game names for them and a
+  legend with their names. This needs the addon on their side too. With "Rooms glow on the map"
+  (gear button, off at first) their rooms light up blue, like your own in gold.
 - Click the route name to choose a route, create a new one, copy, rename, delete or import.
   "Route from the last run" makes an own route of your last run in this dungeon: the bosses where
   they fell (in the middle of the room the game named, else where the standard route has them) and
@@ -177,13 +191,16 @@ By hand:
   chat. Blizzard lets addons send no hidden messages to a chat channel, so the request there is a
   short visible line ("FDR:Q") that the addon hides, and the answers come by whisper. The route
   itself comes by whisper from its author or from a player who took it over.
-- Above the stop list: the level of the dungeon in the colour of your level, the run time and your
+- Above the stop list: the level of the dungeon in the colour of your level, the bosses down (the
+  same count as in the small display; the mouse on it shows the optional and rare stops you ticked
+  off besides; in the style gilded it stands on the head line of the stops), the run time and your
   best time (the mouse on them shows your last ten runs), and outside the dungeon its entrance. A
   click on the entrance sets the map pin.
-- The gear button holds the settings: stop list, arrows, rooms on the map, your group on the map,
+- The gear button holds the settings: stop list, rooms glow on the map, your group on the map,
   map from the game's minimap, tick off bosses automatically, what shows on entering a dungeon (small map, route map or
   nothing), button at the minimap, small display in dungeons, route list over the server channel,
-  line width, text size of the stop list, window style (gilded, dark, parchment, classic), opacity.
+  route line (width, colour, arrows), text size of the stop list, window style (gilded, dark, parchment,
+  classic), opacity.
 - With a controller (the game's controller mode) the menus of the addon show as a list of its own: the game steers
   its own menus there itself and blocks them when an addon opens them. A submenu opens in place with a line back at
   the top ("< ..."); a click beside the list, Escape or a second click on the same button closes it. From a button
@@ -233,7 +250,8 @@ few words about the spot help too. Post it as an [issue](https://github.com/Chec
 
 Raids: Molten Core, Onyxia's Lair, Blackwing Lair, Naxxramas (in the order of the game's dungeon
 journal: Arachnid, Plague, Military and Construct Quarter), and with "Full clear" and "Efficient"
-Zul'Gurub, Ruins of Ahn'Qiraj and Ahn'Qiraj Temple.
+Zul'Gurub, Ruins of Ahn'Qiraj and Ahn'Qiraj Temple. Of these, WoW: Forever opens only Onyxia's Lair
+(on December 9); the maps of the other six come from the game client.
 
 ## How the map works
 
@@ -277,7 +295,9 @@ For the Sunken Temple and parts of Scholomance those maps served as a guide for 
 order; the paths follow the corridors of the game's map. Boss names come from the game's boss list,
 the boss positions in the raids from the game's dungeon journal (in Zul'Gurub from the game's areas
 and the skulls of its map). The raid paths are searched over the walkable floors in the game's
-files, around lava and deep water.
+files, around lava and deep water. In 1.3.0 every route was checked once more against the game's own
+minimap pictures and building files: paths on walkable floor, bosses in their rooms, level changes at
+the stairs and ramps where you really take them.
 
 The maps of all nine new Forever dungeons, of the Underbelly of Dalaran, of Ataal'Byzal in The Drowned
 City, both levels of Alcaz Prison and all six levels of Blackmaw Hold are by Santiago Reyes,

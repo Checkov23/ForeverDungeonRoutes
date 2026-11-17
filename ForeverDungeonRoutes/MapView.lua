@@ -20,6 +20,7 @@ local ROOM_GLOW = 1.35      -- the soft glow over a part of a room is this much 
 -- A room whose glow covers more of the map than this (Chapel Gardens in the Cathedral, Ironclad Cove, Shadowforge
 -- City, the Spiral of Thorns ...) glows faint and still: pulsing it would pulse the whole map (Oliver, 14.11.2026).
 local BIG_ROOM, BIG_ROOM_ALPHA = 0.3, 0.2
+local HELP_MIN_W = 240      -- the "?" of the key to the signs only on a map at least this wide (since 1.3.0)
 local ADDON_PATH = "Interface\\AddOns\\ForeverDungeonRoutes\\"
 local MEDIA = ADDON_PATH .. "media\\"
 
@@ -58,6 +59,27 @@ local function gradient(t)
 	return last[2], last[3], last[4]
 end
 DR.GradientColor = gradient
+
+-- One colour for the whole route instead of the gradient (setting lineColor, since 1.3.0; a wish on CurseForge: the
+-- route should stand out more). Main path and side paths take it, the side paths stay dashed. Colours that neither
+-- the map art (brown and beige parchment, grey and green minimap pictures, orange lava, blue water) nor the addon's
+-- own signs use (gold bosses and rooms, blue floor boxes and group, whitish grey rares), bright on the dark minimap
+-- pictures and set off on the light parchment by the dark edge every line has.
+local LINE_COLORS = {
+	white = { 1.00, 1.00, 1.00 },
+	magenta = { 1.00, 0.30, 0.85 },
+	cyan = { 0.30, 0.90, 1.00 },
+}
+
+-- The fixed colour the player chose for the route line, or nil for the gradient (also for a value it does not know).
+function DR.LineColor()
+	local key = DR.db and DR.db.lineColor
+	return key and LINE_COLORS[key] or nil
+end
+
+function DR.LineColorKey()
+	return DR.LineColor() and DR.db.lineColor or "gradient"
+end
 
 local View = {}
 DR.MapView = View
@@ -235,6 +257,24 @@ local function createLinkPin(view)
 	return pin
 end
 
+-- The key to the signs on the map (the "?" beside the crosshair, since 1.3.0); the line as it is drawn: the gradient,
+-- or the one colour the player chose (setting lineColor).
+local function legendOnEnter(button)
+	GameTooltip:SetOwner(button, "ANCHOR_LEFT")
+	GameTooltip:SetText(L["Signs on the map"], 1, 1, 1)
+	for _, text in ipairs({
+		L["1 2 3: bosses in route order (click to tick off)"],
+		L["R: rare   +: optional   !: note"],
+		L["Blue box: another map level (same letters belong together, click to switch)"],
+		DR.LineColor() and L["Solid line: the route, dashed: side path"]
+			or L["Line from turquoise (start) to orange (end), dashed: side path"],
+	}) do
+		GameTooltip:AddLine(text, 0.9, 0.9, 0.9, true)
+	end
+	GameTooltip:AddLine(L["Hover over a stop for its tips"], 0.4, 0.8, 1, true)
+	GameTooltip:Show()
+end
+
 local function createMarker(view, size, level)
 	local marker = CreateFrame("Frame", nil, view.canvas)
 	marker:SetSize(size, size)
@@ -254,11 +294,29 @@ local function createMarker(view, size, level)
 end
 
 -- Floor changes along the main path get a link pin at both ends, so the next floor is one
--- click away. Explicit links stored in the route are shown as well.
-local function collectLinks(route)
-	local links = {}
+-- click away. Explicit links stored in the route are shown as well; where one of them already
+-- marks that change (a stair "v", a portal "P"), no second pin goes on top of it, and the one at
+-- the end of a piece says "Route continues on" in its tooltip (both since 1.3.0).
+local NEAR_LINK = 0.03
+
+local function explicitNear(route, floor, x, y, to)
 	for _, link in ipairs(route.links or {}) do
-		table.insert(links, link)
+		if link.floor == floor and link.to == to and math.abs(link.x - x) <= NEAR_LINK and math.abs(link.y - y) <= NEAR_LINK then
+			return link
+		end
+	end
+end
+
+local function collectLinks(route)
+	-- copies, so the flag for the tooltip never ends up in the route itself (saved routes)
+	local links, shown = {}, {}
+	for _, link in ipairs(route.links or {}) do
+		local copy = {}
+		for k, v in pairs(link) do
+			copy[k] = v
+		end
+		shown[link] = copy
+		table.insert(links, copy)
 	end
 	local previous
 	for _, path in ipairs(route.paths) do
@@ -267,14 +325,23 @@ local function collectLinks(route)
 			local continues = not previous or not path.t0 or not previous.t1 or path.t0 >= previous.t1 - 0.01
 			if previous and previous.floor ~= path.floor and continues then
 				local pts = previous.pts
-				table.insert(links, { floor = previous.floor, x = pts[#pts - 1], y = pts[#pts], to = path.floor, forward = true })
-				table.insert(links, { floor = path.floor, x = path.pts[1], y = path.pts[2], to = previous.floor })
+				local x, y = pts[#pts - 1], pts[#pts]
+				local own = explicitNear(route, previous.floor, x, y, path.floor)
+				if own then
+					shown[own].forward = true
+				else
+					table.insert(links, { floor = previous.floor, x = x, y = y, to = path.floor, forward = true })
+				end
+				if not explicitNear(route, path.floor, path.pts[1], path.pts[2], previous.floor) then
+					table.insert(links, { floor = path.floor, x = path.pts[1], y = path.pts[2], to = previous.floor })
+				end
 			end
 			previous = path
 		end
 	end
 	return links
 end
+DR.CollectLinks = collectLinks -- for the checks in tools/szenario.lua
 
 -- Setup -------------------------------------------------------------------------------------
 
@@ -372,6 +439,21 @@ function View:Create(parent)
 	self.creditBack:SetPoint("BOTTOMRIGHT", self.credit, "BOTTOMRIGHT", 7, -5)
 	self.creditBack:SetColorTexture(0.05, 0.05, 0.06, 0.85)
 	self.creditBack:Hide()
+	-- a map picture of the addon the game does not know yet (since 1.3.0, UpdateArt): a hint across the top of the
+	-- map (Layout), wrapped where the map is narrow (the small map)
+	self.newMap = overlay:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+	self.newMap:SetPoint("TOPLEFT", 20, -13)
+	self.newMap:SetPoint("TOPRIGHT", -20, -13)
+	self.newMap:SetJustifyH("CENTER")
+	self.newMap:SetWordWrap(true)
+	self.newMap:SetTextColor(1, 0.86, 0.5)
+	self.newMap:SetText(L["This map is new: quit and restart the game once (/reload is not enough)."])
+	self.newMap:Hide()
+	self.newMapBack = overlay:CreateTexture(nil, "BACKGROUND")
+	self.newMapBack:SetPoint("TOPLEFT", self.newMap, "TOPLEFT", -7, 5)
+	self.newMapBack:SetPoint("BOTTOMRIGHT", self.newMap, "BOTTOMRIGHT", 7, -5)
+	self.newMapBack:SetColorTexture(0.05, 0.05, 0.06, 0.85)
+	self.newMapBack:Hide()
 
 	local locate = CreateFrame("Button", nil, frame)
 	locate:SetSize(26, 26)
@@ -401,6 +483,28 @@ function View:Create(parent)
 	locate:SetScript("OnLeave", GameTooltip_Hide)
 	locate:Hide()
 	self.locate = locate
+	-- the signs on the map explained (since 1.3.0): a round "?" beside the crosshair, in its look and in every style,
+	-- the mouse on it shows the key (legendOnEnter); in the corner where the crosshair is hidden (PlaceHelp), only
+	-- where the map is wide enough for it (Layout: the small map can be narrower)
+	local help = CreateFrame("Button", nil, frame)
+	help:SetSize(26, 26)
+	help:SetPoint("BOTTOMRIGHT", -6, 6)
+	help:SetFrameLevel(frame:GetFrameLevel() + 40)
+	help.Back = help:CreateTexture(nil, "BACKGROUND")
+	help.Back:SetTexture(MEDIA .. "circle")
+	help.Back:SetAllPoints()
+	help.Back:SetVertexColor(0.05, 0.05, 0.06, 0.85)
+	help.Text = help:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+	help.Text:SetPoint("CENTER", 0, 0)
+	help.Text:SetText("?")
+	help.Text:SetTextColor(1, 0.84, 0.36)
+	help.Highlight = help:CreateTexture(nil, "HIGHLIGHT")
+	help.Highlight:SetTexture(MEDIA .. "glow")
+	help.Highlight:SetBlendMode("ADD")
+	help.Highlight:SetAllPoints()
+	help:SetScript("OnEnter", legendOnEnter)
+	help:SetScript("OnLeave", GameTooltip_Hide)
+	self.help = help
 
 	frame:SetScript("OnSizeChanged", function() View:Layout() end)
 	frame:SetScript("OnMouseWheel", function(_, delta) View:OnMouseWheel(delta) end)
@@ -424,7 +528,28 @@ function View:Layout()
 	local w, h = self.frame:GetWidth(), self.frame:GetHeight()
 	if not w or w <= 0 or not h or h <= 0 then return end
 	self.fit = math.min(w / MAP_W, h / MAP_H)
+	-- the "?" where the map has room for it beside the crosshair and the room's name (the window's map is always wide
+	-- enough, the small map only at about its first size)
+	self.help:SetShown(w >= HELP_MIN_W)
+	-- the hint on a new map at the top, below the route choice where that sits on the map (stop list hidden)
+	local y = (not DR.db.showStops and self.frame:GetParent() == DR.Window:GetFrame()) and -36 or -13
+	self.newMap:ClearAllPoints()
+	self.newMap:SetPoint("TOPLEFT", 20, y)
+	self.newMap:SetPoint("TOPRIGHT", -20, y)
 	self:ApplyTransform(true)
+end
+
+-- The "?" beside the crosshair, or in its corner where the crosshair is hidden (outside the dungeons).
+function View:PlaceHelp()
+	local beside = self.locate:IsShown()
+	if self.helpBeside == beside then return end
+	self.helpBeside = beside
+	self.help:ClearAllPoints()
+	if beside then
+		self.help:SetPoint("RIGHT", self.locate, "LEFT", -4, 0)
+	else
+		self.help:SetPoint("BOTTOMRIGHT", -6, 6)
+	end
 end
 
 -- Places the canvas for the current zoom and pan; the map stays inside the view where it can.
@@ -564,8 +689,9 @@ function View:OnUpdate(elapsed)
 end
 
 -- The room the player is in --------------------------------------------------------------------
--- The game names the room (Room.lua); where the player wants it (setting showRoom), its parts glow softly on
--- the map and its name stands below. The map follows the rooms either way.
+-- The game names the room (Room.lua): its name stands in the lower left corner of the map (since 1.3.0 always, before
+-- only with the glow), and where the player wants it (setting showRoom, off at first) its parts glow softly on the
+-- map. The map follows the rooms either way.
 
 -- A soft glow over one part of a room: a soft rectangle (full inside, rounded corners, fading edge) stretched
 -- along a line through the middle of the part (width along the line, height as thickness), a little larger so
@@ -625,12 +751,14 @@ function View:UpdateRoom()
 	hideAll(self.roomLines)
 	self.status:Hide()
 	self.statusBack:Hide()
-	local room = self.key ~= nil and self.key == DR.currentKey and DR.db.showRoom and DR.Room:Get()
+	local room = self.key ~= nil and self.key == DR.currentKey and DR.Room:Get()
 	if room then
 		self.status:SetText(L["You are in: %s"]:format(DR.LocText(room, "name")))
 		self.status:Show()
 		self.statusBack:Show()
-		self.numRoomLines, self.roomStill = glowRoom(self, self.roomLines, 0, room, ROOM_COLOR, ROOM_ALPHA)
+		if DR.db.showRoom then
+			self.numRoomLines, self.roomStill = glowRoom(self, self.roomLines, 0, room, ROOM_COLOR, ROOM_ALPHA)
+		end
 	end
 	self:PlaceLegend()
 end
@@ -652,7 +780,8 @@ function View:UpdateArt()
 	local floor = self.floor
 	local info = DR.Floors[floor]
 	local hasArt = floor ~= nil and DR.FloorHasArt(floor)
-	local minimap = floor ~= nil and DR.db.gameMinimap and DR.MinimapArt and DR.MinimapArt[floor]
+	local minimapArt = floor ~= nil and DR.MinimapArt and DR.MinimapArt[floor]
+	local minimap = DR.db.gameMinimap and minimapArt
 	local picture = hasArt and not minimap and info.image
 	for i, tile in ipairs(self.tiles) do
 		if hasArt and not minimap and not info.image then
@@ -662,10 +791,21 @@ function View:UpdateArt()
 			tile:Hide()
 		end
 	end
+	-- A picture in the addon folder that is new since the last start of the game (an update with /reload only) is
+	-- unknown to the game until it starts again and shows bright green. SetTexture tells (since 1.3.0, as
+	-- DR.MediaReady for the window's pictures): then a hint instead, over the game's minimap pictures of the floor
+	-- where there are some.
+	local missing = false
 	if picture then
-		self.picture:SetTexture(ADDON_PATH .. picture.file, nil, nil, "TRILINEAR")
+		missing = self.picture:SetTexture(ADDON_PATH .. picture.file, nil, nil, "TRILINEAR") == false
 		self.picture:SetTexCoord(0, picture.right or 1, 0, picture.bottom or 1)
+		if missing then
+			picture, minimap = nil, minimapArt
+		end
 	end
+	self.artMissing = missing
+	self.newMap:SetShown(missing)
+	self.newMapBack:SetShown(missing)
 	self.picture:SetShown(picture and true or false)
 	-- { file, x, y, width, height, 8 texture coordinates, sublevel }: in pixels of the map, turned by the
 	-- texture coordinates (a building at an angle leaves the rest of its box clear), higher building
@@ -688,7 +828,7 @@ function View:UpdateArt()
 	for i = count + 1, #self.minimapTiles do
 		self.minimapTiles[i]:Hide()
 	end
-	local credit = hasArt and not minimap and info.credit
+	local credit = hasArt and not minimap and not missing and info.credit
 	if credit then
 		self.credit:SetText(L["Map: %s"]:format(credit))
 	end
@@ -909,9 +1049,14 @@ function View:DrawMainPath(path, k)
 	for i = 2, n do
 		self:Segment(-6, xs[i - 1], ys[i - 1], xs[i], ys[i], casing, unpack(CASING_COLOR))
 	end
+	local fixed = DR.LineColor()
 	for i = 2, n do
-		local t = t0 + (t1 - t0) * ((cum[i - 1] + cum[i]) * 0.5 / total)
-		local r, g, b = gradient(t)
+		local r, g, b
+		if fixed then
+			r, g, b = fixed[1], fixed[2], fixed[3]
+		else
+			r, g, b = gradient(t0 + (t1 - t0) * ((cum[i - 1] + cum[i]) * 0.5 / total))
+		end
 		self:Segment(0, xs[i - 1], ys[i - 1], xs[i], ys[i], width, r, g, b, 1)
 	end
 	if DR.db.showArrows then
@@ -947,6 +1092,8 @@ function View:DrawSidePath(path, k)
 	local width = math.max(2, (DR.db.lineWidth or 4) - 1) / k
 	local casing = width + 3 / k
 	local dash, gap = 7 / k, 5 / k
+	-- whitish grey beside the gradient, in the colour of the main path where the player chose one (since 1.3.0)
+	local color = DR.LineColor() or SIDE_COLOR
 	for i = 2, n do
 		self:Segment(-6, xs[i - 1], ys[i - 1], xs[i], ys[i], casing, CASING_COLOR[1], CASING_COLOR[2], CASING_COLOR[3], 0.55)
 	end
@@ -960,7 +1107,7 @@ function View:DrawSidePath(path, k)
 			if drawing then
 				local a, b = pos / len, (pos + step) / len
 				self:Segment(0, x1 + (x2 - x1) * a, y1 + (y2 - y1) * a, x1 + (x2 - x1) * b, y1 + (y2 - y1) * b,
-					width, SIDE_COLOR[1], SIDE_COLOR[2], SIDE_COLOR[3], 1)
+					width, color[1], color[2], color[3], 1)
 			end
 			pos = pos + step
 			phase = phase - step
@@ -1105,7 +1252,8 @@ end
 -- route, so the editor leaves them alone.
 function View:AddMapNotes()
 	local floor = self.floor
-	if DR.db.gameMinimap and DR.MinimapArt and DR.MinimapArt[floor] then
+	-- nor where the drawn picture is missing (since 1.3.0, UpdateArt)
+	if self.artMissing or (DR.db.gameMinimap and DR.MinimapArt and DR.MinimapArt[floor]) then
 		return
 	end
 	for _, note in ipairs(DR.MapNotes and DR.MapNotes[floor] or {}) do
@@ -1144,6 +1292,7 @@ function View:UpdateGroup()
 	-- the crosshair inside every dungeon the addon knows, also while the map shows another one: a click finds
 	-- the dungeon again (for a player who loaded the addon inside and sees the wrong one)
 	self.locate:SetShown(inside or DR:InKnownInstance())
+	self:PlaceHelp()
 	if not inside or not DR.db.showPlayer then
 		self:HideGroup()
 		return

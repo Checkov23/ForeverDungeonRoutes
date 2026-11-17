@@ -1,5 +1,57 @@
 # Changelog
 
+## 1.3.0
+
+Thank you for more than 100,000 downloads! This version brings wishes from the comments and checks every
+route once more.
+
+- The colour of the route line can be chosen: gear button, "Route line", with the width as before, the colour
+  (turquoise to orange as before, white, magenta or cyan) and the arrows on the route. Side paths take the chosen
+  colour too and stay dashed. The gear menu has one entry less on top.
+- One count of the bosses: the window now counts the numbered bosses like the small display (before it counted every
+  stop); the mouse on the count tells the optional and rare stops you ticked off besides. In the styles Dark,
+  Parchment and Classic the count stands beside the level.
+- A round "?" beside the crosshair explains the signs on the map: the numbers, R, +, !, the blue boxes and the line.
+- The name of the room you are in ("You are in: ...") now shows whenever the game names a room. The gear setting is
+  now called "Rooms glow on the map (yours and your group's)" and only switches the glow, still off at first.
+- When a boss fight starts, the map (window or small map) shows the map level of that boss, unless you chose a level
+  by hand in the last 30 seconds. This helps where the game names no rooms, as in Blackmaw Hold and Alcaz Prison.
+- A map that is new in an update no longer shows as a bright green area after a /reload: the map says "This map is
+  new: quit and restart the game once (/reload is not enough)" and shows the game's minimap pictures of that level
+  where there are some.
+
+All routes checked once more, against the game's own minimap pictures and building files: paths that
+ran through walls or over cliffs, bosses in the wrong room, level changes in the wrong place, notes
+that were too long or unclear. The most noticeable changes:
+
+- Wailing Caverns: Lord Serpentis and Verdan the Everliving had swapped places. The route now also shows
+  the way back from the pool behind Verdan to the Disciple of Naralex, through the passage between the
+  river and the lower cave.
+- Blackfathom Deeps: Lorgus Jett on the right map level, with the other spots where he can stand; Old
+  Serra'kis as a side path in the Forgotten Pool; from Baron Aquanis straight on to the sanctum instead
+  of a second loop through the ruins.
+- Gnomeregan: the level changes sit at the jump onto the gear, the jump from the Electrocutioner's
+  platform and the elevator, without lines across the halls.
+- Blackrock Depths: bosses in the order you walk past them (Bael'Gar, Lord Incendius, Fineous Darkvire,
+  Gerstahn, Grebmar, Roccor, Ring of Law ...); in the Grim Guzzler Phalanx stands at the back door.
+- Lower Blackrock Spire: every level change at its ramp, marked "v"/"^", no diagonals through walls.
+  Upper Blackrock Spire: Goraluk Anvilcrack no longer counts as a boss (the game has no boss fight for him).
+- Maraudon: the way up to Landslide and the start of the orange side no longer go over cliffs.
+- Stratholme: Ramstein the Gorger on Slaughter Square, Baron Rivendare in the slaughterhouse,
+  Magistrate Barthilas at the gate, Stonespine on the path.
+- Shadowfang Keep, Uldaman, Dire Maul West and East, Razorfen Kraul and Downs, Zul'Farrak, Ragefire
+  Chasm, The Deadmines, The Stockade, Scarlet Monastery, Scholomance and the newer dungeons: smoother
+  paths, bosses on their spots, side paths (Cookie, Bruegal Ironknuckle, Belnistrasz).
+- Raids: Blackwing Lair over the right stairs, Ruins of Ahn'Qiraj over the stairs instead of through
+  walls, the teleporters in Naxxramas marked "P", Molten Core with Baron Geddon before Shazzrah.
+- Notes for events and keys where they were missing: Sneed's Shredder, the gunpowder for the cannon,
+  Grubbis, the gong at Tuten'kash, the Ring of Law, the Seven, Emberseer, Rend, the service entrance of
+  Stratholme, Majordomo, Onyxia's Drakefire Amulet, Hakkar and more. On The Shaper's Terrace the notes say
+  that Nanaya needs the crystals of all four panels; the note on Grox in Krol'dok is shorter. All of them
+  in every language of the addon.
+- Map: where a level change has its own sign (stairs "v", portal "P"), no second square sits on top of
+  it any more, and at the end of a piece its tooltip says "Route continues on".
+
 ## 1.2.7
 
 - The Drowned City: a second map level, Ataal'Byzal, the sunken temple of the Primeval Elemental, on a map by
