@@ -301,8 +301,8 @@ The maps of the nine new dungeons are by Santiago Reyes; if you like them, have 
 
 ## Credits
 
-The standard routes were traced from the dungeon walkthrough maps of aetherflask.com, which went
-offline in 2022 and are mirrored at [eintr.net](https://eintr.net/WoW/World-of-Warcraft-Classic-Dungeon-Walkthrough.html).
+The first versions of the classic routes were traced from the walkthrough maps of aetherflask.com;
+since 1.3.0 every route has been checked against the game's own map data and partly redrawn.
 For the Sunken Temple and parts of Scholomance those maps served as a guide for the boss
 order; the paths follow the corridors of the game's map. Boss names come from the game's boss list,
 the boss positions in the raids from the game's dungeon journal (in Zul'Gurub from the game's areas
