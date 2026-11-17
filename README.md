@@ -289,6 +289,16 @@ puts on the level (where WoW: Forever rebuilt a dungeon, the new parts take the 
 in the same place), outdoors those of the terrain tiles, turned and put together on the same spot as
 the map art, so routes and rooms fit both.
 
+## Support
+
+Forever Dungeon Routes is free and stays free. If it saved your group a wipe and you want to say thanks, you can
+buy me a coffee on Ko-fi:
+
+[![Support me on Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/checkov)
+
+The maps of the nine new dungeons are by Santiago Reyes; if you like them, have a look at his
+[Atlas de Azeroth: Forever](https://asguevara433.wixsite.com/srmaps).
+
 ## Credits
 
 The standard routes were traced from the dungeon walkthrough maps of aetherflask.com, which went
