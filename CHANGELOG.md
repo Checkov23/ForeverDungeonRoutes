@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.3.3
+
+Maps on every game client, and reporting a problem or an idea gets easier.
+
+- No more green maps on the Russian, Spanish (Mexico) and Italian clients: these clients lack the game's tiles of the
+  classic dungeon and raid maps. The addon now brings them along and uses them on every client (Blizzard's files,
+  unchanged; the addon grows by about 37 MB). Thanks to the players who reported it.
+- "Report a problem or idea" at the bottom of the gear menu (or /fdr report) shows a text to copy with Ctrl+C into a
+  comment on CurseForge or an issue on GitHub. It holds what helps to find a problem: the versions of the addon and
+  the game, the language of the client, the map on screen and whether the game accepted its map pictures, and the
+  settings that change the map. Nothing about you or your character.
+- New files: after the update, quit and restart the game once (/reload is not enough). Until then the game's own
+  tiles stand in; on the clients without them the map asks for the restart.
+
 ## 1.3.2
 
 Two wishes from the comments: a padlock that keeps the window in place, and a marker you put on the map yourself.

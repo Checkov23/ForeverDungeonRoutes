@@ -239,6 +239,9 @@ Your own routes work for every dungeon: choose the dungeon and "New route".
 map pin at the entrance of the shown dungeon, `/fdr reset` clears the checkmarks and starts a new
 run, `/fdr pos` prints the position data and the room the game reports (helps with bug reports),
 `/fdr menu` shows the menus as in controller mode also with the mouse, until the next `/reload`.
+`/fdr report` (or "Report a problem or idea" at the bottom of the gear menu) shows a text to copy
+into a comment on CurseForge or an issue on GitHub: the versions of the addon and the game, the
+language of the client, the map on screen and the settings that change it, nothing about you.
 
 ## Dungeons with a standard route
 
@@ -264,8 +267,10 @@ Zul'Gurub, Ruins of Ahn'Qiraj and Ahn'Qiraj Temple. Of these, WoW: Forever opens
 
 ## How the map works
 
-The addon ships no map art. It shows the game's own dungeon map files by their file IDs
-(`Data/Floors.lua`, generated from Blizzard's map tables). Inside dungeons the game gives addons
+The classic dungeon and raid maps are Blizzard's own map tiles; which tiles make up which map level
+comes from Blizzard's map tables (`Data/Floors.lua`). Since 1.3.3 the addon brings these tiles along
+(`tiles/`, copied unchanged from the game files) and uses them on every client: the Russian, Spanish
+(Mexico) and Italian game clients do not have them and showed the maps green. Inside dungeons the game gives addons
 no position, only the name of the room you are in. Where the rooms lie (`Data/Rooms.lua`) is
 generated from the game's building files: each named part of a dungeon building with its outline,
 placed on the map level where the game's own map shows it. Rooms come with all dungeons except
@@ -319,6 +324,9 @@ minimap pictures and building files: paths on walkable floor, bosses in their ro
 the stairs and ramps where you really take them. The short tips at the bosses follow the WoW: Forever
 guides of method.gg, wow.gg and Warcraft Tavern and the Warcraft Wiki, in our own words.
 
+That the Russian, Spanish (Mexico) and Italian game clients lack the tiles of the classic maps was found
+by the authors of [OpenMap](https://github.com/openmap-world/openmap) and RADD95's OpenMap TextureFix.
+
 The maps of all nine new Forever dungeons, of the Underbelly of Dalaran, of Ataal'Byzal in The Drowned
 City, both levels of Alcaz Prison and all six levels of Blackmaw Hold are by Santiago Reyes,
 from his [Atlas de Azeroth: Forever](https://asguevara433.wixsite.com/srmaps), used with his permission in the
@@ -342,4 +350,6 @@ The rough route of The Shaper's Terrace places the bosses after the video guide 
 
 Copyright (c) 2026 Checkov23. MIT license, see [LICENSE](LICENSE). The map pictures by Santiago Reyes
 in `ForeverDungeonRoutes/maps/` are not covered by the MIT license, see
-[maps/CREDITS.txt](ForeverDungeonRoutes/maps/CREDITS.txt) for which ones they are.
+[maps/CREDITS.txt](ForeverDungeonRoutes/maps/CREDITS.txt) for which ones they are. Neither are the map
+tiles in `ForeverDungeonRoutes/tiles/`, Blizzard Entertainment's art from the game files, see
+[tiles/CREDITS.txt](ForeverDungeonRoutes/tiles/CREDITS.txt).

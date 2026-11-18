@@ -423,8 +423,75 @@ local function openSettingsMenu(owner)
 			if mini then restoreMiniGeometry() end
 		end)
 		root:CreateDivider()
+		-- a text to copy for a report on CurseForge or GitHub (since 1.3.3, DR:ShowReport below)
+		root:CreateButton(L["Report a problem or idea"], function() DR:ShowReport() end)
 		root:CreateTitle(("Forever Dungeon Routes %s, \194\169 2026 Checkov23"):format(DR.version))
 	end)
+end
+
+-- Report a problem or idea (since 1.3.3) ------------------------------------------------------
+-- The game cannot open web pages, so the gear menu and "/fdr report" show a text to copy into a comment on CurseForge
+-- or an issue on GitHub, with what helps to find a problem: the versions, the language of the client, the map on
+-- screen and what the game answered for its art (green maps on Russian clients, CurseForge 18.11.2026), and the
+-- settings that change the map. In English whatever the client's language, and nothing about the player (name,
+-- realm, guild, other addons): the text ends up in public.
+local REPORT_PLACES = "curseforge.com/wow/addons/forever-dungeon-routes\ngithub.com/Checkov23/ForeverDungeonRoutes/issues"
+local ART_NAMES = { tiles = "map tiles in the addon", gametiles = "game map tiles", minimap = "game minimap pictures",
+	picture = "drawn map in the addon", none = "none, no map art for this floor" }
+
+local function onOff(value)
+	return value and "on" or "off"
+end
+
+function DR:ReportText()
+	local lines = { "Forever Dungeon Routes " .. tostring(DR.version) }
+	local version, build
+	if GetBuildInfo then
+		version, build = GetBuildInfo()
+	end
+	lines[#lines + 1] = ("Game: %s, client language %s"):format(
+		(version and build) and (tostring(version) .. "." .. tostring(build)) or "unknown", GetLocale() or "unknown")
+	local inInstance, _, instanceID = DR.CurrentInstance()
+	lines[#lines + 1] = "Where: " .. ((inInstance == nil and "unknown")
+		or (inInstance and "in instance " .. (instanceID and tostring(instanceID) or "unknown")) or "outside")
+	-- the map the addon drew last, in the window or the small map (both show it through DR.MapView)
+	local map = DR.MapView
+	local floor = map.floor
+	if not floor then
+		lines[#lines + 1] = "Map: none shown yet"
+	else
+		local dungeon = DR:GetDungeon(map.key)
+		local floors = dungeon and dungeon.floors or {}
+		local info = DR.Floors[floor]
+		lines[#lines + 1] = ("Map: %s, floor %s of %d, %s (%d)"):format(dungeon and dungeon.name or tostring(map.key),
+			tostring(indexOf(floors, floor) or "?"), #floors, info and info.name or "?", floor)
+		local art = ART_NAMES[map.artSource] or "unknown"
+		if map.artMissing then
+			art = "drawn map in the addon, not loaded by the game; shown instead: " .. art
+		elseif map.artSource == "gametiles" then
+			-- tiles of the addon new since the last start of the game (an update with /reload only)
+			art = ("map tiles in the addon, %s of 12 not loaded by the game (restart needed); shown instead: %s"):format(
+				tostring(map.ownTilesRefused), art)
+		end
+		local answers = map.artAnswers
+		if answers then
+			art = ("%s; the game answered %d true, %d false"):format(art, answers.yes, answers.no)
+			if answers.none > 0 then
+				art = art .. (", %d nothing"):format(answers.none)
+			end
+		end
+		lines[#lines + 1] = "Map art: " .. art
+	end
+	lines[#lines + 1] = ("Settings: map from the game's minimap %s, controller mode %s, window style %s"):format(
+		onOff(DR.db.gameMinimap), onOff(DR.ControllerUI()), tostring(DR.db.theme))
+	lines[#lines + 1] = ""
+	lines[#lines + 1] = "What happened, or what would you like? A screenshot helps."
+	return table.concat(lines, "\n")
+end
+
+function DR:ShowReport()
+	DR.Dialog.ShowText(L["Report a problem or idea"], L["The game cannot open web pages. Copy this text with Ctrl+C (Mac: Cmd+C), paste it into a comment on CurseForge or an issue on GitHub, and add what happened or what you would like."]
+		.. "\n" .. REPORT_PLACES, DR:ReportText())
 end
 
 -- Stop list -----------------------------------------------------------------------------------

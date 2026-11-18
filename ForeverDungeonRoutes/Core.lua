@@ -287,6 +287,9 @@ SlashCmdList.FOREVERDUNGEONROUTES = function(input)
 		-- the addon's own menu list of controller mode (Dialogs.lua) also with the mouse, to try it; until /reload
 		DR.ownMenu = not DR.ownMenu
 		DR:Print("menu list as in controller mode: %s", DR.ownMenu and "on" or "off")
+	elseif cmd == "report" or cmd == "bug" then
+		-- a text to copy for a report on CurseForge or GitHub (since 1.3.3, Window.lua)
+		DR:ShowReport()
 	elseif cmd == "pos" then
 		local _, _, instanceID = DR.CurrentInstance()
 		local x, y, mapInstance = DR:GetUnitWorldPosition("player")
@@ -299,7 +302,7 @@ SlashCmdList.FOREVERDUNGEONROUTES = function(input)
 			tostring(key), tostring(floor), u and ("%.3f"):format(u) or "-", v and ("%.3f"):format(v) or "-",
 			type(subzone) == "string" and subzone or "-", room and room.name or "-")
 	else
-		DR:Print(L["Commands: /fdr (show or hide the map), /fdr send (route to the group), /fdr way (waypoint to the entrance), /fdr reset (new run), /fdr pos (position check)"])
+		DR:Print(L["Commands: /fdr (show or hide the map), /fdr send (route to the group), /fdr way (waypoint to the entrance), /fdr reset (new run), /fdr pos (position check), /fdr report (report a problem or idea)"])
 	end
 end
 

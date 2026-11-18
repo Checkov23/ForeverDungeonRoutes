@@ -22,6 +22,12 @@ local ROOM_GLOW = 1.35      -- the soft glow over a part of a room is this much 
 local BIG_ROOM, BIG_ROOM_ALPHA = 0.3, 0.2
 local HELP_MIN_W = 240      -- the "?" of the key to the signs only on a map at least this wide (since 1.3.0)
 local ADDON_PATH = "Interface\\AddOns\\ForeverDungeonRoutes\\"
+-- The classic maps' tiles, shipped with the addon since 1.3.3 (tiles\<file ID>.blp, Blizzard's files unchanged): the
+-- Russian, Spanish (Mexico) and Italian clients of WoW: Forever lack the game's own and drew the maps green (found by
+-- OpenMap, 07.11.2026, build 1.60.1.70862). On those clients a tile of the addon the game does not know yet (an update
+-- with /reload only) asks for a restart; elsewhere the game's own tile stands in until then.
+local TILE_PATH = ADDON_PATH .. "tiles\\"
+local WITHOUT_GAME_TILES = { ruRU = true, esMX = true, itIT = true }
 local MEDIA = ADDON_PATH .. "media\\"
 
 DR.MAP_W, DR.MAP_H = MAP_W, MAP_H
@@ -924,8 +930,8 @@ function View:SetFloor(key, floor)
 	self:Refresh()
 end
 
--- The art of the shown floor: the game's map tiles or a drawn picture (floor.image), or, where the
--- player chose so, the game's minimap pictures of the floor instead.
+-- The art of the shown floor: the map tiles of the classic maps (since 1.3.3 from the addon folder) or a drawn
+-- picture (floor.image), or, where the player chose so, the game's minimap pictures of the floor instead.
 function View:UpdateArt()
 	local floor = self.floor
 	local info = DR.Floors[floor]
@@ -933,14 +939,35 @@ function View:UpdateArt()
 	local minimapArt = floor ~= nil and DR.MinimapArt and DR.MinimapArt[floor]
 	local minimap = DR.db.gameMinimap and minimapArt
 	local picture = hasArt and not minimap and info.image
+	local tiles = hasArt and not minimap and not info.image
+	-- What the game answers for each file the map draws (since 1.3.3, for the report in the gear menu, after green
+	-- maps on Russian clients): true, false or nothing, counted as they come; own = the addon's tiles, game = the
+	-- game's files (its tiles where the addon's are not known yet, its minimap pictures).
+	local own, game = { yes = 0, no = 0, none = 0 }, { yes = 0, no = 0, none = 0 }
+	local function tally(answers, answer)
+		if answer == true then
+			answers.yes = answers.yes + 1
+		elseif answer == false then
+			answers.no = answers.no + 1
+		else
+			answers.none = answers.none + 1
+		end
+		return answer
+	end
 	for i, tile in ipairs(self.tiles) do
-		if hasArt and not minimap and not info.image then
-			tile:SetTexture(info.tiles[i], nil, nil, "TRILINEAR")
+		if tiles then
+			local id = info.tiles[i]
+			if tally(own, tile:SetTexture(TILE_PATH .. id, nil, nil, "TRILINEAR")) == false then
+				tally(game, tile:SetTexture(id, nil, nil, "TRILINEAR"))
+			end
 			tile:Show()
 		else
 			tile:Hide()
 		end
 	end
+	-- the addon's tiles new since the last start of the game: where the game has its own tiles they stand in unnoticed;
+	-- on the clients without them (or where the game says so) the hint to restart, as for a new picture below
+	local tilesNew = own.no > 0 and (WITHOUT_GAME_TILES[GetLocale()] or game.no > 0) and true or false
 	-- A picture in the addon folder that is new since the last start of the game (an update with /reload only) is
 	-- unknown to the game until it starts again and shows bright green. SetTexture tells (since 1.3.0, as
 	-- DR.MediaReady for the window's pictures): then a hint instead, over the game's minimap pictures of the floor
@@ -954,8 +981,8 @@ function View:UpdateArt()
 		end
 	end
 	self.artMissing = missing
-	self.newMap:SetShown(missing)
-	self.newMapBack:SetShown(missing)
+	self.newMap:SetShown(missing or tilesNew)
+	self.newMapBack:SetShown(missing or tilesNew)
 	self.picture:SetShown(picture and true or false)
 	-- { file, x, y, width, height, 8 texture coordinates, sublevel }: in pixels of the map, turned by the
 	-- texture coordinates (a building at an angle leaves the rest of its box clear), higher building
@@ -967,7 +994,7 @@ function View:UpdateArt()
 			tile = self.canvas:CreateTexture(nil, "BACKGROUND")
 			self.minimapTiles[i] = tile
 		end
-		tile:SetTexture(part[1], "CLAMPTOBLACKADDITIVE", "CLAMPTOBLACKADDITIVE", "TRILINEAR")
+		tally(game, tile:SetTexture(part[1], "CLAMPTOBLACKADDITIVE", "CLAMPTOBLACKADDITIVE", "TRILINEAR"))
 		tile:SetTexCoord(part[6], part[7], part[8], part[9], part[10], part[11], part[12], part[13])
 		tile:SetDrawLayer("BACKGROUND", part[14])
 		tile:SetSize(part[4], part[5])
@@ -985,6 +1012,23 @@ function View:UpdateArt()
 	self.credit:SetShown(credit and true or false)
 	self.creditBack:SetShown(credit and true or false)
 	self.message:SetShown(floor ~= nil and not hasArt and not minimap)
+	-- for the report (since 1.3.3): which art the floor shows and the game's answers for its files; "gametiles" where
+	-- tiles of the addon were not known yet and the game's stood in. No floor stays unknown (nil), not "none".
+	if floor == nil then
+		self.artSource = nil
+	elseif count > 0 then
+		self.artSource = "minimap"
+	elseif picture then
+		self.artSource = "picture"
+	elseif tiles then
+		self.artSource = own.no > 0 and "gametiles" or "tiles"
+	else
+		self.artSource = "none"
+	end
+	self.artAnswers = (self.artSource == "tiles" and own)
+		or ((self.artSource == "gametiles" or self.artSource == "minimap") and game) or nil
+	self.ownTilesRefused = tiles and own.no or nil
+	self.tilesNew = tilesNew
 end
 
 function View:Refresh()

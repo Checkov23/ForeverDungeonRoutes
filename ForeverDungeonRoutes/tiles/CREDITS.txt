@@ -1,0 +1,8 @@
+Map tiles in this folder (<file ID>.blp): the maps of the classic dungeons and raids of
+World of Warcraft, art by Blizzard Entertainment, copied unchanged from the game files of
+WoW: Forever (build 1.60.1.70959). The Russian, Spanish (Mexico) and Italian game clients
+do not have them and show these maps green, so the addon brings them along and uses them
+on every client.
+
+They are not covered by the MIT license of this addon; all rights stay with Blizzard
+Entertainment.
