@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.3.2
+
+Two wishes from the comments: a padlock that keeps the window in place, and a marker you put on the map yourself.
+
+- A padlock beside the "?" on the map locks the window and the small map: they stay where they are, keep their size,
+  and Escape no longer closes the window (the X, /fdr and the key still do). Click it again to unlock.
+- Your own marker: Shift-click on the map puts a green marker there. Drag it along as you go, right-click removes it,
+  and a new run takes it away. Only you see it. WoW gives addons no position inside dungeons, so this is the way to
+  keep track of where you are on the route. Inside a dungeon a tip at the top of the map tells the keys until you set
+  your first marker or click the tip away; the "?" on the map mentions it too.
+- The source of the classic routes now reads "aetherflask.com, checked against the game's map data".
+- No new files: /reload is enough.
+
 ## 1.3.1
 
 Short tips from guides for many more bosses, shown when you point at a stop, and Stratholme shows the side you are on.

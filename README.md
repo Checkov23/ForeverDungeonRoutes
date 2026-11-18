@@ -164,6 +164,13 @@ By hand:
   lets the map follow you again. The `?` beside it explains the signs on the map. Inside a dungeon it is there also while the map
   shows another one, and a click finds the dungeon and its wing anew (handy after loading the
   addon inside a dungeon).
+- The padlock beside the `?` locks the window and the small map: they stay where they are, keep their
+  size, and Escape no longer closes the window (the X, `/fdr` and the key still do). Click it again to
+  unlock.
+- Your own marker: Shift-click on the map puts a green marker there, for example where you are. Drag it
+  along as you go, right-click removes it; a new run takes it away. Only you see it. WoW gives addons no
+  position inside dungeons, so this is the way to keep track of yourself on the route. Inside a dungeon a tip at the
+  top of the map tells the keys until you set your first marker or click the tip away.
 - Bosses tick themselves off when they die. A click on a boss on the map or in the list ticks it
   off by hand, for your whole group. Shift-click a list entry to show it on the map, Alt-click a
   stop to show it to your group (a ring on their map for half a minute).

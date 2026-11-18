@@ -684,11 +684,33 @@ end
 
 function DR:ResetProgress(key, since)
 	self.cdb.progress[key] = nil
+	self:ClearMarker(key)
 	self:Fire("PROGRESS_CHANGED", key)
 	self:Fire("RUN_RESET", key)
 	if key == self.currentKey then
 		self:StartRun(key, since)
 	end
+end
+
+-- The own marker (since 1.3.2, BobMonkhaus on CurseForge: "a manually movable marker so tanks can track where they are
+-- on the route"): WoW gives addons no position inside dungeons, so the player puts a pin on the map by hand
+-- (Shift-click, MapView.lua) and drags it along. One per dungeon and character; a new run takes it away.
+function DR:GetMarker(key)
+	return key and self.cdb and self.cdb.markers and self.cdb.markers[key] or nil
+end
+
+function DR:SetMarker(key, floor, x, y)
+	if not key or not floor or not x or not y then return end
+	self.cdb.markers = self.cdb.markers or {}
+	self.cdb.markers[key] = { floor = floor, x = math.max(0, math.min(1, x)), y = math.max(0, math.min(1, y)) }
+	self.db.markerHint = "done" -- whoever set one knows the keys: the tip on the map stays away from now on
+	self:Fire("MARKER_CHANGED", key)
+end
+
+function DR:ClearMarker(key)
+	if not self:GetMarker(key) then return end
+	self.cdb.markers[key] = nil
+	self:Fire("MARKER_CHANGED", key)
 end
 
 -- Runs: the clock starts when the player enters the dungeon (or starts a new run inside it) and

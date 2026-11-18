@@ -40,6 +40,8 @@ local EDIT_DOT_COLOR = { 1.00, 1.00, 1.00, 0.95 }
 
 local MEMBER_COLOR = { 0.45, 0.78, 1.00 } -- rooms of the others in the group
 local MEMBER_ALPHA = 0.45
+local OWN_COLOR = { 0.40, 0.95, 0.55 }    -- the own marker (since 1.3.2), a colour no other sign on the map has
+local LOCK_COLOR = { 1.00, 0.84, 0.36 }   -- the padlock, gold like the "?" and the crosshair
 
 local KIND_STYLE = {
 	boss = { ring = { 0.95, 0.76, 0.31 }, text = { 1.00, 0.91, 0.66 } },
@@ -272,6 +274,26 @@ local function legendOnEnter(button)
 		GameTooltip:AddLine(text, 0.9, 0.9, 0.9, true)
 	end
 	GameTooltip:AddLine(L["Hover over a stop for its tips"], 0.4, 0.8, 1, true)
+	GameTooltip:AddLine(L["Shift-click on the map: your own marker (drag it along, right-click removes it)"], 0.4, 0.8, 1, true)
+	GameTooltip:Show()
+end
+
+local function ownOnEnter(button)
+	GameTooltip:SetOwner(button, "ANCHOR_RIGHT")
+	GameTooltip:SetText(L["Your marker"], 1, 1, 1)
+	GameTooltip:AddLine(L["Drag it along as you go; right-click removes it."], 0.9, 0.9, 0.9, true)
+	GameTooltip:Show()
+end
+
+local function lockOnEnter(button)
+	GameTooltip:SetOwner(button, "ANCHOR_LEFT")
+	if DR.db.lockWindow then
+		GameTooltip:SetText(L["Window locked"], 1, 1, 1)
+		GameTooltip:AddLine(L["Click to move and resize them again; Escape then closes the window again."], 0.9, 0.9, 0.9, true)
+	else
+		GameTooltip:SetText(L["Lock the window"], 1, 1, 1)
+		GameTooltip:AddLine(L["The window and the small map stay where they are and keep their size, and Escape no longer closes the window."], 0.9, 0.9, 0.9, true)
+	end
 	GameTooltip:Show()
 end
 
@@ -392,6 +414,38 @@ function View:Create(parent)
 	self.player.Arrow:SetTexture(MEDIA .. "player")
 	self.player.Arrow:SetAllPoints()
 	self.party = {}
+	-- the own marker (since 1.3.2): Shift-click puts it on the map (OnMouseUp), the mouse drags it (OnUpdate), a
+	-- right-click takes it away; green dot with the arrow of the player's own position outside
+	local own = CreateFrame("Button", nil, canvas)
+	own:SetSize(26, 26)
+	own:SetFrameLevel(canvas:GetFrameLevel() + 22)
+	own:RegisterForClicks("RightButtonUp")
+	own.Dot = own:CreateTexture(nil, "ARTWORK")
+	own.Dot:SetTexture(MEDIA .. "circle")
+	own.Dot:SetSize(22, 22)
+	own.Dot:SetPoint("CENTER")
+	own.Dot:SetVertexColor(OWN_COLOR[1], OWN_COLOR[2], OWN_COLOR[3], 1)
+	own.Ring = own:CreateTexture(nil, "OVERLAY")
+	own.Ring:SetTexture(MEDIA .. "ring")
+	own.Ring:SetVertexColor(0.05, 0.04, 0.03, 1)
+	own.Ring:SetSize(22, 22)
+	own.Ring:SetPoint("CENTER")
+	own.Arrow = own:CreateTexture(nil, "OVERLAY", nil, 1)
+	own.Arrow:SetTexture(MEDIA .. "player")
+	own.Arrow:SetAllPoints()
+	own:SetScript("OnMouseDown", function(_, button)
+		if button == "LeftButton" then View.dragOwn = {} end
+	end)
+	own:SetScript("OnMouseUp", function(_, button)
+		if button == "LeftButton" then View:DropOwnMarker() end
+	end)
+	own:SetScript("OnClick", function(_, button)
+		if button == "RightButton" then DR:ClearMarker(View.key) end
+	end)
+	own:SetScript("OnEnter", ownOnEnter)
+	own:SetScript("OnLeave", GameTooltip_Hide)
+	own:Hide()
+	self.own = own
 
 	self.message = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 	self.message:SetPoint("CENTER")
@@ -505,6 +559,64 @@ function View:Create(parent)
 	help:SetScript("OnEnter", legendOnEnter)
 	help:SetScript("OnLeave", GameTooltip_Hide)
 	self.help = help
+	-- the padlock (since 1.3.2, a wish on CurseForge): left of the "?" and in its look, it keeps the window and the small
+	-- map where they are (Window.lua, applyLock); drawn from the shapes the addon has (no new file, no restart needed):
+	-- the upper half of a ring as the shackle on a small square, lifted while open
+	local lock = CreateFrame("Button", nil, frame)
+	lock:SetSize(26, 26)
+	lock:SetPoint("RIGHT", help, "LEFT", -4, 0)
+	lock:SetFrameLevel(frame:GetFrameLevel() + 40)
+	lock.Back = lock:CreateTexture(nil, "BACKGROUND")
+	lock.Back:SetTexture(MEDIA .. "circle")
+	lock.Back:SetAllPoints()
+	lock.Back:SetVertexColor(0.05, 0.05, 0.06, 0.85)
+	lock.Body = lock:CreateTexture(nil, "ARTWORK", nil, 1)
+	lock.Body:SetTexture(MEDIA .. "square")
+	lock.Body:SetSize(12, 9)
+	lock.Body:SetPoint("CENTER", 0, -3)
+	lock.Shackle = lock:CreateTexture(nil, "ARTWORK")
+	lock.Shackle:SetTexture(MEDIA .. "ring")
+	lock.Shackle:SetTexCoord(0, 1, 0, 0.5)
+	lock.Shackle:SetSize(10, 6)
+	lock.Highlight = lock:CreateTexture(nil, "HIGHLIGHT")
+	lock.Highlight:SetTexture(MEDIA .. "glow")
+	lock.Highlight:SetBlendMode("ADD")
+	lock.Highlight:SetAllPoints()
+	lock:SetScript("OnClick", function()
+		DR:SetLocked(not DR.db.lockWindow)
+		if lock:IsMouseOver() then lockOnEnter(lock) end
+	end)
+	lock:SetScript("OnEnter", lockOnEnter)
+	lock:SetScript("OnLeave", GameTooltip_Hide)
+	self.lock = lock
+	self:UpdateLock()
+	-- the tip for the own marker (since 1.3.2, Oliver: the keys belong on the map, not hidden in the options): a band
+	-- at the top of the map in the dungeon the player is in, until the first marker is set or a click hides it for good
+	local tip = CreateFrame("Button", nil, frame)
+	tip:SetFrameLevel(frame:GetFrameLevel() + 41)
+	tip.Text = tip:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+	tip.Text:SetPoint("TOPLEFT", 8, -5)
+	tip.Text:SetPoint("TOPRIGHT", -8, -5)
+	tip.Text:SetJustifyH("CENTER")
+	tip.Text:SetWordWrap(true)
+	tip.Text:SetTextColor(OWN_COLOR[1], OWN_COLOR[2], OWN_COLOR[3])
+	tip.Text:SetText(L["Tip: Shift-click on the map sets your own marker"])
+	tip.Back = tip:CreateTexture(nil, "BACKGROUND")
+	tip.Back:SetAllPoints()
+	tip.Back:SetColorTexture(0.05, 0.05, 0.06, 0.85)
+	tip:SetScript("OnClick", function()
+		DR.db.markerHint = "done"
+		GameTooltip_Hide()
+		View:UpdateMarkerHint()
+	end)
+	tip:SetScript("OnEnter", function(button)
+		GameTooltip:SetOwner(button, "ANCHOR_BOTTOM")
+		GameTooltip:SetText(L["Click to hide this tip"], 1, 1, 1)
+		GameTooltip:Show()
+	end)
+	tip:SetScript("OnLeave", GameTooltip_Hide)
+	tip:Hide()
+	self.markerTip = tip
 
 	frame:SetScript("OnSizeChanged", function() View:Layout() end)
 	frame:SetScript("OnMouseWheel", function(_, delta) View:OnMouseWheel(delta) end)
@@ -517,6 +629,7 @@ function View:Create(parent)
 	self.elapsed = 0
 
 	DR:On("HIGHLIGHT_STOP", function(index) View:HighlightStop(index) end)
+	DR:On("MARKER_CHANGED", function(key) if key == View.key then View:UpdateOwnMarker() end end)
 	DR:On("GROUP_ROOMS_CHANGED", function() View:UpdateMembers() end)
 	DR:On("GROUP_STOP_SHOWN", function() View:UpdatePing() end)
 	return frame
@@ -531,12 +644,36 @@ function View:Layout()
 	-- the "?" where the map has room for it beside the crosshair and the room's name (the window's map is always wide
 	-- enough, the small map only at about its first size)
 	self.help:SetShown(w >= HELP_MIN_W)
+	self.lock:SetShown(w >= HELP_MIN_W) -- the padlock with it (since 1.3.2)
 	-- the hint on a new map at the top, below the route choice where that sits on the map (stop list hidden)
 	local y = (not DR.db.showStops and self.frame:GetParent() == DR.Window:GetFrame()) and -36 or -13
 	self.newMap:ClearAllPoints()
 	self.newMap:SetPoint("TOPLEFT", 20, y)
 	self.newMap:SetPoint("TOPRIGHT", -20, y)
+	-- the tip for the own marker in the same place (the two never show together)
+	if self.markerTip then
+		self.markerTip:ClearAllPoints()
+		self.markerTip:SetPoint("TOP", 0, y + 5)
+		self:UpdateMarkerHint()
+	end
 	self:ApplyTransform(true)
+end
+
+-- The tip for the own marker (since 1.3.2): in the dungeon the player is in, no marker yet, never set one before and
+-- not clicked away (db.markerHint), not while a route is drawn or the band about a new map shows. Fits narrow maps.
+function View:UpdateMarkerHint()
+	local tip = self.markerTip
+	if not tip then return end
+	local show = DR.db.markerHint ~= "done" and self.key ~= nil and self.key == DR.currentKey
+		and not DR:GetMarker(self.key) and not self.newMap:IsShown()
+		and not (self.route and DR.Editor:IsEditing(self.key, self.route))
+	if show then
+		-- as wide as the text, at most the map less a margin; the text (anchored left and right) wraps inside
+		local width = math.min(tip.Text:GetStringWidth(), math.max(120, (self.frame:GetWidth() or 300) - 60))
+		tip:SetWidth(width + 16)
+		tip:SetHeight(tip.Text:GetStringHeight() + 10)
+	end
+	tip:SetShown(show)
 end
 
 -- The "?" beside the crosshair, or in its corner where the crosshair is hidden (outside the dungeons).
@@ -644,12 +781,25 @@ function View:OnMouseUp(button)
 	local u, v = self:GetCursorUV()
 	if not u then return end
 	if DR.Editor:OnMapClick(button, u, v) then return end
+	-- Shift-click puts the own marker here (since 1.3.2); while editing the click belongs to the editor (above)
+	if button == "LeftButton" and IsShiftKeyDown() and self.key and self.floor then
+		DR:SetMarker(self.key, self.floor, u, v)
+		return
+	end
 	if button == "RightButton" then
 		self:ResetZoom()
 	end
 end
 
 function View:OnUpdate(elapsed)
+	-- the own marker follows the mouse while it is dragged (DropOwnMarker keeps it where it is let go)
+	if self.dragOwn then
+		local u, v = self:GetCursorUV()
+		if u then
+			self.dragOwn.u, self.dragOwn.v = u, v
+			self:PlacePin(self.own, u, v)
+		end
+	end
 	local press = self.press
 	if press and press.canPan then
 		local fx, fy = self:CursorInFrame()
@@ -851,6 +1001,43 @@ function View:Refresh()
 	self:UpdateMembers()
 	self:UpdateGroup()
 	self:UpdatePing()
+	self:UpdateOwnMarker()
+end
+
+-- The own marker on its floor (since 1.3.2), not while it hangs on the mouse.
+function View:UpdateOwnMarker()
+	if self.dragOwn then return end
+	local marker = DR:GetMarker(self.key)
+	if marker and marker.floor == self.floor then
+		self:PlacePin(self.own, marker.x, marker.y)
+		self.own:Show()
+	else
+		self.own:Hide()
+	end
+	self:UpdateMarkerHint()
+end
+
+-- The own marker let go after dragging: it stays where the mouse is (a click without moving keeps it in place).
+function View:DropOwnMarker()
+	local drag = self.dragOwn
+	self.dragOwn = nil
+	if drag and drag.u and self.key and self.floor then
+		DR:SetMarker(self.key, self.floor, drag.u, drag.v)
+	else
+		self:UpdateOwnMarker()
+	end
+end
+
+-- The padlock shut (shackle down, full gold) or open (shackle lifted, faint), since 1.3.2.
+function View:UpdateLock()
+	local lock = self.lock
+	if not lock then return end
+	local locked = DR.db.lockWindow == true
+	local alpha = locked and 1 or 0.55
+	lock.Shackle:ClearAllPoints()
+	lock.Shackle:SetPoint("BOTTOM", lock.Body, "TOP", locked and 0 or 2, locked and -1 or 2)
+	lock.Shackle:SetVertexColor(LOCK_COLOR[1], LOCK_COLOR[2], LOCK_COLOR[3], alpha)
+	lock.Body:SetVertexColor(LOCK_COLOR[1], LOCK_COLOR[2], LOCK_COLOR[3], alpha)
 end
 
 -- The others in the group ----------------------------------------------------------------------
@@ -1180,6 +1367,9 @@ function View:PlaceAllPins()
 	if self.ping and self.ping:IsShown() and self.ping.u then
 		self:PlacePin(self.ping, self.ping.u, self.ping.v)
 	end
+	if self.own and self.own:IsShown() and self.own.u then
+		self:PlacePin(self.own, self.own.u, self.own.v)
+	end
 end
 
 function View:ReleasePins()
@@ -1293,6 +1483,7 @@ function View:UpdateGroup()
 	-- the dungeon again (for a player who loaded the addon inside and sees the wrong one)
 	self.locate:SetShown(inside or DR:InKnownInstance())
 	self:PlaceHelp()
+	self:UpdateMarkerHint()
 	if not inside or not DR.db.showPlayer then
 		self:HideGroup()
 		return

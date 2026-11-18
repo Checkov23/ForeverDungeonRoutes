@@ -1157,6 +1157,30 @@ local function refreshOrnate(dungeon, index)
 	return fits
 end
 
+-- Locked (since 1.3.2, a wish on CurseForge: "the window can't be moved/resized, and doesn't close when I hit ESC"):
+-- the window and the small map stay where they are and keep their size, and Escape no longer closes the window, which
+-- for that leaves UISpecialFrames; the padlock on the map switches it (MapView.lua). X, /fdr and the key still close it.
+local function applyLock()
+	local locked = DR.db.lockWindow == true
+	local at
+	for i, name in ipairs(UISpecialFrames) do
+		if name == "ForeverDungeonRoutesFrame" then at = i end
+	end
+	if locked and at then
+		table.remove(UISpecialFrames, at)
+	elseif not locked and not at then
+		table.insert(UISpecialFrames, "ForeverDungeonRoutesFrame")
+	end
+	if frame then frame.Grip:SetShown(not locked) end
+	if mini then mini.Grip:SetShown(not locked) end
+	if view then view:UpdateLock() end
+end
+
+function DR:SetLocked(on)
+	self.db.lockWindow = on and true or false
+	self:Fire("SETTINGS_CHANGED", "lockWindow")
+end
+
 -- Building --------------------------------------------------------------------------------------
 
 local function build()
@@ -1171,7 +1195,7 @@ local function build()
 	frame:SetDontSavePosition(true)
 	frame:EnableMouse(true)
 	frame:Hide()
-	table.insert(UISpecialFrames, "ForeverDungeonRoutesFrame")
+	-- Escape closes the window unless it is locked (applyLock at the end of build)
 	restoreGeometry()
 	frame:SetAlpha(DR.db.alpha or 1)
 	frame:SetScript("OnHide", function()
@@ -1193,7 +1217,7 @@ local function build()
 	header:SetHeight(HEADER_H)
 	header:EnableMouse(true)
 	header:RegisterForDrag("LeftButton")
-	header:SetScript("OnDragStart", function() frame:StartMoving() end)
+	header:SetScript("OnDragStart", function() if not DR.db.lockWindow then frame:StartMoving() end end)
 	header:SetScript("OnDragStop", function()
 		frame:StopMovingOrSizing()
 		saveGeometry()
@@ -1257,7 +1281,7 @@ local function build()
 	grip.Highlight:SetTexture("Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Highlight")
 	grip.Highlight:SetAllPoints()
 	DR.ThemeIcon(grip.Highlight, "gripHover")
-	grip:SetScript("OnMouseDown", function() frame:StartSizing("BOTTOMRIGHT") end)
+	grip:SetScript("OnMouseDown", function() if not DR.db.lockWindow then frame:StartSizing("BOTTOMRIGHT") end end)
 	grip:SetScript("OnMouseUp", function()
 		frame:StopMovingOrSizing()
 		saveGeometry()
@@ -1266,6 +1290,7 @@ local function build()
 
 	buildOrnate()
 	layout()
+	applyLock()
 end
 
 -- Small map -------------------------------------------------------------------------------------
@@ -1324,7 +1349,7 @@ local function buildMini()
 	bar:SetHeight(MINI_BAR)
 	bar:EnableMouse(true)
 	bar:RegisterForDrag("LeftButton")
-	bar:SetScript("OnDragStart", function() mini:StartMoving() end)
+	bar:SetScript("OnDragStart", function() if not DR.db.lockWindow then mini:StartMoving() end end)
 	bar:SetScript("OnDragStop", function()
 		mini:StopMovingOrSizing()
 		saveMiniGeometry()
@@ -1363,12 +1388,13 @@ local function buildMini()
 	grip.Highlight:SetTexture("Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Highlight")
 	grip.Highlight:SetAllPoints()
 	DR.ThemeIcon(grip.Highlight, "gripHover")
-	grip:SetScript("OnMouseDown", function() mini:StartSizing("BOTTOMRIGHT") end)
+	grip:SetScript("OnMouseDown", function() if not DR.db.lockWindow then mini:StartSizing("BOTTOMRIGHT") end end)
 	grip:SetScript("OnMouseUp", function()
 		mini:StopMovingOrSizing()
 		saveMiniGeometry()
 	end)
 	mini.Grip = grip
+	applyLock()
 end
 
 -- Puts the map view back into the window, shown or not.
@@ -1675,6 +1701,8 @@ DR:On("SETTINGS_CHANGED", function(key)
 		-- at once, whatever else the refresh below does
 		view:UpdateRoom()
 		view:UpdateMembers()
+	elseif key == "lockWindow" then
+		applyLock()
 	elseif key == "theme" then
 		layout()
 	elseif key == "listScale" then

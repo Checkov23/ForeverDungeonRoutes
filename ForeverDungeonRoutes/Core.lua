@@ -34,6 +34,9 @@ local DB_DEFAULTS = {
 	lineColor = "gradient", -- colour of the route line (since 1.3.0): "gradient" (turquoise to orange), "white",
 	                        -- "magenta" or "cyan" (MapView.lua, LINE_COLORS)
 	alpha = 1,
+	lockWindow = false, -- the padlock on the map (since 1.3.2): window and small map stay where they are and keep their
+	                    -- size, and Escape no longer closes the window
+	-- markerHint (since 1.3.2): "done" once the player set an own marker or clicked the tip about it away
 	window = {},        -- point, relativePoint, x, y, width, height
 	active = {},        -- [dungeonKey] = routeId ("default" or a user route id)
 	routes = {},        -- [dungeonKey] = { [routeId] = route }
@@ -44,6 +47,7 @@ local DB_DEFAULTS = {
 local CHAR_DEFAULTS = {
 	progress = {},      -- [dungeonKey] = { routeId = id, done = { [stopIndex] = true }, time = epoch,
 	                    --   started = epoch (entered), finished = epoch (last boss) }
+	markers = {},       -- the own marker (since 1.3.2): [dungeonKey] = { floor = uiMapID, x = 0..1, y = 0..1 }
 }
 
 -- Settings of 0.3.0 that are gone since the addon draws its own map, and of the minimap ping
