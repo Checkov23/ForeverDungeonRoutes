@@ -699,10 +699,12 @@ function DR:GetMarker(key)
 	return key and self.cdb and self.cdb.markers and self.cdb.markers[key] or nil
 end
 
+-- In the drawn map's coordinates. MapView keeps it on what the map shows: on the drawn map 0..1; the map turned north up
+-- (since 1.3.5) can show a little beyond the drawn map, so the marker may lie there, and only far-off values are cut.
 function DR:SetMarker(key, floor, x, y)
 	if not key or not floor or not x or not y then return end
 	self.cdb.markers = self.cdb.markers or {}
-	self.cdb.markers[key] = { floor = floor, x = math.max(0, math.min(1, x)), y = math.max(0, math.min(1, y)) }
+	self.cdb.markers[key] = { floor = floor, x = math.max(-1, math.min(2, x)), y = math.max(-1, math.min(2, y)) }
 	self.db.markerHint = "done" -- whoever set one knows the keys: the tip on the map stays away from now on
 	self:Fire("MARKER_CHANGED", key)
 end

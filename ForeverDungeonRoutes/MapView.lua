@@ -45,6 +45,7 @@ local SIDE_COLOR = { 0.89, 0.87, 0.82 }
 local CASING_COLOR = { 0.05, 0.04, 0.03, 0.78 }
 local ARROW_COLOR = { 0.06, 0.05, 0.03, 0.92 }
 local EDIT_DOT_COLOR = { 1.00, 1.00, 1.00, 0.95 }
+local EDGE_COLOR = { 0.85, 0.85, 0.85, 0.6 } -- the edge of the drawn map while editing on the map turned north up
 
 local MEMBER_COLOR = { 0.45, 0.78, 1.00 } -- rooms of the others in the group
 local MEMBER_ALPHA = 0.45
@@ -692,10 +693,130 @@ end
 
 -- Geometry ----------------------------------------------------------------------------------
 
+-- North up (since 1.3.5): on nine levels of the new dungeons Santiago's map is turned against north (Data/Pictures.lua,
+-- frame: Alcaz Prison by 89 degrees, the Depths of Forbidden Magic by 167), and so were the minimap pictures laid on it.
+-- Where Data/Minimaps.lua has them north up as well (DR.MinimapArtNorth, over a rectangle of the world around the
+-- building, the route and the rooms), the view with the minimap pictures shows them so, like the minimap in the game
+-- (Oliver, 19.11.2026), and turns everything on the map with them. Routes, rooms, markers and the group keep the drawn
+-- map's coordinates (saved routes, export strings and group messages stay as they are); only the drawing converts
+-- them (View:ToCanvas, View:FromCanvas).
+local turns = {} -- [floor] = the turn of northTurn, worked out once
+local CANVAS = { 0, 0, MAP_W, MAP_H } -- what the map shows where nothing reaches beyond the canvas (View:UpdateExtent)
+local EXTENT_MARGIN = 24 -- canvas pixels kept around a route point or the marker beyond the north-up rectangle
+
+-- The turn of a floor from the drawn map's coordinates to the north-up rectangle: shown u = t[1] u + t[2] v + t[3],
+-- shown v = t[4] u + t[5] v + t[6]; back over the world (t.frame, t.world). Nil where the floor has none.
+local function northTurn(floor)
+	local north = DR.MinimapArtNorth and DR.MinimapArtNorth[floor]
+	local info = DR.Floors[floor]
+	local f, r = info and info.frame, north and north.world
+	if not f or not r then return nil end
+	local turn = turns[floor]
+	if turn and turn.frame == f and turn.world == r then return turn end
+	-- frame: u = a north + b west + c, v = d north + e west + g; the rectangle { north min, west min, north max,
+	-- west max }: shown u = (west max - west) / its width, shown v = (north max - north) / its height
+	local a, b, c, d, e, g = f[1], f[2], f[3], f[4], f[5], f[6]
+	local det = a * e - b * d
+	local sn, sw = r[3] - r[1], r[4] - r[2]
+	if det == 0 or not (sn > 0) or not (sw > 0) then return nil end
+	turn = {
+		d / (det * sw), -a / (det * sw), r[4] / sw + (a * g - d * c) / (det * sw),
+		-e / (det * sn), b / (det * sn), r[3] / sn + (e * c - b * g) / (det * sn),
+		frame = f, world = r,
+	}
+	turns[floor] = turn
+	return turn
+end
+
+-- The linear part of a turn in canvas pixels: a direction or length on the drawn map to the one shown.
+local function turnPixels(t)
+	return t[1], t[2] * MAP_W / MAP_H, t[4] * MAP_H / MAP_W, t[5]
+end
+
+-- Where a point in the drawn map's coordinates (u, v, 0..1) lies on the canvas, in its pixels (1002 by 668).
+function View:ToCanvas(u, v)
+	local t = self.turn
+	if t then
+		return (t[1] * u + t[2] * v + t[3]) * MAP_W, (t[4] * u + t[5] * v + t[6]) * MAP_H
+	end
+	return u * MAP_W, v * MAP_H
+end
+
+-- And back: the drawn map's coordinates of a point on the canvas.
+function View:FromCanvas(x, y)
+	local t = self.turn
+	if not t then
+		return x / MAP_W, y / MAP_H
+	end
+	local f, r = t.frame, t.world
+	local west = r[4] - x / MAP_W * (r[4] - r[2])
+	local north = r[3] - y / MAP_H * (r[3] - r[1])
+	return f[1] * north + f[2] * west + f[3], f[4] * north + f[5] * west + f[6]
+end
+
+-- What the map shows, in canvas pixels { left, top, right, bottom }: the canvas, and on the map turned north up also
+-- whatever of the shown route on this floor or of the own marker lies beyond it. The north-up rectangle frames the
+-- building, the standard route and the rooms (werkzeug/minikarten_export.py); an own route or a marker set on the
+-- drawn map can reach further on Santiago's map and would otherwise be cut off (the review of 1.3.5). Layout fits and
+-- ApplyTransform keeps this in view. Returns whether it changed.
+function View:UpdateExtent()
+	local x0, y0, x1, y1 = 0, 0, MAP_W, MAP_H
+	local floor, route = self.floor, self.route
+	if self.turn and floor then
+		local function add(u, v)
+			local x, y = self:ToCanvas(u, v)
+			x0, x1 = math.min(x0, x - EXTENT_MARGIN), math.max(x1, x + EXTENT_MARGIN)
+			y0, y1 = math.min(y0, y - EXTENT_MARGIN), math.max(y1, y + EXTENT_MARGIN)
+		end
+		if route then
+			for _, path in ipairs(route.paths) do
+				if path.floor == floor then
+					for i = 1, #path.pts - 1, 2 do add(path.pts[i], path.pts[i + 1]) end
+				end
+			end
+			for _, list in ipairs({ route.stops, route.notes or {}, route.links or {} }) do
+				for _, entry in ipairs(list) do
+					if DR.OnFloor(entry, floor) then add(entry.x, entry.y) end
+				end
+			end
+		end
+		local marker = self.key and DR:GetMarker(self.key)
+		if marker and marker.floor == floor then add(marker.x, marker.y) end
+	end
+	local e = self.extent
+	if e and e[1] == x0 and e[2] == y0 and e[3] == x1 and e[4] == y1 then return false end
+	self.extent = (x0 == 0 and y0 == 0 and x1 == MAP_W and y1 == MAP_H) and CANVAS or { x0, y0, x1, y1 }
+	return true
+end
+
+-- Turns the drawing north up or back (UpdateArt). Zoomed in, the spot of the dungeon in the middle of the map stays in
+-- the middle; pins, lines and glowing rooms move to their new places.
+function View:SetTurn(turn)
+	if turn == self.turn then return end
+	local w, h = self.frame:GetWidth(), self.frame:GetHeight()
+	local s = self.scale
+	local u, v
+	if self.zoom > 1 and s and s > 0 and w and w > 0 and h and h > 0 then
+		u, v = self:FromCanvas((w / 2 - self.ox) / s, (h / 2 - self.oy) / s)
+	end
+	self.turn = turn
+	self:UpdateExtent()
+	self:Layout() -- the fit for what the map shows now; places pins and lines anew
+	if u then
+		s = self.fit * self.zoom
+		local x, y = self:ToCanvas(u, v)
+		self.ox, self.oy = w / 2 - x * s, h / 2 - y * s
+		self:ApplyTransform(true)
+	end
+	self:UpdateRoom()
+	self:UpdateMembers()
+end
+
 function View:Layout()
 	local w, h = self.frame:GetWidth(), self.frame:GetHeight()
 	if not w or w <= 0 or not h or h <= 0 then return end
-	self.fit = math.min(w / MAP_W, h / MAP_H)
+	local e = self.extent or CANVAS -- the canvas, or more where the map is turned north up (UpdateExtent, since 1.3.5)
+	self.fit = math.min(w / (e[3] - e[1]), h / (e[4] - e[2]))
 	-- the "?" where the map has room for it beside the crosshair and the room's name (the window's map is always wide
 	-- enough, the small map only at about its first size)
 	self.help:SetShown(w >= HELP_MIN_W)
@@ -752,16 +873,18 @@ function View:ApplyTransform(redraw)
 	if not w or w <= 0 or not h or h <= 0 then return end
 	local s = self.fit * self.zoom
 	if s <= 0 then return end
-	local cw, ch = MAP_W * s, MAP_H * s
+	-- what the map shows: the canvas, or more on the map turned north up (UpdateExtent, since 1.3.5)
+	local e = self.extent or CANVAS
+	local cw, ch = (e[3] - e[1]) * s, (e[4] - e[2]) * s
 	if cw <= w then
-		self.ox = (w - cw) / 2
+		self.ox = (w - cw) / 2 - e[1] * s
 	else
-		self.ox = DR.Clamp(self.ox, w - cw, 0)
+		self.ox = DR.Clamp(self.ox, w - e[3] * s, -e[1] * s)
 	end
 	if ch <= h then
-		self.oy = (h - ch) / 2
+		self.oy = (h - ch) / 2 - e[2] * s
 	else
-		self.oy = DR.Clamp(self.oy, h - ch, 0)
+		self.oy = DR.Clamp(self.oy, h - e[4] * s, -e[2] * s)
 	end
 	local rescaled = s ~= self.scale
 	self.scale = s
@@ -782,11 +905,22 @@ function View:CursorInFrame()
 	return x / scale - left, top - y / scale
 end
 
+-- The point under the mouse in the drawn map's coordinates (also where the map is turned north up).
 function View:GetCursorUV()
 	local fx, fy = self:CursorInFrame()
 	if not fx then return nil end
 	local s = self.scale
-	return (fx - self.ox) / (MAP_W * s), (fy - self.oy) / (MAP_H * s)
+	return self:FromCanvas((fx - self.ox) / s, (fy - self.oy) / s)
+end
+
+-- The same, kept on what the map shows (for the own marker): on the drawn map its area, as before; on the map turned
+-- north up the whole north-up rectangle, which can reach beyond the drawn map (since 1.3.5: there the marker stays
+-- under the mouse instead of jumping to the drawn map's edge; DR:SetMarker keeps such a point).
+function View:CursorOnShownMap()
+	local fx, fy = self:CursorInFrame()
+	if not fx then return nil end
+	local s, e = self.scale, self.extent or CANVAS
+	return self:FromCanvas(DR.Clamp((fx - self.ox) / s, e[1], e[3]), DR.Clamp((fy - self.oy) / s, e[2], e[4]))
 end
 
 function View:ZoomAt(fx, fy, factor)
@@ -806,7 +940,8 @@ function View:CenterOn(u, v, zoom)
 	if not w or w <= 0 then return end
 	self.zoom = DR.Clamp(math.max(self.zoom, zoom or 1), 1, MAX_ZOOM)
 	local s = self.fit * self.zoom
-	self.ox, self.oy = w / 2 - u * MAP_W * s, h / 2 - v * MAP_H * s
+	local x, y = self:ToCanvas(u, v)
+	self.ox, self.oy = w / 2 - x * s, h / 2 - y * s
 	self:ApplyTransform()
 end
 
@@ -840,7 +975,7 @@ function View:OnMouseUp(button)
 	if DR.Editor:OnMapClick(button, u, v) then return end
 	-- Shift-click puts the own marker here (since 1.3.2); while editing the click belongs to the editor (above)
 	if button == "LeftButton" and IsShiftKeyDown() and self.key and self.floor then
-		DR:SetMarker(self.key, self.floor, u, v)
+		DR:SetMarker(self.key, self.floor, self:CursorOnShownMap())
 		return
 	end
 	if button == "RightButton" then
@@ -851,7 +986,7 @@ end
 function View:OnUpdate(elapsed)
 	-- the own marker follows the mouse while it is dragged (DropOwnMarker keeps it where it is let go)
 	if self.dragOwn then
-		local u, v = self:GetCursorUV()
+		local u, v = self:CursorOnShownMap()
 		if u then
 			self.dragOwn.u, self.dragOwn.v = u, v
 			self:PlacePin(self.own, u, v)
@@ -904,12 +1039,24 @@ end
 -- along a line through the middle of the part (width along the line, height as thickness), a little larger so
 -- the part lies in its full inside and the edge fades out around it.
 local function placeGlow(view, line, box)
-	local cx, cy = box[2] * MAP_W, box[3] * MAP_H
+	local cx, cy = view:ToCanvas(box[2], box[3])
 	local half = box[4] * ROOM_GLOW / 2
+	local thickness = box[5] * ROOM_GLOW
 	local dx, dy = math.cos(box[6]) * half, math.sin(box[6]) * half
+	local t = view.turn
+	if t then
+		-- turned north up with the map (since 1.3.5): the line turns and stretches with it, the thickness keeps the
+		-- area of the part (a rectangle the turn would skew a little becomes the nearest rectangle)
+		local p, q, r, s = turnPixels(t)
+		dx, dy = p * dx + q * dy, r * dx + s * dy
+		local len = math.sqrt(dx * dx + dy * dy)
+		if len > 0 then
+			thickness = thickness * math.abs(p * s - q * r) * half / len
+		end
+	end
 	line:SetStartPoint("TOPLEFT", view.canvas, cx - dx, -(cy - dy))
 	line:SetEndPoint("TOPLEFT", view.canvas, cx + dx, -(cy + dy))
-	line:SetThickness(box[5] * ROOM_GLOW)
+	line:SetThickness(thickness)
 end
 
 local function createGlow(view, color)
@@ -928,12 +1075,17 @@ local function hideAll(list)
 end
 
 -- The soft glow over the parts of a room on the shown floor, from the list of lines (created as needed, stored
--- before use); returns how many lines of the list are in use, and whether the room is big (then its glow is
--- faint and does not pulse).
+-- before use); returns how many lines of the list are in use, whether the room is big (then its glow is
+-- faint and does not pulse) and the share of the map its glow covers.
 local function glowRoom(view, lines, used, room, color, alpha)
 	local area = 0
 	for _, box in ipairs(room.boxes or {}) do
 		if box[1] == view.floor then area = area + box[4] * box[5] * ROOM_GLOW * ROOM_GLOW end
+	end
+	if view.turn then
+		-- as large as it shows on the map turned north up (since 1.3.5)
+		local p, q, r, s = turnPixels(view.turn)
+		area = area * math.abs(p * s - q * r)
 	end
 	local big = area > BIG_ROOM * MAP_W * MAP_H
 	if big then alpha = math.min(alpha, BIG_ROOM_ALPHA) end
@@ -950,11 +1102,11 @@ local function glowRoom(view, lines, used, room, color, alpha)
 			line:Show()
 		end
 	end
-	return used, big
+	return used, big, area / (MAP_W * MAP_H)
 end
 
 function View:UpdateRoom()
-	self.numRoomLines = 0
+	self.numRoomLines, self.roomShare = 0, nil
 	hideAll(self.roomLines)
 	self.status:Hide()
 	self.statusBack:Hide()
@@ -965,7 +1117,8 @@ function View:UpdateRoom()
 		self.statusBack:Show()
 		self:FitStatus()
 		if DR.db.showRoom then
-			self.numRoomLines, self.roomStill = glowRoom(self, self.roomLines, 0, room, ROOM_COLOR, ROOM_ALPHA)
+			self.numRoomLines, self.roomStill, self.roomShare = glowRoom(self, self.roomLines, 0, room, ROOM_COLOR,
+				ROOM_ALPHA)
 		end
 	end
 	self:PlaceLegend()
@@ -1032,6 +1185,13 @@ function View:UpdateArt()
 			picture, minimap = nil, minimapArt
 		end
 	end
+	-- the minimap pictures north up where the drawn map is turned against north (since 1.3.5): the same pictures from
+	-- DR.MinimapArtNorth, and the route and everything else on the map turned with them (SetTurn)
+	local turn = minimap and northTurn(floor) or nil
+	if turn then
+		minimap = DR.MinimapArtNorth[floor]
+	end
+	self:SetTurn(turn)
 	self.artMissing = missing
 	self.newMap:SetShown(missing or tilesNew)
 	self.newMapBack:SetShown(missing or tilesNew)
@@ -1093,6 +1253,7 @@ function View:Refresh()
 	if self.floor then
 		self:AddMapNotes()
 	end
+	self:UpdateExtent() -- what the map shows, before Layout fits it (since 1.3.5)
 	self:Layout()
 	self:UpdateRoom()
 	self:UpdateMembers()
@@ -1110,6 +1271,10 @@ function View:UpdateOwnMarker()
 		self.own:Show()
 	else
 		self.own:Hide()
+	end
+	-- on the map turned north up a marker beyond its rectangle widens what the map shows (since 1.3.5)
+	if self.turn and self:UpdateExtent() then
+		self:Layout()
 	end
 	self:UpdateMarkerHint()
 end
@@ -1342,11 +1507,10 @@ function View:Dot(x, y, size, r, g, b, a)
 	return dot
 end
 
-local function toCanvas(pts)
+local function toCanvas(view, pts)
 	local xs, ys = {}, {}
 	for i = 1, #pts / 2 do
-		xs[i] = pts[2 * i - 1] * MAP_W
-		ys[i] = pts[2 * i] * MAP_H
+		xs[i], ys[i] = view:ToCanvas(pts[2 * i - 1], pts[2 * i])
 	end
 	return xs, ys
 end
@@ -1354,7 +1518,7 @@ end
 -- k is the canvas scale: widths are given in screen units and divided by it, so lines keep their
 -- width on screen while zooming.
 function View:DrawMainPath(path, k)
-	local xs, ys = toCanvas(path.pts)
+	local xs, ys = toCanvas(self, path.pts)
 	local n = #xs
 	if n < 2 then return end
 	local width = (DR.db.lineWidth or 4) / k
@@ -1406,7 +1570,7 @@ function View:DrawMainPath(path, k)
 end
 
 function View:DrawSidePath(path, k)
-	local xs, ys = toCanvas(path.pts)
+	local xs, ys = toCanvas(self, path.pts)
 	local n = #xs
 	if n < 2 then return end
 	local width = math.max(2, (DR.db.lineWidth or 4) - 1) / k
@@ -1464,16 +1628,30 @@ function View:DrawLines()
 			end
 		end
 	end
+	-- editing on the map turned north up (since 1.3.5): a thin line along the edge of the drawn map. Route points go
+	-- only inside it (they are kept in the drawn map's coordinates), while the north-up map can show more around it.
+	if editingRoute and self.turn then
+		local xs, ys = {}, {}
+		for i, corner in ipairs({ { 0, 0 }, { 1, 0 }, { 1, 1 }, { 0, 1 } }) do
+			xs[i], ys[i] = self:ToCanvas(corner[1], corner[2])
+		end
+		for i = 1, 4 do
+			local j = i % 4 + 1
+			self:Segment(-2, xs[i], ys[i], xs[j], ys[j], 1.5 / k, unpack(EDGE_COLOR))
+		end
+	end
 end
 
 -- Pins ----------------------------------------------------------------------------------------
 
+-- A pin at a point in the drawn map's coordinates (kept in pin.u, pin.v; drawn turned where the map is north up).
 function View:PlacePin(pin, u, v)
 	pin.u, pin.v = u, v
 	local s = self.scale
+	local x, y = self:ToCanvas(u, v)
 	pin:SetScale(1 / s)
 	pin:ClearAllPoints()
-	pin:SetPoint("CENTER", self.canvas, "TOPLEFT", u * MAP_W * s, -v * MAP_H * s)
+	pin:SetPoint("CENTER", self.canvas, "TOPLEFT", x * s, -y * s)
 end
 
 local function eachPin(view, fn)

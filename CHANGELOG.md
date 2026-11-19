@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.3.5
+
+The minimap pictures with north at the top, like the minimap in your game.
+
+- On eight levels of the new dungeons the drawn map is turned against north (City of Dalaran, Ataal'Byzal, both levels
+  of Alcaz Prison and the four Depths of Blackmaw Hold), and the view from the game's minimap pictures (the round
+  button left of the padlock) was turned with it. It now shows these levels with north at the top, like the minimap in
+  your game. The route, the stops, the squares to other levels, your marker and the glowing rooms turn with the
+  pictures. The drawn maps stay as they are.
+- On these levels the minimap view frames the dungeon itself: the caves of Blackmaw Hold show larger than before,
+  Alcaz Prison, Ataal'Byzal and Dalaran a little smaller (a turned map needs more room). Where your own route reaches
+  beyond that frame, the map shows that much more.
+- The north-up view can show a little more around the drawn map (at Alcaz Prison the entrance hall east of the main
+  corridor). Your marker goes there too. While you edit a route there, a thin line marks the edge of the drawn map:
+  route points can only go inside it.
+- Saved and shared routes and everything the addon sends to your group stay as they are: only the drawing turns.
+- No new files since 1.3.3: /reload is enough. Coming from 1.3.2 or older: quit and restart the game once (the map tiles
+  of 1.3.3 are new files).
+
 ## 1.3.4
 
 A switch on the map between the drawn map and the game's minimap pictures.

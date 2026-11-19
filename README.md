@@ -170,7 +170,8 @@ By hand:
 - The round button left of the padlock switches between the drawn map and the game's minimap pictures
   (the same as "Map from the game's minimap" behind the gear button). The minimap pictures look like the
   minimap in your game, which makes it easier to see where you are on the route. On some levels of the new
-  dungeons Santiago's map is turned against north, and the minimap pictures with it.
+  dungeons Santiago's map is turned against north; the minimap pictures still show north at the top there, and the
+  route turns with them.
 - Your own marker: Shift-click on the map puts a green marker there, for example where you are. Drag it
   along as you go, right-click removes it; a new run takes it away. Only you see it. WoW gives addons no
   position inside dungeons, so this is the way to keep track of yourself on the route. Inside a dungeon a tip at the
@@ -303,7 +304,10 @@ Behind the gear button every map level can also show the game's own minimap pict
 (`Data/Minimaps.lua`, by file ID like the other map art): the pictures of the building parts the game
 puts on the level (where WoW: Forever rebuilt a dungeon, the new parts take the level of the old ones
 in the same place), outdoors those of the terrain tiles, turned and put together on the same spot as
-the map art, so routes and rooms fit both.
+the map art, so routes and rooms fit both. Where Santiago's map is turned against north, the same pictures are
+also laid out north up over a rectangle of the world around the dungeon (`DR.MinimapArtNorth`); the minimap view
+shows those and turns routes, rooms and markers the same way when it draws them, while everything saved keeps the
+coordinates of the drawn map.
 
 ## Support
 

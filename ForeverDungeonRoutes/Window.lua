@@ -472,6 +472,9 @@ function DR:ReportText()
 		lines[#lines + 1] = ("Map: %s, floor %s of %d, %s (%d)"):format(dungeon and dungeon.name or tostring(map.key),
 			tostring(indexOf(floors, floor) or "?"), #floors, info and info.name or "?", floor)
 		local art = ART_NAMES[map.artSource] or "unknown"
+		if map.turn then
+			art = art .. ", north up" -- the drawn map is turned on this floor, the minimap pictures are not (since 1.3.5)
+		end
 		if map.artMissing then
 			art = "drawn map in the addon, not loaded by the game; shown instead: " .. art
 		elseif map.artSource == "gametiles" then
