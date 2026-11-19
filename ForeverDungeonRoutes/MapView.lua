@@ -21,6 +21,8 @@ local ROOM_GLOW = 1.35      -- the soft glow over a part of a room is this much 
 -- City, the Spiral of Thorns ...) glows faint and still: pulsing it would pulse the whole map (Oliver, 14.11.2026).
 local BIG_ROOM, BIG_ROOM_ALPHA = 0.3, 0.2
 local HELP_MIN_W = 240      -- the "?" of the key to the signs only on a map at least this wide (since 1.3.0)
+local ART_TOGGLE_MIN_W = 280 -- the switch to the minimap pictures beside them only from this width (since 1.3.4), so the
+                             -- room's name in the lower left keeps its room on the small map
 local ADDON_PATH = "Interface\\AddOns\\ForeverDungeonRoutes\\"
 -- The classic maps' tiles, shipped with the addon since 1.3.3 (tiles\<file ID>.blp, Blizzard's files unchanged): the
 -- Russian, Spanish (Mexico) and Italian clients of WoW: Forever lack the game's own and drew the maps green (found by
@@ -299,6 +301,22 @@ local function lockOnEnter(button)
 	else
 		GameTooltip:SetText(L["Lock the window"], 1, 1, 1)
 		GameTooltip:AddLine(L["The window and the small map stay where they are and keep their size, and Escape no longer closes the window."], 0.9, 0.9, 0.9, true)
+	end
+	GameTooltip:Show()
+end
+
+-- The switch between the drawn map and the game's minimap pictures (since 1.3.4, Oliver: a button on the map rather
+-- than the box behind the gear button; a player on CurseForge found it hard to tell where he is on the route).
+local function artToggleOnEnter(button)
+	GameTooltip:SetOwner(button, "ANCHOR_LEFT")
+	-- what the map shows, not only the setting (UpdateArtToggle)
+	if View.artSource == "minimap" then
+		GameTooltip:SetText(L["Map from the game's minimap"], 1, 1, 1)
+		GameTooltip:AddLine(L["Click to show the drawn map again."], 0.9, 0.9, 0.9, true)
+	else
+		GameTooltip:SetText(L["Show the map from the game's minimap"], 1, 1, 1)
+		GameTooltip:AddLine(L["It looks like the minimap in your game, which makes it easier to see where you are."],
+			0.9, 0.9, 0.9, true)
 	end
 	GameTooltip:Show()
 end
@@ -596,6 +614,37 @@ function View:Create(parent)
 	lock:SetScript("OnLeave", GameTooltip_Hide)
 	self.lock = lock
 	self:UpdateLock()
+	-- the switch to the game's minimap pictures (since 1.3.4): left of the padlock and in its look, a small round map
+	-- with the player's arrow, bright while the minimap pictures show (as the padlock while locked); the same setting
+	-- as the box behind the gear button, drawn from the shapes the addon has (no new file)
+	local art = CreateFrame("Button", nil, frame)
+	art:SetSize(26, 26)
+	art:SetPoint("RIGHT", lock, "LEFT", -4, 0)
+	art:SetFrameLevel(frame:GetFrameLevel() + 40)
+	art.Back = art:CreateTexture(nil, "BACKGROUND")
+	art.Back:SetTexture(MEDIA .. "circle")
+	art.Back:SetAllPoints()
+	art.Back:SetVertexColor(0.05, 0.05, 0.06, 0.85)
+	art.Ring = art:CreateTexture(nil, "ARTWORK")
+	art.Ring:SetTexture(MEDIA .. "ring")
+	art.Ring:SetSize(16, 16)
+	art.Ring:SetPoint("CENTER")
+	art.Arrow = art:CreateTexture(nil, "ARTWORK", nil, 1)
+	art.Arrow:SetTexture(MEDIA .. "player")
+	art.Arrow:SetSize(9, 9)
+	art.Arrow:SetPoint("CENTER")
+	art.Highlight = art:CreateTexture(nil, "HIGHLIGHT")
+	art.Highlight:SetTexture(MEDIA .. "glow")
+	art.Highlight:SetBlendMode("ADD")
+	art.Highlight:SetAllPoints()
+	art:SetScript("OnClick", function()
+		DR:SetGameMinimap(not DR.db.gameMinimap)
+		if art:IsMouseOver() then artToggleOnEnter(art) end
+	end)
+	art:SetScript("OnEnter", artToggleOnEnter)
+	art:SetScript("OnLeave", GameTooltip_Hide)
+	art:Hide()
+	self.artToggle = art
 	-- the tip for the own marker (since 1.3.2, Oliver: the keys belong on the map, not hidden in the options): a band
 	-- at the top of the map in the dungeon the player is in, until the first marker is set or a click hides it for good
 	local tip = CreateFrame("Button", nil, frame)
@@ -651,6 +700,8 @@ function View:Layout()
 	-- enough, the small map only at about its first size)
 	self.help:SetShown(w >= HELP_MIN_W)
 	self.lock:SetShown(w >= HELP_MIN_W) -- the padlock with it (since 1.3.2)
+	self.width = w
+	self:UpdateArtToggle() -- the switch to the minimap pictures (since 1.3.4)
 	-- the hint on a new map at the top, below the route choice where that sits on the map (stop list hidden)
 	local y = (not DR.db.showStops and self.frame:GetParent() == DR.Window:GetFrame()) and -36 or -13
 	self.newMap:ClearAllPoints()
@@ -912,6 +963,7 @@ function View:UpdateRoom()
 		self.status:SetText(L["You are in: %s"]:format(DR.LocText(room, "name")))
 		self.status:Show()
 		self.statusBack:Show()
+		self:FitStatus()
 		if DR.db.showRoom then
 			self.numRoomLines, self.roomStill = glowRoom(self, self.roomLines, 0, room, ROOM_COLOR, ROOM_ALPHA)
 		end
@@ -1029,6 +1081,7 @@ function View:UpdateArt()
 		or ((self.artSource == "gametiles" or self.artSource == "minimap") and game) or nil
 	self.ownTilesRefused = tiles and own.no or nil
 	self.tilesNew = tilesNew
+	self:UpdateArtToggle()
 end
 
 function View:Refresh()
@@ -1082,6 +1135,42 @@ function View:UpdateLock()
 	lock.Shackle:SetPoint("BOTTOM", lock.Body, "TOP", locked and 0 or 2, locked and -1 or 2)
 	lock.Shackle:SetVertexColor(LOCK_COLOR[1], LOCK_COLOR[2], LOCK_COLOR[3], alpha)
 	lock.Body:SetVertexColor(LOCK_COLOR[1], LOCK_COLOR[2], LOCK_COLOR[3], alpha)
+end
+
+-- The switch to the minimap pictures (since 1.3.4): only where the floor has minimap pictures and the map is wide enough,
+-- bright while the map shows them. Not while they only stand in for a drawn picture the game does not know yet
+-- (artMissing): a click would change nothing there before the restart.
+function View:UpdateArtToggle()
+	local art = self.artToggle
+	if not art then return end
+	local floor = self.floor
+	local available = floor ~= nil and DR.MinimapArt ~= nil and DR.MinimapArt[floor] ~= nil and not self.artMissing
+	art:SetShown(available and (self.width or 0) >= ART_TOGGLE_MIN_W)
+	local alpha = self.artSource == "minimap" and 1 or 0.55
+	art.Ring:SetVertexColor(LOCK_COLOR[1], LOCK_COLOR[2], LOCK_COLOR[3], alpha)
+	art.Arrow:SetVertexColor(LOCK_COLOR[1], LOCK_COLOR[2], LOCK_COLOR[3], alpha)
+	self:FitStatus()
+end
+
+-- The room's name in the lower left ends before the buttons in the lower right (since 1.3.4: with the switch to the
+-- minimap pictures that row grew by one button, and on the small map a long name ran under it). A name that does not
+-- fit is cut by the game with "...".
+local STATUS_LEFT, STATUS_PAD, BUTTON_GAP, BUTTON_MARGIN = 14, 7, 4, 6
+
+function View:FitStatus()
+	local status, frame = self.status, self.frame
+	if not status or not frame then return end
+	local right = BUTTON_MARGIN
+	for _, button in ipairs({ self.locate, self.help, self.lock, self.artToggle }) do
+		if button and button:IsShown() then
+			right = right + button:GetWidth() + BUTTON_GAP
+		end
+	end
+	local room = (frame:GetWidth() or 0) - STATUS_LEFT - STATUS_PAD - right
+	status:SetWidth(0)
+	if room > 0 and (status:GetStringWidth() or 0) > room then
+		status:SetWidth(room)
+	end
 end
 
 -- The others in the group ----------------------------------------------------------------------
@@ -1527,6 +1616,7 @@ function View:UpdateGroup()
 	-- the dungeon again (for a player who loaded the addon inside and sees the wrong one)
 	self.locate:SetShown(inside or DR:InKnownInstance())
 	self:PlaceHelp()
+	self:FitStatus() -- the crosshair takes room from the room's name (since 1.3.4)
 	self:UpdateMarkerHint()
 	if not inside or not DR.db.showPlayer then
 		self:HideGroup()

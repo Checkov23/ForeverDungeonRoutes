@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.3.4
+
+A switch on the map between the drawn map and the game's minimap pictures.
+
+- A small round button left of the padlock on the map switches between the drawn map and the game's minimap pictures.
+  The minimap pictures look like the minimap in your game (on some levels of the new dungeons turned like the drawn
+  map), which makes it easier to see where you are on the route.
+  It is the same setting as "Map from the game's minimap" behind the gear button; the button shows where a map level
+  has minimap pictures and the map is wide enough.
+- On the small map a long room name now ends before the buttons in its lower right corner instead of running under them.
+- No new files since 1.3.3: /reload is enough. Coming from 1.3.2 or older: quit and restart the game once (the map tiles
+  of 1.3.3 are new files).
+
 ## 1.3.3
 
 Maps on every game client, and reporting a problem or an idea gets easier.

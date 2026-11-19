@@ -167,6 +167,10 @@ By hand:
 - The padlock beside the `?` locks the window and the small map: they stay where they are, keep their
   size, and Escape no longer closes the window (the X, `/fdr` and the key still do). Click it again to
   unlock.
+- The round button left of the padlock switches between the drawn map and the game's minimap pictures
+  (the same as "Map from the game's minimap" behind the gear button). The minimap pictures look like the
+  minimap in your game, which makes it easier to see where you are on the route. On some levels of the new
+  dungeons Santiago's map is turned against north, and the minimap pictures with it.
 - Your own marker: Shift-click on the map puts a green marker there, for example where you are. Drag it
   along as you go, right-click removes it; a new run takes it away. Only you see it. WoW gives addons no
   position inside dungeons, so this is the way to keep track of yourself on the route. Inside a dungeon a tip at the

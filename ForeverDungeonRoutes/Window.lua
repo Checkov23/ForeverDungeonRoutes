@@ -351,6 +351,12 @@ local function setting(key, value)
 	DR:Fire("SETTINGS_CHANGED", key)
 end
 
+-- the switch on the map between the drawn map and the game's minimap pictures (since 1.3.4, MapView.lua), the same
+-- setting as the box below
+function DR:SetGameMinimap(on)
+	setting("gameMinimap", on and true or false)
+end
+
 -- The colours of the route line (MapView.lua, DR.LineColor), since 1.3.0: the gradient as before, or one colour
 -- that stands out on the drawn maps and on the game's dark minimap pictures alike.
 local LINE_COLOR_CHOICES = { { "gradient", L["Turquoise to orange"] }, { "white", L["White"] },
