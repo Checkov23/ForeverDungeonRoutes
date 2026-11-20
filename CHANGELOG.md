@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.3.6
+
+The map follows you down in Uldaman, and the route list no longer joins a chat channel on its own.
+
+- Where the game gives a room the same name on two map levels, the map now shows the level of the next open boss when
+  you walk in or a boss dies there. In Uldaman the Hall of the Crafters leads from the upper level down to Archaedas,
+  and the map stayed up until Khaz'goroth's Seat. The same goes for 21 more rooms, among them Shadowforge City in
+  Blackrock Depths and the halls of Gnomeregan. A map level you choose by hand still stays until you click the
+  crosshair.
+- The route list no longer joins the chat channel FDRoutes unless you turn on "Route list over the server channel"
+  behind the gear button. Joined by default, it took a channel number, could move your own chat channels and came back
+  after /leave (thanks for the report). After the update the addon leaves the channel by itself; your guild and your
+  party still share their lists.
+- No new files since 1.3.3: /reload is enough. Coming from 1.3.2 or older: quit and restart the game once (the map tiles
+  of 1.3.3 are new files).
+
 ## 1.3.5
 
 The minimap pictures with north at the top, like the minimap in your game.

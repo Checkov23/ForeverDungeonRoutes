@@ -1575,14 +1575,26 @@ local function nextBossFloor(key)
 	return index and route.stops[index].floor
 end
 
--- The floor of the room the game names as the player's place (the shown one if it has the room).
-local function roomFloor(key)
-	local room = key == DR.currentKey and DR.Room:Get()
-	if not room then return nil end
+-- The floor of a room the game names as the player's place. A room on one floor is on that floor. A room the game names
+-- the same on several floors does not tell the level (Uldaman's Hall of the Crafters runs from the upper level down to
+-- Archaedas; Blackrock Depths' Shadowforge City, Gnomeregan's halls and 19 more): there the floor of the route's next
+-- open boss where the room reaches it, else the shown floor where it has the room, else the floor with most of it.
+-- Since 1.3.6; before, the shown floor won, and going down in Uldaman the map stayed up (Oliver, 19.11.2026).
+local function floorOfRoom(key, room)
+	local nextFloor = nextBossFloor(key)
+	if nextFloor and DR.Room:OnFloor(room, nextFloor) then
+		return nextFloor
+	end
 	if shown.key == key and shown.floor and DR.Room:OnFloor(room, shown.floor) then
 		return shown.floor
 	end
 	return DR.Room:MainFloor(room)
+end
+
+-- The floor of the room the game names as the player's place, if it names one.
+local function roomFloor(key)
+	local room = key == DR.currentKey and DR.Room:Get()
+	return room and floorOfRoom(key, room) or nil
 end
 
 -- Shows a dungeon; without a floor inside the dungeon the player's floor where the game reveals
@@ -1755,11 +1767,13 @@ end
 DR:On("ROUTE_CHANGED", refreshIfShown)
 DR:On("PROGRESS_CHANGED", refreshIfShown)
 -- A boss was ticked off (by the kill or by hand): while the map follows the run it moves on to
--- the floor of the next open boss, unless the game reveals the player's own floor.
+-- the floor of the next open boss, unless the game reveals the player's own floor. A room the game names tells it where
+-- the room lies on one floor; one on several floors leaves it to the next open boss (floorOfRoom, since 1.3.6).
 DR:On("PROGRESS_CHANGED", function(key)
 	if not Window:IsShown() or not following or key ~= DR.currentKey or shown.key ~= key then return end
-	if DR:GetUnitWorldPosition("player") or DR.Room:Get() then return end
-	local floor = nextBossFloor(key)
+	if DR:GetUnitWorldPosition("player") then return end
+	local room = DR.Room:Get()
+	local floor = room and floorOfRoom(key, room) or nextBossFloor(key)
 	if floor then
 		Window:SelectFloor(floor)
 	end
@@ -1801,14 +1815,18 @@ DR:On("DUNGEON_CHANGED", function(key)
 		view:UpdateRoom()
 	end
 end)
--- The player walked into another named room: while the map follows, it shows the room's floor.
+-- The player walked into another named room: while the map follows, it shows the room's floor (floorOfRoom: for a room
+-- on several floors the one of the next open boss, since 1.3.6).
 DR:On("ROOM_CHANGED", function(room)
 	if not Window:IsShown() then return end
-	if room and following and shown.key == DR.currentKey and not DR.Room:OnFloor(room, shown.floor) then
-		Window:SelectFloor(DR.Room:MainFloor(room))
-	else
-		view:UpdateRoom()
+	if room and following and shown.key == DR.currentKey then
+		local floor = floorOfRoom(shown.key, room)
+		if floor ~= shown.floor then
+			Window:SelectFloor(floor)
+			return
+		end
 	end
+	view:UpdateRoom()
 end)
 -- A boss fight starts (since 1.3.0): the map (window or small map) shows the floor of that boss's stop in the active
 -- route, where the game names no room (Blackmaw Hold, Alcaz Prison) the only sign of where the player is. Not within

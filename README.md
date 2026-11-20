@@ -91,7 +91,9 @@ replace them.
 - Where you are, as well as the game allows: WoW gives addons no position inside dungeons (since
   patch 7.1), so there is no arrow for you or your group. But the game names the room you are in
   (the text above the minimap). The addon knows where these rooms lie: the name of your room stands
-  below the map ("You are in: ..."), and the map follows you to the level of your room. If you like,
+  below the map ("You are in: ..."), and the map follows you to the level of your room. Where the game
+  gives a room the same name on two levels (Uldaman's Hall of the Crafters on the way down to Archaedas),
+  the map shows the level of the next open boss. If you like,
   the room also glows softly on the map (gear button, "Rooms glow on the map (yours and your
   group's)", off at first; big rooms such as the Chapel Gardens glow faint and still instead of
   pulsing). Between named rooms the map follows your run: after a boss kill it shows the level of
@@ -125,7 +127,8 @@ replace them.
   offered and takes it over with one click. Post the boss order in the group chat for players
   without the addon, or share routes as text (export and import).
 - Route list: players put their routes up for everyone, a click takes a route over, and good routes
-  get recommended. The list comes from your guild, your parties and the server channel FDRoutes.
+  get recommended. The list comes from your guild, your parties and, if you turn it on, the server
+  channel FDRoutes.
 - Four window styles: gilded (the default: a beveled gold frame on a dark ground, with a title plate,
   the map levels as tabs, gold-framed buttons and a footer), dark, parchment (light like the map art)
   and classic (the game's gold frame).
@@ -198,11 +201,13 @@ By hand:
 - "Route list" in the same menu: the routes others put up for the shown dungeon, with their author
   and number of stops, recommended ones first. A click takes one over; a route taken over from
   the list can be recommended once ("Recommend this route" in the route menu), and its author's
-  addon counts it. "Refresh the list" asks your guild, your party and
-  the players in the chat channel FDRoutes; the addon joins this channel and hides it from your
-  chat. Blizzard lets addons send no hidden messages to a chat channel, so the request there is a
-  short visible line ("FDR:Q") that the addon hides, and the answers come by whisper. The route
-  itself comes by whisper from its author or from a player who took it over.
+  addon counts it. "Refresh the list" asks your guild and your party, and, where you turned on
+  "Route list over the server channel" behind the gear button, the players in the chat channel
+  FDRoutes; only then does the addon join this channel, and it hides it from your chat (off at first
+  since 1.3.6: a joined channel takes a channel number and can move your own channels). Blizzard lets
+  addons send no hidden messages to a chat channel, so the request there is a short visible line
+  ("FDR:Q") that the addon hides, and the answers come by whisper. The route itself comes by whisper
+  from its author or from a player who took it over.
 - Above the stop list: the level of the dungeon in the colour of your level, the bosses down (the
   same count as in the small display; the mouse on it shows the optional and rare stops you ticked
   off besides; in the style gilded it stands on the head line of the stops), the run time and your

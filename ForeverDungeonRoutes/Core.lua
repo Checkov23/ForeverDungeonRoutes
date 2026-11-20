@@ -25,7 +25,7 @@ local DB_DEFAULTS = {
 	best = {},          -- [dungeonKey] = fastest run in seconds
 	list = {},          -- route list: [hash] = { key, name, author, stops, seen, holders = { player, ... }, text }
 	published = {},     -- own routes in the route list: [dungeonKey] = { [routeId] = true }
-	listChannel = true, -- route list also over the chat channel FDRoutes
+	listChannel = false, -- route list also over the chat channel FDRoutes (since 1.3.6 only when the player turns it on)
 	liked = {},         -- routes of the list this player recommended: [hash] = "sent" or "done"
 	runs = {},          -- last runs: [dungeonKey] = { { time = seconds, date = epoch, route = name }, ... }
 	listScale = 1,      -- text size of the stop list
@@ -62,6 +62,13 @@ function DR.UpgradeSettings(db)
 		db.onEnter = db.autoOpen and "window" or "mini"
 	end
 	db.autoOpen = nil
+	-- Since 1.3.6 the route list uses the server channel FDRoutes only when the player turns it on (gear button): joined
+	-- by default, it took a chat channel number, shifted the player's own channels and came back after /leave
+	-- (CurseForge 8754639, 20.11.2026). Off once for everyone, as hardly anyone knew it was on; on again stays on.
+	if not db.listChannelOptIn then
+		db.listChannel = false
+		db.listChannelOptIn = true
+	end
 end
 
 -- Progress older than this is considered a finished run and is cleared on the next visit.

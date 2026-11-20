@@ -7,7 +7,9 @@ local L = DR.L
 --   guild    putting a route in the list tells the guild members online, and so does logging in
 --   group    joining a party asks the others for their routes
 --   channel  "Refresh the list" posts a short line in the chat channel FDRoutes, which the addon
---            joins and hides; every addon there answers with whispers
+--            joins and hides; every addon there answers with whispers. Since 1.3.6 only where the
+--            player turned it on (setting listChannel, off at first: a joined channel takes a channel
+--            number and moved the player's own channels, CurseForge 8754639)
 -- Only short entries travel like this. The route itself comes by whisper from a player who has
 -- it (its author, or someone who took it over and so can hand it on), once someone takes it over.
 --
@@ -519,7 +521,13 @@ end
 
 -- On login: join the channel, tell the guild the own routes in the list.
 local function loggedIn()
-	joinChannel()
+	-- the channel as the setting says: joined where the player turned it on; left where it is off but still joined from
+	-- before 1.3.6 (the game keeps it over /reload), so it no longer takes a channel number unasked
+	if DR.db.listChannel then
+		joinChannel()
+	else
+		leaveChannel()
+	end
 	if DR.Share:InGuild() then
 		local texts = {}
 		for _, p in ipairs(published()) do
@@ -529,6 +537,8 @@ local function loggedIn()
 		if #texts > 0 then send("GUILD", texts) end
 	end
 end
+
+List.LoggedIn = loggedIn -- for the checks in tools/szenario.lua
 
 C_ChatInfo.RegisterAddonMessagePrefix(PREFIX)
 local events = CreateFrame("Frame")
