@@ -7,7 +7,7 @@ DR.version = (C_AddOns and C_AddOns.GetAddOnMetadata and C_AddOns.GetAddOnMetada
 
 local DB_DEFAULTS = {
 	showArrows = true,
-	gameMinimap = false, -- the game's minimap pictures instead of the map art (Data/Minimaps.lua)
+	gameMinimap = true, -- the game's minimap pictures instead of the map art (Data/Minimaps.lua); since 1.3.7 the default
 	showPlayer = true,  -- own position and group on the map, where the game reveals it (not in dungeons)
 	showStops = true,   -- stop list beside the map
 	showRoom = false,   -- rooms glow on the map: the player's own (gold) and, with showGroup, the group's (blue);
@@ -68,6 +68,13 @@ function DR.UpgradeSettings(db)
 	if not db.listChannelOptIn then
 		db.listChannel = false
 		db.listChannelOptIn = true
+	end
+	-- Since 1.3.7 the map shows the game's minimap pictures first, as the minimap in the game does (Oliver, 22.11.2026: "da
+	-- kann man sich besser orientieren"), with the switch "Minimap | Map" on every map. On once for everyone, as until
+	-- then it was off unless chosen; the drawn map chosen again stays.
+	if not db.gameMinimapFirst then
+		db.gameMinimap = true
+		db.gameMinimapFirst = true
 	end
 end
 

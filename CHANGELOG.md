@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.3.7
+
+The map starts with the game's own minimap pictures, has a switch for them on every map, and always shows north at the
+top, as the minimap does.
+
+- The map shows the game's minimap pictures first: they look like the minimap in your game, which makes it easier to
+  see where you are on the route. The switch "Minimap | Map" in the upper left corner of the map, on the small map
+  too, changes between them and the drawn map, and your choice stays. After the update everyone starts with the
+  minimap pictures once.
+- The map always faces the way the minimap does. Where Santiago's map of a new dungeon is turned against north (Alcaz
+  Prison, City of Dalaran and The Underbelly, Ataal'Byzal, the depths of Blackmaw Hold, and a few levels by a degree
+  or two), the drawn map now turns north up as well, so switching between the two keeps everything in place (thanks
+  for the suggestion).
+- Where the game's minimap shows too little of the way (Ironclad Cove in the Deadmines, the Wall Walk of Shadowfang
+  Keep, the Temple Gates of Ahn'Qiraj), the drawn map stays.
+- Quit and restart the game once after the update: the drawn maps of the new dungeons changed (the space around them
+  is clear now, so they can turn).
+
 ## 1.3.6
 
 The map follows you down in Uldaman, and the route list no longer joins a chat channel on its own.

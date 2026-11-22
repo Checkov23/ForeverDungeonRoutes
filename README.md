@@ -80,9 +80,11 @@ replace them.
   in the submenu "Raids". Of these, only Onyxia's Lair is part of WoW: Forever. It opens on December 9,
   together with the two new raids Barrow Deeps and Hyjal Summit, which are not in the addon yet. The
   other six are not open in WoW: Forever; their maps come from the map files in the game client.
-- Or the game's own minimap pictures (gear button, "Map from the game's minimap"): every dungeon and
-  raid put together from the pictures the minimap shows there, one map per level, with the same
-  routes, rooms and notes.
+- First the game's own minimap pictures (since 1.3.7; the switch "Minimap | Map" in the upper left corner
+  of the map, or "Map from the game's minimap" behind the gear button): every dungeon and raid put together
+  from the pictures the minimap shows there, one map per level, with the same routes, rooms and notes, north
+  at the top like the minimap. Where the minimap shows too little of the way (Ironclad Cove, the Wall Walk of
+  Shadowfang Keep, the Temple Gates of Ahn'Qiraj) the drawn map stays.
 - Numbered bosses in route order, rares (`R`), optional bosses (`+`) and notes (`!`) with keys,
   events and quest items. Blue squares switch to the next map level. The round `?` beside the
   crosshair on the map explains these signs. Where the drawn map of a dungeon
@@ -170,11 +172,12 @@ By hand:
 - The padlock beside the `?` locks the window and the small map: they stay where they are, keep their
   size, and Escape no longer closes the window (the X, `/fdr` and the key still do). Click it again to
   unlock.
-- The round button left of the padlock switches between the drawn map and the game's minimap pictures
-  (the same as "Map from the game's minimap" behind the gear button). The minimap pictures look like the
-  minimap in your game, which makes it easier to see where you are on the route. On some levels of the new
-  dungeons Santiago's map is turned against north; the minimap pictures still show north at the top there, and the
-  route turns with them.
+- The switch "Minimap | Map" in the upper left corner of the map, in the window and on the small map, changes
+  between the game's minimap pictures (shown first since 1.3.7) and the drawn map (the same as "Map from the
+  game's minimap" behind the gear button). The minimap pictures look like the minimap in your game, which makes
+  it easier to see where you are on the route. Both views show north at the top, as the minimap does: on the
+  levels of the new dungeons where Santiago's map is turned against north, the map turns it, and the route with
+  it, so switching keeps everything in place.
 - Your own marker: Shift-click on the map puts a green marker there, for example where you are. Drag it
   along as you go, right-click removes it; a new run takes it away. Only you see it. WoW gives addons no
   position inside dungeons, so this is the way to keep track of yourself on the route. Inside a dungeon a tip at the
@@ -305,14 +308,17 @@ For the new Forever dungeons there is no map art in the game. All nine show Sant
 (`maps/*.blp`, `Data/Pictures.lua`), fitted to the game's coordinates with the game's minimap pictures.
 Their rooms are the areas and named building parts the game reports there. The game has no entrance data for these dungeons.
 
-Behind the gear button every map level can also show the game's own minimap pictures
-(`Data/Minimaps.lua`, by file ID like the other map art): the pictures of the building parts the game
-puts on the level (where WoW: Forever rebuilt a dungeon, the new parts take the level of the old ones
-in the same place), outdoors those of the terrain tiles, turned and put together on the same spot as
-the map art, so routes and rooms fit both. Where Santiago's map is turned against north, the same pictures are
-also laid out north up over a rectangle of the world around the dungeon (`DR.MinimapArtNorth`); the minimap view
-shows those and turns routes, rooms and markers the same way when it draws them, while everything saved keeps the
-coordinates of the drawn map.
+Every map level shows first the game's own minimap pictures (since 1.3.7; `Data/Minimaps.lua`, by file
+ID like the other map art): the pictures of the building parts the game puts on the level (where WoW:
+Forever rebuilt a dungeon, the new parts take the level of the old ones in the same place), outdoors those
+of the terrain tiles, turned and put together on the same spot as the map art, so routes and rooms fit both.
+Levels where these pictures show less than 60 % of the standard route keep the map art. On every level with
+Santiago's map the same pictures are also laid out north up over a rectangle of the world (`DR.MinimapArtNorth`:
+the whole drawn map where it is turned only a little, else around the building, the route and the rooms; for The
+Underbelly, which has no minimap pictures in the game, the rectangle alone). Both views show that rectangle: the
+minimap pictures from there and Santiago's map turned through its texture coordinates (the space around it in
+`maps/*.blp` is clear since 1.3.7), with routes, rooms and markers turned the same way when drawn, while
+everything saved keeps the coordinates of the drawn map.
 
 ## Support
 

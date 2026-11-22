@@ -21,8 +21,10 @@ local ROOM_GLOW = 1.35      -- the soft glow over a part of a room is this much 
 -- City, the Spiral of Thorns ...) glows faint and still: pulsing it would pulse the whole map (Oliver, 14.11.2026).
 local BIG_ROOM, BIG_ROOM_ALPHA = 0.3, 0.2
 local HELP_MIN_W = 240      -- the "?" of the key to the signs only on a map at least this wide (since 1.3.0)
-local ART_TOGGLE_MIN_W = 280 -- the switch to the minimap pictures beside them only from this width (since 1.3.4), so the
-                             -- room's name in the lower left keeps its room on the small map
+local SWITCH_H, SWITCH_PAD = 20, 9 -- the switch between minimap pictures and drawn map (since 1.3.7): height, room
+                                   -- beside each word
+local SWITCH_ON = { 1, 0.86, 0.5 }    -- the word of what the map shows (as the room's name)
+local SWITCH_OFF = { 0.62, 0.62, 0.62 }
 local ADDON_PATH = "Interface\\AddOns\\ForeverDungeonRoutes\\"
 -- The classic maps' tiles, shipped with the addon since 1.3.3 (tiles\<file ID>.blp, Blizzard's files unchanged): the
 -- Russian, Spanish (Mexico) and Italian clients of WoW: Forever lack the game's own and drew the maps green (found by
@@ -306,18 +308,24 @@ local function lockOnEnter(button)
 	GameTooltip:Show()
 end
 
--- The switch between the drawn map and the game's minimap pictures (since 1.3.4, Oliver: a button on the map rather
--- than the box behind the gear button; a player on CurseForge found it hard to tell where he is on the route).
-local function artToggleOnEnter(button)
-	GameTooltip:SetOwner(button, "ANCHOR_LEFT")
-	-- what the map shows, not only the setting (UpdateArtToggle)
-	if View.artSource == "minimap" then
-		GameTooltip:SetText(L["Map from the game's minimap"], 1, 1, 1)
-		GameTooltip:AddLine(L["Click to show the drawn map again."], 0.9, 0.9, 0.9, true)
-	else
-		GameTooltip:SetText(L["Show the map from the game's minimap"], 1, 1, 1)
+-- The switch between the game's minimap pictures and the drawn map (since 1.3.4 a small round button beside the
+-- padlock, Oliver: a button on the map rather than the box behind the gear button; since 1.3.7 two words in the upper
+-- left corner, on every map and the small map too, Oliver 22.11.2026: "einen umschalter direkt per button auf der map"
+-- and "den schalter auch in der verkleinerten karte"). The tooltip tells what a click does; on the word of what the map
+-- shows already only for the minimap pictures, what they are.
+local function switchOnEnter(button)
+	local shows = View.artSource == "minimap" -- what the map shows, not only the setting (UpdateArtToggle)
+	if button.key == "map" and not shows then
+		GameTooltip_Hide()
+		return
+	end
+	GameTooltip:SetOwner(button, "ANCHOR_BOTTOM")
+	if button.key == "minimap" then
+		GameTooltip:SetText(shows and L["Map from the game's minimap"] or L["Show the map from the game's minimap"], 1, 1, 1)
 		GameTooltip:AddLine(L["It looks like the minimap in your game, which makes it easier to see where you are."],
 			0.9, 0.9, 0.9, true)
+	else
+		GameTooltip:SetText(L["Click to show the drawn map again."], 1, 1, 1)
 	end
 	GameTooltip:Show()
 end
@@ -615,37 +623,46 @@ function View:Create(parent)
 	lock:SetScript("OnLeave", GameTooltip_Hide)
 	self.lock = lock
 	self:UpdateLock()
-	-- the switch to the game's minimap pictures (since 1.3.4): left of the padlock and in its look, a small round map
-	-- with the player's arrow, bright while the minimap pictures show (as the padlock while locked); the same setting
-	-- as the box behind the gear button, drawn from the shapes the addon has (no new file)
-	local art = CreateFrame("Button", nil, frame)
-	art:SetSize(26, 26)
-	art:SetPoint("RIGHT", lock, "LEFT", -4, 0)
-	art:SetFrameLevel(frame:GetFrameLevel() + 40)
-	art.Back = art:CreateTexture(nil, "BACKGROUND")
-	art.Back:SetTexture(MEDIA .. "circle")
-	art.Back:SetAllPoints()
-	art.Back:SetVertexColor(0.05, 0.05, 0.06, 0.85)
-	art.Ring = art:CreateTexture(nil, "ARTWORK")
-	art.Ring:SetTexture(MEDIA .. "ring")
-	art.Ring:SetSize(16, 16)
-	art.Ring:SetPoint("CENTER")
-	art.Arrow = art:CreateTexture(nil, "ARTWORK", nil, 1)
-	art.Arrow:SetTexture(MEDIA .. "player")
-	art.Arrow:SetSize(9, 9)
-	art.Arrow:SetPoint("CENTER")
-	art.Highlight = art:CreateTexture(nil, "HIGHLIGHT")
-	art.Highlight:SetTexture(MEDIA .. "glow")
-	art.Highlight:SetBlendMode("ADD")
-	art.Highlight:SetAllPoints()
-	art:SetScript("OnClick", function()
-		DR:SetGameMinimap(not DR.db.gameMinimap)
-		if art:IsMouseOver() then artToggleOnEnter(art) end
-	end)
-	art:SetScript("OnEnter", artToggleOnEnter)
-	art:SetScript("OnLeave", GameTooltip_Hide)
-	art:Hide()
-	self.artToggle = art
+	-- the switch between the game's minimap pictures and the drawn map (since 1.3.7, switchOnEnter): "Minimap | Map" in
+	-- the upper left corner, the word of what the map shows bright on a gold ground; the same setting as the box
+	-- behind the gear button
+	local switch = CreateFrame("Frame", nil, frame)
+	switch:SetPoint("TOPLEFT", 8, -8)
+	switch:SetHeight(SWITCH_H)
+	switch:SetFrameLevel(frame:GetFrameLevel() + 41)
+	switch.Back = switch:CreateTexture(nil, "BACKGROUND")
+	switch.Back:SetAllPoints()
+	switch.Back:SetColorTexture(0.05, 0.05, 0.06, 0.85)
+	switch.segments = {}
+	local width = 0
+	for i, segment in ipairs({ { key = "minimap", text = L["Minimap"] }, { key = "map", text = L["Map"] } }) do
+		local b = CreateFrame("Button", nil, switch)
+		b.key = segment.key
+		b.Text = b:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+		b.Text:SetPoint("CENTER", 0, 0)
+		b.Text:SetText(segment.text)
+		-- the width as worked out here (a frame's own GetWidth can still be 0 before the game has laid it out)
+		local w = math.floor(math.max(b.Text:GetStringWidth() or 0, 30) + 2 * SWITCH_PAD + 0.5)
+		b:SetSize(w, SWITCH_H)
+		b:SetPoint("TOPLEFT", switch, "TOPLEFT", width, 0)
+		width = width + w
+		b.On = b:CreateTexture(nil, "BACKGROUND", nil, 1)
+		b.On:SetAllPoints()
+		b.On:SetColorTexture(0.85, 0.62, 0.22, 0.32)
+		b.Highlight = b:CreateTexture(nil, "HIGHLIGHT")
+		b.Highlight:SetAllPoints()
+		b.Highlight:SetColorTexture(1, 1, 1, 0.08)
+		b:SetScript("OnClick", function(button)
+			DR:SetGameMinimap(button.key == "minimap")
+			if button:IsMouseOver() then switchOnEnter(button) end
+		end)
+		b:SetScript("OnEnter", switchOnEnter)
+		b:SetScript("OnLeave", GameTooltip_Hide)
+		switch.segments[i] = b
+	end
+	switch:SetWidth(width)
+	switch:Hide()
+	self.artSwitch = switch
 	-- the tip for the own marker (since 1.3.2, Oliver: the keys belong on the map, not hidden in the options): a band
 	-- at the top of the map in the dungeon the player is in, until the first marker is set or a click hides it for good
 	local tip = CreateFrame("Button", nil, frame)
@@ -822,9 +839,11 @@ function View:Layout()
 	self.help:SetShown(w >= HELP_MIN_W)
 	self.lock:SetShown(w >= HELP_MIN_W) -- the padlock with it (since 1.3.2)
 	self.width = w
-	self:UpdateArtToggle() -- the switch to the minimap pictures (since 1.3.4)
-	-- the hint on a new map at the top, below the route choice where that sits on the map (stop list hidden)
-	local y = (not DR.db.showStops and self.frame:GetParent() == DR.Window:GetFrame()) and -36 or -13
+	self:UpdateArtToggle() -- the switch between minimap pictures and drawn map (since 1.3.4, in the corner since 1.3.7)
+	-- the hint on a new map at the top, below the route choice where that sits on the map (stop list hidden) and below
+	-- the switch in the upper left corner (since 1.3.7)
+	local below = (not DR.db.showStops and self.frame:GetParent() == DR.Window:GetFrame()) or self.artSwitch:IsShown()
+	local y = below and -36 or -13
 	self.newMap:ClearAllPoints()
 	self.newMap:SetPoint("TOPLEFT", 20, y)
 	self.newMap:SetPoint("TOPRIGHT", -20, y)
@@ -1135,8 +1154,41 @@ function View:SetFloor(key, floor)
 	self:Refresh()
 end
 
+-- A drawn picture of a floor (floor.image) on the canvas: as it is, or turned north up (since 1.3.7) over the rectangle
+-- around its corners on the canvas, with the texture coordinates there worked back through the turn (an affine map,
+-- exact at the four corners). Beyond the map's edges the texture is clear (CLAMPTOBLACKADDITIVE, and since 1.3.7 the
+-- part of the texture below the map in maps\*.blp).
+function View:PlacePicture(picture, turn)
+	local texture = self.picture
+	local right, bottom = picture.right or 1, picture.bottom or 1
+	texture:ClearAllPoints()
+	if not turn then
+		texture:SetAllPoints(self.canvas)
+		texture:SetTexCoord(0, right, 0, bottom)
+		return
+	end
+	local x0, y0, x1, y1
+	for _, corner in ipairs({ { 0, 0 }, { 1, 0 }, { 0, 1 }, { 1, 1 } }) do
+		local x, y = self:ToCanvas(corner[1], corner[2])
+		x0, x1 = math.min(x0 or x, x), math.max(x1 or x, x)
+		y0, y1 = math.min(y0 or y, y), math.max(y1 or y, y)
+	end
+	texture:SetPoint("TOPLEFT", self.canvas, "TOPLEFT", x0, -y0)
+	texture:SetSize(x1 - x0, y1 - y0)
+	local function at(x, y)
+		local u, v = self:FromCanvas(x, y)
+		return u * right, v * bottom
+	end
+	local ulx, uly = at(x0, y0)
+	local llx, lly = at(x0, y1)
+	local urx, ury = at(x1, y0)
+	local lrx, lry = at(x1, y1)
+	texture:SetTexCoord(ulx, uly, llx, lly, urx, ury, lrx, lry)
+end
+
 -- The art of the shown floor: the map tiles of the classic maps (since 1.3.3 from the addon folder) or a drawn
--- picture (floor.image), or, where the player chose so, the game's minimap pictures of the floor instead.
+-- picture (floor.image), or, where the player chose so (since 1.3.7 the default), the game's minimap pictures of the
+-- floor instead.
 function View:UpdateArt()
 	local floor = self.floor
 	local info = DR.Floors[floor]
@@ -1179,19 +1231,25 @@ function View:UpdateArt()
 	-- where there are some.
 	local missing = false
 	if picture then
-		missing = self.picture:SetTexture(ADDON_PATH .. picture.file, nil, nil, "TRILINEAR") == false
-		self.picture:SetTexCoord(0, picture.right or 1, 0, picture.bottom or 1)
+		-- clear beyond the map's edges where it is turned (CLAMPTOBLACKADDITIVE; below it the texture is clear itself)
+		missing = self.picture:SetTexture(ADDON_PATH .. picture.file, "CLAMPTOBLACKADDITIVE", "CLAMPTOBLACKADDITIVE",
+			"TRILINEAR") == false
 		if missing then
 			picture, minimap = nil, minimapArt
 		end
 	end
-	-- the minimap pictures north up where the drawn map is turned against north (since 1.3.5): the same pictures from
-	-- DR.MinimapArtNorth, and the route and everything else on the map turned with them (SetTurn)
-	local turn = minimap and northTurn(floor) or nil
-	if turn then
+	-- North up (since 1.3.5 the minimap pictures, since 1.3.7 the drawn map too, on every picture floor, Oliver
+	-- 22.11.2026: "minimaps und unsere karten müssen immer deckungsgleich sein mit der ausrichtung"): the same turn for
+	-- both, so the switch between them keeps everything in place; the minimap pictures from DR.MinimapArtNorth, the
+	-- drawn map turned through its texture coordinates (PlacePicture), the route and everything else with them (SetTurn)
+	local turn = (minimap or picture) and northTurn(floor) or nil
+	if turn and minimap then
 		minimap = DR.MinimapArtNorth[floor]
 	end
 	self:SetTurn(turn)
+	if picture then
+		self:PlacePicture(picture, turn)
+	end
 	self.artMissing = missing
 	self.newMap:SetShown(missing or tilesNew)
 	self.newMapBack:SetShown(missing or tilesNew)
@@ -1302,19 +1360,23 @@ function View:UpdateLock()
 	lock.Body:SetVertexColor(LOCK_COLOR[1], LOCK_COLOR[2], LOCK_COLOR[3], alpha)
 end
 
--- The switch to the minimap pictures (since 1.3.4): only where the floor has minimap pictures and the map is wide enough,
--- bright while the map shows them. Not while they only stand in for a drawn picture the game does not know yet
--- (artMissing): a click would change nothing there before the restart.
+-- The switch between minimap pictures and drawn map (since 1.3.4; since 1.3.7 "Minimap | Map" in the upper left corner
+-- on every map size): only where the floor has minimap pictures (Data/Minimaps.lua leaves out the floors where they
+-- show too little of the way, since 1.3.7), the word of what the map shows lit. Not while the minimap pictures only
+-- stand in for a drawn picture the game does not know yet (artMissing): a click would change nothing before the restart.
 function View:UpdateArtToggle()
-	local art = self.artToggle
-	if not art then return end
+	local switch = self.artSwitch
+	if not switch then return end
 	local floor = self.floor
 	local available = floor ~= nil and DR.MinimapArt ~= nil and DR.MinimapArt[floor] ~= nil and not self.artMissing
-	art:SetShown(available and (self.width or 0) >= ART_TOGGLE_MIN_W)
-	local alpha = self.artSource == "minimap" and 1 or 0.55
-	art.Ring:SetVertexColor(LOCK_COLOR[1], LOCK_COLOR[2], LOCK_COLOR[3], alpha)
-	art.Arrow:SetVertexColor(LOCK_COLOR[1], LOCK_COLOR[2], LOCK_COLOR[3], alpha)
-	self:FitStatus()
+	switch:SetShown(available)
+	local minimap = self.artSource == "minimap"
+	for _, b in ipairs(switch.segments) do
+		local on = (b.key == "minimap") == minimap
+		local c = on and SWITCH_ON or SWITCH_OFF
+		b.On:SetShown(on)
+		b.Text:SetTextColor(c[1], c[2], c[3])
+	end
 end
 
 -- The room's name in the lower left ends before the buttons in the lower right (since 1.3.4: with the switch to the
@@ -1326,7 +1388,7 @@ function View:FitStatus()
 	local status, frame = self.status, self.frame
 	if not status or not frame then return end
 	local right = BUTTON_MARGIN
-	for _, button in ipairs({ self.locate, self.help, self.lock, self.artToggle }) do
+	for _, button in ipairs({ self.locate, self.help, self.lock }) do
 		if button and button:IsShown() then
 			right = right + button:GetWidth() + BUTTON_GAP
 		end

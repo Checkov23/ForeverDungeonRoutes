@@ -473,7 +473,9 @@ function DR:ReportText()
 			tostring(indexOf(floors, floor) or "?"), #floors, info and info.name or "?", floor)
 		local art = ART_NAMES[map.artSource] or "unknown"
 		if map.turn then
-			art = art .. ", north up" -- the drawn map is turned on this floor, the minimap pictures are not (since 1.3.5)
+			-- Santiago's map is turned against north on this floor, the view north up (since 1.3.5 the minimap pictures,
+			-- since 1.3.7 the drawn map as well)
+			art = art .. ", north up"
 		end
 		if map.artMissing then
 			art = "drawn map in the addon, not loaded by the game; shown instead: " .. art

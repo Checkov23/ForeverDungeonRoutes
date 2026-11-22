@@ -209,6 +209,8 @@ if locale == "deDE" then
 	L["Report a problem or idea"] = "Problem oder Idee melden"
 	L["The game cannot open web pages. Copy this text with Ctrl+C (Mac: Cmd+C), paste it into a comment on CurseForge or an issue on GitHub, and add what happened or what you would like."] = "Das Spiel kann keine Webseiten öffnen. Kopiere diesen Text mit Strg+C (Mac: Cmd+C), füge ihn als Kommentar auf CurseForge oder als Issue auf GitHub ein und schreib dazu, was passiert ist oder was du dir wünschst."
 	L["Show the map from the game's minimap"] = "Karte aus der Minikarte des Spiels zeigen"
+	L["Minimap"] = "Minikarte"
+	L["Map"] = "Karte"
 	L["It looks like the minimap in your game, which makes it easier to see where you are."] = "Sie sieht aus wie die Minikarte im Spiel, so erkennst du leichter, wo du bist."
 	L["Click to show the drawn map again."] = "Klick zeigt wieder die gezeichnete Karte."
 elseif locale == "frFR" then
@@ -413,6 +415,8 @@ elseif locale == "frFR" then
 	L["Report a problem or idea"] = "Signaler un problème ou une idée"
 	L["The game cannot open web pages. Copy this text with Ctrl+C (Mac: Cmd+C), paste it into a comment on CurseForge or an issue on GitHub, and add what happened or what you would like."] = "Le jeu ne peut pas ouvrir de pages web. Copiez ce texte avec Ctrl+C (Mac : Cmd+C), collez-le dans un commentaire sur CurseForge ou un ticket sur GitHub, puis ajoutez ce qui s’est passé ou ce que vous aimeriez."
 	L["Show the map from the game's minimap"] = "Afficher la carte tirée de la minicarte du jeu"
+	L["Minimap"] = "Minicarte"
+	L["Map"] = "Carte"
 	L["It looks like the minimap in your game, which makes it easier to see where you are."] = "Elle ressemble à la minicarte de votre jeu, ce qui aide à voir où vous êtes."
 	L["Click to show the drawn map again."] = "Cliquez pour revenir à la carte dessinée."
 elseif locale == "esES" or locale == "esMX" then
@@ -617,6 +621,8 @@ elseif locale == "esES" or locale == "esMX" then
 	L["Report a problem or idea"] = "Informar de un problema o una idea"
 	L["The game cannot open web pages. Copy this text with Ctrl+C (Mac: Cmd+C), paste it into a comment on CurseForge or an issue on GitHub, and add what happened or what you would like."] = "El juego no puede abrir páginas web. Copia este texto con Ctrl+C (Mac: Cmd+C), pégalo en un comentario en CurseForge o en una incidencia en GitHub y añade qué ocurrió o qué te gustaría."
 	L["Show the map from the game's minimap"] = "Mostrar el mapa del minimapa del juego"
+	L["Minimap"] = "Minimapa"
+	L["Map"] = "Mapa"
 	L["It looks like the minimap in your game, which makes it easier to see where you are."] = "Se parece al minimapa de tu juego, así es más fácil ver dónde estás."
 	L["Click to show the drawn map again."] = "Haz clic para volver al mapa dibujado."
 elseif locale == "ptBR" then
@@ -821,6 +827,8 @@ elseif locale == "ptBR" then
 	L["Report a problem or idea"] = "Relatar um problema ou uma ideia"
 	L["The game cannot open web pages. Copy this text with Ctrl+C (Mac: Cmd+C), paste it into a comment on CurseForge or an issue on GitHub, and add what happened or what you would like."] = "O jogo não consegue abrir páginas da web. Copie este texto com Ctrl+C (Mac: Cmd+C), cole-o em um comentário no CurseForge ou em uma issue no GitHub e conte o que aconteceu ou o que você gostaria."
 	L["Show the map from the game's minimap"] = "Mostrar o mapa do minimapa do jogo"
+	L["Minimap"] = "Minimapa"
+	L["Map"] = "Mapa"
 	L["It looks like the minimap in your game, which makes it easier to see where you are."] = "Ele se parece com o minimapa do seu jogo, o que facilita ver onde você está."
 	L["Click to show the drawn map again."] = "Clique para voltar ao mapa desenhado."
 elseif locale == "ruRU" then
@@ -1025,6 +1033,8 @@ elseif locale == "ruRU" then
 	L["Report a problem or idea"] = "Сообщить о проблеме или идее"
 	L["The game cannot open web pages. Copy this text with Ctrl+C (Mac: Cmd+C), paste it into a comment on CurseForge or an issue on GitHub, and add what happened or what you would like."] = "Игра не может открывать веб-страницы. Скопируйте этот текст (Ctrl+C, на Mac Cmd+C), вставьте его в комментарий на CurseForge или в issue на GitHub и допишите, что случилось или чего бы вам хотелось."
 	L["Show the map from the game's minimap"] = "Показать карту из миникарты игры"
+	L["Minimap"] = "Миникарта"
+	L["Map"] = "Карта"
 	L["It looks like the minimap in your game, which makes it easier to see where you are."] = "Она выглядит как миникарта в игре, так проще понять, где вы находитесь."
 	L["Click to show the drawn map again."] = "Щелчок снова показывает нарисованную карту."
 elseif locale == "koKR" then
@@ -1229,6 +1239,8 @@ elseif locale == "koKR" then
 	L["Report a problem or idea"] = "문제 또는 아이디어 알리기"
 	L["The game cannot open web pages. Copy this text with Ctrl+C (Mac: Cmd+C), paste it into a comment on CurseForge or an issue on GitHub, and add what happened or what you would like."] = "게임에서는 웹 페이지를 열 수 없습니다. 이 텍스트를 Ctrl+C(Mac: Cmd+C)로 복사해 CurseForge 댓글이나 GitHub 이슈에 붙여 넣고, 어떤 일이 있었는지 또는 무엇을 원하는지 적어 주세요."
 	L["Show the map from the game's minimap"] = "게임 미니맵 지도로 전환"
+	L["Minimap"] = "미니맵"
+	L["Map"] = "지도"
 	L["It looks like the minimap in your game, which makes it easier to see where you are."] = "게임 속 미니맵과 같은 모습이라 현재 위치를 알아보기 쉽습니다."
 	L["Click to show the drawn map again."] = "클릭하면 그려진 지도로 돌아갑니다."
 elseif locale == "zhCN" then
@@ -1433,6 +1445,8 @@ elseif locale == "zhCN" then
 	L["Report a problem or idea"] = "报告问题或建议"
 	L["The game cannot open web pages. Copy this text with Ctrl+C (Mac: Cmd+C), paste it into a comment on CurseForge or an issue on GitHub, and add what happened or what you would like."] = "游戏无法打开网页。请用 Ctrl+C（Mac：Cmd+C）复制这段文字，粘贴到 CurseForge 的评论或 GitHub 的 issue 中，并写下发生了什么或你希望有什么。"
 	L["Show the map from the game's minimap"] = "改用游戏小地图显示"
+	L["Minimap"] = "小地图"
+	L["Map"] = "地图"
 	L["It looks like the minimap in your game, which makes it easier to see where you are."] = "它和游戏中的小地图一样，更容易看出你在哪里。"
 	L["Click to show the drawn map again."] = "点击重新显示绘制的地图。"
 elseif locale == "zhTW" then
@@ -1637,6 +1651,8 @@ elseif locale == "zhTW" then
 	L["Report a problem or idea"] = "回報問題或建議"
 	L["The game cannot open web pages. Copy this text with Ctrl+C (Mac: Cmd+C), paste it into a comment on CurseForge or an issue on GitHub, and add what happened or what you would like."] = "遊戲無法開啟網頁。請用 Ctrl+C（Mac：Cmd+C）複製這段文字，貼到 CurseForge 的留言或 GitHub 的 issue 中，並寫下發生了什麼或你希望有什麼。"
 	L["Show the map from the game's minimap"] = "改用遊戲小地圖顯示"
+	L["Minimap"] = "小地圖"
+	L["Map"] = "地圖"
 	L["It looks like the minimap in your game, which makes it easier to see where you are."] = "它和遊戲中的小地圖一樣，更容易看出你在哪裡。"
 	L["Click to show the drawn map again."] = "點擊重新顯示繪製的地圖。"
 end
