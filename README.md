@@ -50,8 +50,10 @@ replace them.
 - Own map window with the game's dungeon map art. WoW: Forever has no dungeon maps of its own, but
   the art files are still in the game client; the addon draws them itself. No other addon needed.
 - Standard routes for all 25 classic dungeons. The line color runs from the entrance to the last
-  boss, arrows show the walking direction, dashed lines mark side paths. Since 1.3.0 the line can also
-  have one colour of your choice: white, magenta or cyan (gear button, "Route line").
+  boss, arrows show the walking direction, dashed lines mark side paths. Since 1.3.8 a round sign
+  with an arrow marks where the route starts, and the arrows are light with a dark edge, easy to see
+  on every map. Since 1.3.0 the line can also have one colour of your choice: white, magenta or cyan
+  (gear button, "Route line").
 - The four new dungeons of WoW: Forever (The Hall of Thanes, Ruins of Lordaeron, Excavation Site:
   Wetlands, City of Dalaran): the game has no map art for them, so the addon shows the maps of
   Santiago Reyes (Atlas de Azeroth: Forever), used with his permission; City of Dalaran with the

@@ -45,7 +45,9 @@ local GRADIENT = {
 }
 local SIDE_COLOR = { 0.89, 0.87, 0.82 }
 local CASING_COLOR = { 0.05, 0.04, 0.03, 0.78 }
-local ARROW_COLOR = { 0.06, 0.05, 0.03, 0.92 }
+local ARROW_COLOR = { 0.06, 0.05, 0.03, 1 }    -- since 1.3.8 the dark edge of the arrows
+local ARROW_FILL = { 1.00, 0.97, 0.88, 1 }     -- and their light inside (since 1.3.8)
+local START_SIZE = 26                          -- the sign at the start of the route (since 1.3.8)
 local EDIT_DOT_COLOR = { 1.00, 1.00, 1.00, 0.95 }
 local EDGE_COLOR = { 0.85, 0.85, 0.85, 0.6 } -- the edge of the drawn map while editing on the map turned north up
 
@@ -270,12 +272,55 @@ local function createLinkPin(view)
 	return pin
 end
 
+-- The start of the route (since 1.3.8, Oliver 22.11.2026: "den start einer route besser dargestellt"): a round sign in
+-- the colour of the line where it begins, the arrow inside pointing the way; only shows a tooltip, a click goes through
+-- to the map (Shift-click for the own marker, dragging the map).
+local function startOnEnter(pin)
+	GameTooltip:SetOwner(pin, "ANCHOR_RIGHT")
+	GameTooltip:SetText(L["Start of the route"], 1, 0.82, 0)
+	GameTooltip:AddLine(L["The arrows on the line show the way."], 1, 1, 1, true)
+	GameTooltip:Show()
+end
+
+local function createStartPin(view)
+	local pin = CreateFrame("Frame", nil, view.canvas)
+	pin:SetSize(START_SIZE, START_SIZE)
+	pin:SetFrameLevel(view.canvas:GetFrameLevel() + 11) -- over notes and floor boxes, under the bosses
+	pin:SetMouseMotionEnabled(true)
+	pin.Glow = pin:CreateTexture(nil, "BACKGROUND")
+	pin.Glow:SetTexture(MEDIA .. "glow")
+	pin.Glow:SetBlendMode("ADD")
+	pin.Glow:SetSize(START_SIZE * 2, START_SIZE * 2)
+	pin.Glow:SetPoint("CENTER")
+	pin.Fill = pin:CreateTexture(nil, "ARTWORK")
+	pin.Fill:SetTexture(MEDIA .. "circle")
+	pin.Fill:SetAllPoints()
+	pin.Ring = pin:CreateTexture(nil, "OVERLAY", nil, 1)
+	pin.Ring:SetTexture(MEDIA .. "ring")
+	pin.Ring:SetAllPoints()
+	pin.Ring:SetVertexColor(ARROW_COLOR[1], ARROW_COLOR[2], ARROW_COLOR[3], 1)
+	-- the arrow inside: a chevron like the arrows on the line, two strokes View:PlaceStart turns the way the route
+	-- leaves the start (no picture file, so it is also there after an update without a restart)
+	pin.Arms = {}
+	for i = 1, 2 do
+		local arm = pin:CreateLine(nil, "OVERLAY", nil, 2)
+		arm:SetThickness(3)
+		arm:SetColorTexture(ARROW_COLOR[1], ARROW_COLOR[2], ARROW_COLOR[3], 1)
+		pin.Arms[i] = arm
+	end
+	pin:SetScript("OnEnter", startOnEnter)
+	pin:SetScript("OnLeave", GameTooltip_Hide)
+	pin:Hide()
+	return pin
+end
+
 -- The key to the signs on the map (the "?" beside the crosshair, since 1.3.0); the line as it is drawn: the gradient,
 -- or the one colour the player chose (setting lineColor).
 local function legendOnEnter(button)
 	GameTooltip:SetOwner(button, "ANCHOR_LEFT")
 	GameTooltip:SetText(L["Signs on the map"], 1, 1, 1)
 	for _, text in ipairs({
+		L["Circle with an arrow: start of the route"],
 		L["1 2 3: bosses in route order (click to tick off)"],
 		L["R: rare   +: optional   !: note"],
 		L["Blue box: another map level (same letters belong together, click to switch)"],
@@ -479,6 +524,7 @@ function View:Create(parent)
 	own:SetScript("OnLeave", GameTooltip_Hide)
 	own:Hide()
 	self.own = own
+	self.startPin = createStartPin(self)
 
 	self.message = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 	self.message:SetPoint("CENTER")
@@ -1535,6 +1581,7 @@ function View:ReleaseLines()
 		self.dots[i]:Hide()
 	end
 	self.numDots = 0
+	self.startPin:Hide() -- the sign at the start belongs to the line (View:PlaceStart)
 end
 
 function View:Segment(subLevel, x1, y1, x2, y2, thickness, r, g, b, a)
@@ -1605,8 +1652,14 @@ function View:DrawMainPath(path, k)
 		end
 		self:Segment(0, xs[i - 1], ys[i - 1], xs[i], ys[i], width, r, g, b, 1)
 	end
+	-- the arrows (since 1.3.8 bigger and in two tones, Oliver 22.11.2026: "die pfeile etwas eindeutiger (gehen etwas
+	-- unter)"): a light chevron with a dark edge, wider than the line with its edge, so it stands out on every line colour
+	-- and map picture. Each arm runs half its width past the tip, so the two arms (nearly at right angles) meet in a point.
 	if DR.db.showArrows then
-		local spacing, size = 64 / k, 5 / k
+		local w = DR.db.lineWidth or 4
+		local spacing, size = 80 / k, (w + 4) / k
+		local thick, edge = math.max(2.5, w * 0.7) / k, 1 / k
+		local tip = thick / 2
 		local s = spacing * 0.6
 		local i = 2
 		while s < cum[n] - 8 / k do
@@ -1618,17 +1671,89 @@ function View:DrawMainPath(path, k)
 			local mx = xs[i - 1] + (xs[i] - xs[i - 1]) * u
 			local my = ys[i - 1] + (ys[i] - ys[i - 1]) * u
 			local angle = math.atan2(ys[i] - ys[i - 1], xs[i] - xs[i - 1])
-			local ax1 = mx - size * math.cos(angle - 0.75)
-			local ay1 = my - size * math.sin(angle - 0.75)
-			local ax2 = mx - size * math.cos(angle + 0.75)
-			local ay2 = my - size * math.sin(angle + 0.75)
-			local thick = 2 / k
-			self:Segment(4, ax1, ay1, mx, my, thick, unpack(ARROW_COLOR))
-			self:Segment(4, ax2, ay2, mx, my, thick, unpack(ARROW_COLOR))
+			for side = -1, 1, 2 do
+				-- (cx, cy) runs along the arm towards the tip
+				local cx, cy = math.cos(angle + side * 0.75), math.sin(angle + side * 0.75)
+				self:Segment(3, mx - cx * (size + edge), my - cy * (size + edge), mx + cx * (tip + edge),
+					my + cy * (tip + edge), thick + 2 * edge, unpack(ARROW_COLOR))
+				self:Segment(4, mx - cx * size, my - cy * size, mx + cx * tip, my + cy * tip, thick, unpack(ARROW_FILL))
+			end
 			s = s + spacing
 		end
 	end
 	return xs, ys
+end
+
+-- The main path the route starts with on this floor: its first one, or a copy of it on a twin floor (a main path whose
+-- colour starts anew at 0, see collectLinks).
+local function routeStart(route, floor)
+	local first = true
+	for _, path in ipairs(route.paths) do
+		if path.kind == "main" and #path.pts >= 4 then
+			if path.floor == floor and (first or path.t0 == 0) then
+				return path
+			end
+			first = false
+		end
+	end
+end
+
+-- Where the line (canvas coordinates) first gets as far as r from its start: on the piece that leaves the circle, or
+-- its last point when it stays inside.
+local function reachOut(xs, ys, r)
+	for i = 2, #xs do
+		local ox, oy = xs[i] - xs[1], ys[i] - ys[1]
+		if ox * ox + oy * oy >= r * r then
+			-- |a + t * d| = r on the piece from point i - 1 (inside) to point i (outside)
+			local ax, ay = xs[i - 1] - xs[1], ys[i - 1] - ys[1]
+			local dx, dy = xs[i] - xs[i - 1], ys[i] - ys[i - 1]
+			local a, b, c = dx * dx + dy * dy, ax * dx + ay * dy, ax * ax + ay * ay - r * r
+			local t = (math.sqrt(math.max(0, b * b - a * c)) - b) / a
+			return xs[i - 1] + dx * t, ys[i - 1] + dy * t
+		end
+	end
+	return xs[#xs], ys[#ys]
+end
+
+-- The sign at the start of the route (since 1.3.8): in the colour of the line where it begins, the arrow inside pointing
+-- the way the line runs as it leaves the sign: from where it crosses the edge of the sign to where it is a sign's
+-- radius further out (in canvas coordinates, so also on the map turned north up). A bend under the sign and the small
+-- zigzags of traced lines do not turn it.
+function View:PlaceStart(path, xs, ys, k)
+	local pin = self.startPin
+	local fixed = DR.LineColor()
+	local r, g, b
+	if fixed then
+		r, g, b = fixed[1], fixed[2], fixed[3]
+	else
+		r, g, b = gradient(path.t0 or 0)
+	end
+	pin.Fill:SetVertexColor(r, g, b, 1)
+	pin.Glow:SetVertexColor(r, g, b, 0.45)
+	local reach = START_SIZE / 2 / k
+	local x1, y1 = reachOut(xs, ys, reach)
+	local x2, y2 = reachOut(xs, ys, 2 * reach)
+	local dx, dy = x2 - x1, y2 - y1
+	if dx == 0 and dy == 0 then -- a line that ends under the sign or right at its edge
+		dx, dy = xs[#xs] - xs[1], ys[#ys] - ys[1]
+	end
+	local moves = dx ~= 0 or dy ~= 0
+	if moves then
+		-- in the pin y runs up, on the canvas down; the tip 3 ahead of the middle, so the chevron sits in the middle.
+		-- Each arm runs half its width (1.5) past the tip, as on the line.
+		local angle = math.atan2(-dy, dx)
+		local tx, ty = math.cos(angle) * 3, math.sin(angle) * 3
+		for i, side in ipairs({ -1, 1 }) do
+			local cx, cy = math.cos(angle + side * 0.75), math.sin(angle + side * 0.75)
+			pin.Arms[i]:SetStartPoint("CENTER", pin, tx - cx * 8, ty - cy * 8)
+			pin.Arms[i]:SetEndPoint("CENTER", pin, tx + cx * 1.5, ty + cy * 1.5)
+		end
+	end
+	for _, arm in ipairs(pin.Arms) do
+		arm:SetShown(moves)
+	end
+	pin:Show()
+	self:PlacePin(pin, path.pts[1], path.pts[2])
 end
 
 function View:DrawSidePath(path, k)
@@ -1673,11 +1798,16 @@ function View:DrawLines()
 	local k = self.scale
 	if not k or k <= 0 then return end
 	local editingRoute = DR.Editor:IsEditing(self.key, route)
+	-- no sign at the start while the route is edited: it would cover the first point
+	local start = not editingRoute and routeStart(route, floor)
 	for index, path in ipairs(route.paths) do
 		if path.floor == floor then
 			local xs, ys
 			if path.kind == "main" then
 				xs, ys = self:DrawMainPath(path, k)
+				if path == start and xs then
+					self:PlaceStart(path, xs, ys, k)
+				end
 			else
 				xs, ys = self:DrawSidePath(path, k)
 			end
@@ -1742,6 +1872,10 @@ function View:PlaceAllPins()
 	end
 	if self.own and self.own:IsShown() and self.own.u then
 		self:PlacePin(self.own, self.own.u, self.own.v)
+	end
+	-- the sign at the start keeps its size while zooming; DrawLines turns it again a moment later
+	if self.startPin:IsShown() and self.startPin.u then
+		self:PlacePin(self.startPin, self.startPin.u, self.startPin.v)
 	end
 end
 

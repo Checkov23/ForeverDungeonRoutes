@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.3.8
+
+A sign marks where the route starts, and the arrows on the line are easier to see.
+
+- A round sign in the colour of the line marks the start of the route, with an arrow that shows which way the line
+  leaves it. Hover over it for a short note. It shows on the map level where the route begins and steps aside while
+  you edit the route; the "?" on the map explains it.
+- The arrows on the route line are bigger and light with a dark edge, so they no longer get lost on the line or on
+  the map. They grow with the line width (gear button, "Route line").
+- No new files: /reload is enough. Coming from 1.3.6 or older: quit and restart the game once (1.3.7 changed the drawn
+  maps of the new dungeons).
+
 ## 1.3.7
 
 The map starts with the game's own minimap pictures, has a switch for them on every map, and always shows north at the
