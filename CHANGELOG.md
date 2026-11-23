@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.3.9
+
+The map background can be turned down on its own, so the route can lie over your minimap.
+
+- Behind the gear button, "Opacity" now has two parts: "Window" as before, and "Map background" (100, 75, 50, 25
+  or 0 %). It fades the map pictures and the dark ground behind them, while the route with its arrows, the start
+  sign, the stops and the other signs stay as they are. At 0 % the small map is see-through down to the route, so you
+  can lay it over your minimap and drag it into place (thanks for the suggestion). Your minimap stays centred on you,
+  so the route only lines up while you stand still; drag the map along as you go.
+- No new files: /reload is enough. Coming from 1.3.6 or older: quit and restart the game once (1.3.7 changed the drawn
+  maps of the new dungeons).
+
 ## 1.3.8
 
 A sign marks where the route starts, and the arrows on the line are easier to see.

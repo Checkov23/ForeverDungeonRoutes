@@ -189,6 +189,17 @@ function DR.StyleBox(frame, alpha, role)
 	styleBox(frame, alpha or 0.96, role)
 end
 
+-- A new strength for the ground of a box (since 1.3.9 the small map's follows "Map background"), kept for the next
+-- change of style; its edge stays.
+function DR.SetBoxAlpha(frame, alpha)
+	for _, box in ipairs(boxes) do
+		if box.frame == frame then
+			box.alpha = alpha
+			styleBox(frame, alpha, box.role)
+		end
+	end
+end
+
 -- The hover colour of a box's border and back to normal.
 function DR.HoverBox(frame, on)
 	local t = DR.Theme()

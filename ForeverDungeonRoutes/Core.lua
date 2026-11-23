@@ -34,6 +34,9 @@ local DB_DEFAULTS = {
 	lineColor = "gradient", -- colour of the route line (since 1.3.0): "gradient" (turquoise to orange), "white",
 	                        -- "magenta" or "cyan" (MapView.lua, LINE_COLORS)
 	alpha = 1,
+	mapAlpha = 1,       -- the map pictures and the ground behind them (since 1.3.9, gear button "Opacity"): route,
+	                    -- stops and signs stay, the small map turns see-through (a wish on CurseForge: the route over
+	                    -- the own minimap)
 	lockWindow = false, -- the padlock on the map (since 1.3.2): window and small map stay where they are and keep their
 	                    -- size, and Escape no longer closes the window
 	-- markerHint (since 1.3.2): "done" once the player set an own marker or clicked the tip about it away

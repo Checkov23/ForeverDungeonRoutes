@@ -96,6 +96,14 @@ function DR.LineColorKey()
 	return DR.LineColor() and DR.db.lineColor or "gradient"
 end
 
+-- How strongly the map pictures and the ground behind them show (setting mapAlpha, since 1.3.9, a wish on CurseForge:
+-- the route over the own minimap), 0 to 1; a value it does not know counts as fully shown, not as clear.
+function DR.MapAlpha()
+	local a = DR.db and tonumber(DR.db.mapAlpha)
+	if not a or a ~= a then return 1 end
+	return math.max(0, math.min(1, a))
+end
+
 local View = {}
 DR.MapView = View
 
@@ -477,6 +485,7 @@ function View:Create(parent)
 	self.picture:Hide()
 	-- or, where the player chose so, the game's own minimap pictures of the floor (Data/Minimaps.lua)
 	self.minimapTiles = {}
+	self:UpdateMapAlpha()
 
 	self.layer = CreateFrame("Frame", nil, canvas)
 	self.layer:SetAllPoints(canvas)
@@ -1341,6 +1350,7 @@ function View:UpdateArt()
 	else
 		self.artSource = "none"
 	end
+	self:UpdateMapAlpha() -- also for minimap pictures new on this floor
 	self.artAnswers = (self.artSource == "tiles" and own)
 		or ((self.artSource == "gametiles" or self.artSource == "minimap") and game) or nil
 	self.ownTilesRefused = tiles and own.no or nil
@@ -1410,6 +1420,20 @@ end
 -- on every map size): only where the floor has minimap pictures (Data/Minimaps.lua leaves out the floors where they
 -- show too little of the way, since 1.3.7), the word of what the map shows lit. Not while the minimap pictures only
 -- stand in for a drawn picture the game does not know yet (artMissing): a click would change nothing before the restart.
+-- The map pictures and the dark ground behind them at the strength of "Map background" (since 1.3.9); route, stops,
+-- glowing rooms and signs keep theirs. The small map's own ground follows in Window.lua (DR.SetBoxAlpha).
+function View:UpdateMapAlpha()
+	local a = DR.MapAlpha()
+	self.background:SetAlpha(a)
+	self.picture:SetAlpha(a)
+	for _, tile in ipairs(self.tiles) do
+		tile:SetAlpha(a)
+	end
+	for _, tile in ipairs(self.minimapTiles) do
+		tile:SetAlpha(a)
+	end
+end
+
 function View:UpdateArtToggle()
 	local switch = self.artSwitch
 	if not switch then return end
