@@ -419,14 +419,14 @@ local function openSettingsMenu(owner)
 		end
 		-- since 1.3.9 two strengths: the window as before, and the map's ground (the pictures and the dark behind them;
 		-- route, stops and signs stay). A wish on CurseForge: the route over the own minimap, the small map then
-		-- see-through.
+		-- see-through; since 1.3.10 for the small map only (another wish: the big map stays fully usable).
 		local opacity = root:CreateButton(L["Opacity"])
 		opacity:CreateTitle(L["Window"])
 		for _, a in ipairs({ 1, 0.85, 0.7, 0.55 }) do
 			opacity:CreateRadio(math.floor(a * 100 + 0.5) .. "%", function() return DR.db.alpha == a end,
 				function() setting("alpha", a) end)
 		end
-		opacity:CreateTitle(L["Map background"])
+		opacity:CreateTitle(L["Small map background"])
 		for _, a in ipairs({ 1, 0.75, 0.5, 0.25, 0 }) do
 			opacity:CreateRadio(math.floor(a * 100 + 0.5) .. "%", function() return DR.MapAlpha() == a end,
 				function() setting("mapAlpha", a) end)
@@ -1389,9 +1389,9 @@ end
 local MINI_W, MINI_H, MINI_BAR = 320, 236, 20
 local MINI_MIN_W, MINI_MIN_H = 200, 150
 local MINI_ALPHA = 0.75 -- fully visible while the mouse is over it
-local MINI_GROUND = 0.9 -- the small map's own ground, times "Map background" (since 1.3.9: at 0 it is see-through)
+local MINI_GROUND = 0.9 -- the small map's own ground, times its "background" setting (since 1.3.9: at 0 see-through)
 
--- The small map's own ground at the strength of "Map background" (since 1.3.9): whenever it opens and when the setting
+-- The small map's own ground at the strength of its background setting (since 1.3.9): whenever it opens and when it
 -- changes; DR.SetBoxAlpha keeps it through a change of style.
 local function applyMiniGround()
 	if mini then DR.SetBoxAlpha(mini, MINI_GROUND * DR.MapAlpha()) end
@@ -1417,7 +1417,7 @@ end
 
 local function buildMini()
 	mini = CreateFrame("Frame", "ForeverDungeonRoutesMini", UIParent, "BackdropTemplate")
-	DR.StyleBox(mini, MINI_GROUND, "small") -- times "Map background" in Window:OpenMini
+	DR.StyleBox(mini, MINI_GROUND, "small") -- times the background setting in Window:OpenMini
 	mini:SetFrameStrata("MEDIUM")
 	mini:SetClampedToScreen(true)
 	mini:SetMovable(true)
@@ -1494,6 +1494,7 @@ end
 -- Puts the map view back into the window, shown or not.
 local function mapToWindow()
 	view.frame:SetParent(frame)
+	view:UpdateMapAlpha() -- the window shows the map in full (since 1.3.10)
 	layout()
 	frame.RouteButton:Show()
 	view:Layout()
@@ -1742,6 +1743,7 @@ function Window:OpenMini(key)
 	end
 	frame:Hide()
 	view.frame:SetParent(mini)
+	view:UpdateMapAlpha() -- the small map at the strength of its background (since 1.3.10 only here)
 	self:AnchorMiniMap()
 	frame.RouteButton:Hide()
 	mini:Show()

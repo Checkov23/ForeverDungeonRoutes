@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.3.10
+
+The background setting is now for the small map only, so the big map always shows in full.
+
+- "Map background" behind the gear button (Opacity) is now "Small map background": it fades only the small map, so
+  you can lay that over your minimap while the big map stays fully usable, inside and outside dungeons (thanks for
+  the suggestion). Your choice from 1.3.9 stays and now applies to the small map.
+- No new files: /reload is enough. Coming from 1.3.6 or older: quit and restart the game once (1.3.7 changed the drawn
+  maps of the new dungeons).
+
 ## 1.3.9
 
 The map background can be turned down on its own, so the route can lie over your minimap.

@@ -1420,10 +1420,13 @@ end
 -- on every map size): only where the floor has minimap pictures (Data/Minimaps.lua leaves out the floors where they
 -- show too little of the way, since 1.3.7), the word of what the map shows lit. Not while the minimap pictures only
 -- stand in for a drawn picture the game does not know yet (artMissing): a click would change nothing before the restart.
--- The map pictures and the dark ground behind them at the strength of "Map background" (since 1.3.9); route, stops,
--- glowing rooms and signs keep theirs. The small map's own ground follows in Window.lua (DR.SetBoxAlpha).
+-- The map pictures and the dark ground behind them at the strength of the setting (since 1.3.9); route, stops, glowing
+-- rooms and signs keep theirs. Since 1.3.10 only on the small map (darylbepayne on CurseForge: the big map stays fully
+-- usable outside dungeons; behind it lies the window's own ground anyway): in the window always full. The small map's
+-- own ground follows in Window.lua (DR.SetBoxAlpha), which calls this again whenever the map changes windows.
 function View:UpdateMapAlpha()
-	local a = DR.MapAlpha()
+	local inWindow = DR.Window and DR.Window.GetFrame and self.frame:GetParent() == DR.Window:GetFrame()
+	local a = inWindow and 1 or DR.MapAlpha()
 	self.background:SetAlpha(a)
 	self.picture:SetAlpha(a)
 	for _, tile in ipairs(self.tiles) do

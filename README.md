@@ -121,9 +121,10 @@ replace them.
 - Small map when you enter a dungeon: slightly transparent at the edge of the screen, it follows
   your run like the big map. Drag it by its title bar, resize it at its lower right corner; "+"
   makes it the full route map, X closes it, and it closes when you leave. The gear button chooses
-  what shows on entering a dungeon: the small map, the route map or nothing. Since 1.3.9 "Map
-  background" (gear button, Opacity) makes it see-through down to the route, for example to lay
-  the route over your own minimap; the minimap stays centred on you, so drag the map along.
+  what shows on entering a dungeon: the small map, the route map or nothing. Since 1.3.9 "Small
+  map background" (gear button, Opacity) makes it see-through down to the route, for example to lay
+  the route over your own minimap; the minimap stays centred on you, so drag the map along. The big
+  map always shows in full (since 1.3.10).
 - Small display in dungeons (optional): dungeon, bosses down, run time, the next boss with its room
   and your room in a small box, for when the map stays closed.
 - Route from the last run: the addon notes where the bosses fell; one click makes a route of it.
@@ -224,8 +225,9 @@ By hand:
   map from the game's minimap, tick off bosses automatically, what shows on entering a dungeon (small map, route map or
   nothing), button at the minimap, small display in dungeons, route list over the server channel,
   route line (width, colour, arrows), text size of the stop list, window style (gilded, dark, parchment,
-  classic), opacity of the window and, since 1.3.9, of the map background on its own (the map pictures
-  and the ground behind them; route, stops and signs stay).
+  classic), opacity of the window and, since 1.3.9, the background of the small map on its own (the
+  map pictures and the ground behind them; route, stops and signs stay; since 1.3.10 for the small map
+  only).
 - With a controller (the game's controller mode) the menus of the addon show as a list of its own: the game steers
   its own menus there itself and blocks them when an addon opens them. A submenu opens in place with a line back at
   the top ("< ..."); a click beside the list, Escape or a second click on the same button closes it. From a button
