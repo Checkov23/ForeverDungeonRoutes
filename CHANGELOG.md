@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.3.11
+
+Upper Blackrock Spire now shows the pictures of the game's minimap, like the other dungeons.
+
+- With "Map from the game's minimap" on (the default), the three levels of Upper Blackrock Spire (Dragonspire Hall,
+  Hall of Binding, Blackrock Stadium) show the minimap pictures of their rooms instead of the old map art. Lower
+  Blackrock Spire keeps the map art: Forever rebuilt the spire, and there one large part of Hordemar City would cover
+  the lower rooms on five of its six levels.
+- The Hall of Blackhand now counts as a room of the Blackrock Stadium level: when you walk in from the Hall of Binding,
+  the map moves on to that level, as it does in the other rooms.
+- No new files: /reload is enough. Coming from 1.3.6 or older: quit and restart the game once (1.3.7 changed the drawn
+  maps of the new dungeons).
+
 ## 1.3.10
 
 The background setting is now for the small map only, so the big map always shows in full.
