@@ -407,6 +407,9 @@ local function openSettingsMenu(owner)
 		line:CreateDivider()
 		line:CreateCheckbox(L["Arrows on the route"], function() return DR.db.showArrows end,
 			function() setting("showArrows", not DR.db.showArrows) end)
+		-- since 1.3.12 (a wish on CurseForge): the walked part faint, so the rest of a winding route stands out
+		line:CreateCheckbox(L["Fade the route up to the last stop ticked off"], function() return DR.db.fadeWalked end,
+			function() setting("fadeWalked", not DR.db.fadeWalked) end)
 		local size = root:CreateButton(L["Text size of the stop list"])
 		for _, scale in ipairs({ 0.9, 1, 1.15, 1.3 }) do
 			size:CreateRadio(math.floor(scale * 100 + 0.5) .. "%", function() return DR.db.listScale == scale end,

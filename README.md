@@ -53,7 +53,8 @@ replace them.
   boss, arrows show the walking direction, dashed lines mark side paths. Since 1.3.8 a round sign
   with an arrow marks where the route starts, and the arrows are light with a dark edge, easy to see
   on every map. Since 1.3.0 the line can also have one colour of your choice: white, magenta or cyan
-  (gear button, "Route line").
+  (gear button, "Route line"). Since 1.3.12 it can fade up to the last stop ticked off, so the way
+  still to go stands out (same place, off by default).
 - The four new dungeons of WoW: Forever (The Hall of Thanes, Ruins of Lordaeron, Excavation Site:
   Wetlands, City of Dalaran): the game has no map art for them, so the addon shows the maps of
   Santiago Reyes (Atlas de Azeroth: Forever), used with his permission; City of Dalaran with the
@@ -224,10 +225,10 @@ By hand:
 - The gear button holds the settings: stop list, rooms glow on the map, your group on the map,
   map from the game's minimap, tick off bosses automatically, what shows on entering a dungeon (small map, route map or
   nothing), button at the minimap, small display in dungeons, route list over the server channel,
-  route line (width, colour, arrows), text size of the stop list, window style (gilded, dark, parchment,
-  classic), opacity of the window and, since 1.3.9, the background of the small map on its own (the
-  map pictures and the ground behind them; route, stops and signs stay; since 1.3.10 for the small map
-  only).
+  route line (width, colour, arrows, since 1.3.12 fading up to the last stop ticked off), text size of
+  the stop list, window style (gilded, dark, parchment, classic), opacity of the window and, since 1.3.9,
+  the background of the small map on its own (the map pictures and the ground behind them; route, stops
+  and signs stay; since 1.3.10 for the small map only).
 - With a controller (the game's controller mode) the menus of the addon show as a list of its own: the game steers
   its own menus there itself and blocks them when an addon opens them. A submenu opens in place with a line back at
   the top ("< ..."); a click beside the list, Escape or a second click on the same button closes it. From a button

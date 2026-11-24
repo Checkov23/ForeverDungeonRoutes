@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.3.12
+
+The route can fade up to the last stop you ticked off, so the way still to go stands out.
+
+- New behind the gear button under "Route line": "Fade the route up to the last stop ticked off" (off by
+  default). Once a boss or another stop is ticked off, by the kill or by hand, the line up to it, its arrows and the
+  start sign turn faint, and the rest of the route stays bright. That helps in dungeons where the route goes back
+  and forth (thanks for the suggestion). A stop the line does not pass (some side rooms) leaves the faint part where
+  it is.
+- No new files: /reload is enough. Coming from 1.3.6 or older: quit and restart the game once (1.3.7 changed the drawn
+  maps of the new dungeons).
+
 ## 1.3.11
 
 Upper Blackrock Spire now shows the pictures of the game's minimap, like the other dungeons.

@@ -33,6 +33,8 @@ local DB_DEFAULTS = {
 	lineWidth = 4,
 	lineColor = "gradient", -- colour of the route line (since 1.3.0): "gradient" (turquoise to orange), "white",
 	                        -- "magenta" or "cyan" (MapView.lua, LINE_COLORS)
+	fadeWalked = false, -- the route line up to the last stop ticked off drawn faint (since 1.3.12, gear button "Route
+	                    -- line"; a wish on CurseForge: in dungeons that go back and forth the rest stands out)
 	alpha = 1,
 	mapAlpha = 1,       -- the map pictures and the ground behind them on the small map (since 1.3.9, gear button
 	                    -- "Opacity"; since 1.3.10 the small map only, the window shows the map in full): route, stops

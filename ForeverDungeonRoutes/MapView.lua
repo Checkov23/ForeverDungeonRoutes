@@ -48,6 +48,15 @@ local CASING_COLOR = { 0.05, 0.04, 0.03, 0.78 }
 local ARROW_COLOR = { 0.06, 0.05, 0.03, 1 }    -- since 1.3.8 the dark edge of the arrows
 local ARROW_FILL = { 1.00, 0.97, 0.88, 1 }     -- and their light inside (since 1.3.8)
 local START_SIZE = 26                          -- the sign at the start of the route (since 1.3.8)
+-- Since 1.3.12 (option "Fade the route up to the last stop ticked off", a wish on CurseForge): the line up to there
+-- faint and under the rest, the sign at the start as faint as a ticked-off stop. A stop counts where the main line of
+-- its floor passes it at most WALK_REACH pixels of the drawn map away, at the first pass that comes within WALK_SLACK
+-- of the closest one. Sublevels of the lines: faint casing -8, faint line -7, casing -6, faint arrows -4 and -3,
+-- the edge of the drawn map while editing -2, line 0, arrows 3 and 4.
+local WALKED_ALPHA = 0.3
+local WALKED_SIGN = 0.55
+local WALK_REACH = 30
+local WALK_SLACK = 12
 local EDIT_DOT_COLOR = { 1.00, 1.00, 1.00, 0.95 }
 local EDGE_COLOR = { 0.85, 0.85, 0.85, 0.6 } -- the edge of the drawn map while editing on the map turned north up
 
@@ -1651,9 +1660,72 @@ local function toCanvas(view, pts)
 	return xs, ys
 end
 
+-- The lengths along a main path in pixels of the drawn map (map coordinates times MAP_W and MAP_H): cum[i] up to
+-- point i, and the share of the route per pixel (positions along the path run from path.t0 to path.t1).
+local function mapLengths(path)
+	local pts, cum = path.pts, { 0 }
+	local n = #pts / 2
+	for i = 2, n do
+		local dx, dy = (pts[2 * i - 1] - pts[2 * i - 3]) * MAP_W, (pts[2 * i] - pts[2 * i - 2]) * MAP_H
+		cum[i] = cum[i - 1] + math.sqrt(dx * dx + dy * dy)
+	end
+	return cum, ((path.t1 or 1) - (path.t0 or 0)) / (cum[n] > 0 and cum[n] or 1)
+end
+
+-- Where the main line reaches a stop (since 1.3.12): the route position of the first pass near it. Every piece of the
+-- main paths on the stop's floor, in route order, with its point closest to the stop; the pieces within WALK_SLACK of
+-- the closest one make up the passes, and the first pass counts with its closest point (a corridor walked in and out
+-- again counts where the stop was reached, a room crossed twice where the route first came by). nil when the main
+-- line stays farther than WALK_REACH from the stop (a stop off the line, or only on other floors).
+local function stopReach(route, stop)
+	local px, py = stop.x * MAP_W, stop.y * MAP_H
+	local passes, closest = {}, nil
+	for _, path in ipairs(route.paths) do
+		local pts = path.pts
+		if path.kind == "main" and path.t0 and path.t1 and #pts >= 4 and DR.OnFloor(stop, path.floor) then
+			local cum, span = mapLengths(path)
+			for i = 2, #pts / 2 do
+				local ax, ay = pts[2 * i - 3] * MAP_W, pts[2 * i - 2] * MAP_H
+				local dx, dy = pts[2 * i - 1] * MAP_W - ax, pts[2 * i] * MAP_H - ay
+				local len2 = dx * dx + dy * dy
+				local f = len2 > 0 and math.max(0, math.min(1, ((px - ax) * dx + (py - ay) * dy) / len2)) or 0
+				local d = math.sqrt((ax + dx * f - px) ^ 2 + (ay + dy * f - py) ^ 2)
+				passes[#passes + 1] = { t = path.t0 + (cum[i - 1] + f * (cum[i] - cum[i - 1])) * span, d = d }
+				if not closest or d < closest then closest = d end
+			end
+		end
+	end
+	if not closest or closest > WALK_REACH then return nil end
+	local best
+	for _, pass in ipairs(passes) do
+		if pass.d <= closest + WALK_SLACK then
+			if not best or pass.d < best.d then best = pass end
+		elseif best then
+			break -- the first pass is over
+		end
+	end
+	return best.t
+end
+
+-- How far the run has come along the main line (since 1.3.12, option "Fade the route up to the last stop ticked off",
+-- a wish on CurseForge: "after a boss is marked, make the previous route to him transparent"): the route position of
+-- the furthest ticked-off stop that the line reaches (stopReach); nil when there is none.
+function DR:GetWalkedT(key, route)
+	if not key or not route or not route.paths then return nil end
+	local walked
+	for i, stop in ipairs(route.stops or {}) do
+		if stop.x and stop.y and self:IsStopDone(key, route, i) then
+			local t = stopReach(route, stop)
+			if t and (not walked or t > walked) then walked = t end
+		end
+	end
+	return walked
+end
+
 -- k is the canvas scale: widths are given in screen units and divided by it, so lines keep their
--- width on screen while zooming.
-function View:DrawMainPath(path, k)
+-- width on screen while zooming. walked (since 1.3.12): the route position up to which the line is drawn faint
+-- (DR:GetWalkedT), or nil.
+function View:DrawMainPath(path, k, walked)
 	local xs, ys = toCanvas(self, path.pts)
 	local n = #xs
 	if n < 2 then return end
@@ -1666,8 +1738,32 @@ function View:DrawMainPath(path, k)
 	end
 	local total = cum[n] > 0 and cum[n] or 1
 	local t0, t1 = path.t0 or 0, path.t1 or 1
+	-- the walked part: measured along the drawn map like stopReach; a piece that crosses its end is cut there, at the
+	-- same share of the piece on the canvas. cut[i] is the share of the piece from point i - 1 to i that is walked.
+	local cut
+	if walked and walked > t0 then
+		cut = {}
+		local mcum, span = mapLengths(path)
+		for i = 2, n do
+			local ta, tb = t0 + mcum[i - 1] * span, t0 + mcum[i] * span
+			cut[i] = tb <= walked and 1 or ta >= walked and 0 or (walked - ta) / (tb - ta)
+		end
+	end
+	-- a piece in two parts: the walked one faint at sublevel faintSub (under the rest), then the rest
+	local function piece(i, sub, faintSub, thick, r, g, b, a)
+		local share = cut and cut[i] or 0
+		local x1, y1, x2, y2 = xs[i - 1], ys[i - 1], xs[i], ys[i]
+		if share > 0 then
+			local mx, my = x1 + (x2 - x1) * share, y1 + (y2 - y1) * share
+			self:Segment(faintSub, x1, y1, mx, my, thick, r, g, b, a * WALKED_ALPHA)
+			x1, y1 = mx, my
+		end
+		if share < 1 then
+			self:Segment(sub, x1, y1, x2, y2, thick, r, g, b, a)
+		end
+	end
 	for i = 2, n do
-		self:Segment(-6, xs[i - 1], ys[i - 1], xs[i], ys[i], casing, unpack(CASING_COLOR))
+		piece(i, -6, -8, casing, unpack(CASING_COLOR))
 	end
 	local fixed = DR.LineColor()
 	for i = 2, n do
@@ -1677,7 +1773,7 @@ function View:DrawMainPath(path, k)
 		else
 			r, g, b = gradient(t0 + (t1 - t0) * ((cum[i - 1] + cum[i]) * 0.5 / total))
 		end
-		self:Segment(0, xs[i - 1], ys[i - 1], xs[i], ys[i], width, r, g, b, 1)
+		piece(i, 0, -7, width, r, g, b, 1)
 	end
 	-- the arrows (since 1.3.8 bigger and in two tones, Oliver 22.11.2026: "die pfeile etwas eindeutiger (gehen etwas
 	-- unter)"): a light chevron with a dark edge, wider than the line with its edge, so it stands out on every line colour
@@ -1698,12 +1794,16 @@ function View:DrawMainPath(path, k)
 			local mx = xs[i - 1] + (xs[i] - xs[i - 1]) * u
 			local my = ys[i - 1] + (ys[i] - ys[i - 1]) * u
 			local angle = math.atan2(ys[i] - ys[i - 1], xs[i] - xs[i - 1])
+			-- on the walked part faint and under the line that is still to come (since 1.3.12)
+			local faint = cut and u < cut[i]
+			local a = faint and WALKED_ALPHA or 1
 			for side = -1, 1, 2 do
 				-- (cx, cy) runs along the arm towards the tip
 				local cx, cy = math.cos(angle + side * 0.75), math.sin(angle + side * 0.75)
-				self:Segment(3, mx - cx * (size + edge), my - cy * (size + edge), mx + cx * (tip + edge),
-					my + cy * (tip + edge), thick + 2 * edge, unpack(ARROW_COLOR))
-				self:Segment(4, mx - cx * size, my - cy * size, mx + cx * tip, my + cy * tip, thick, unpack(ARROW_FILL))
+				self:Segment(faint and -4 or 3, mx - cx * (size + edge), my - cy * (size + edge), mx + cx * (tip + edge),
+					my + cy * (tip + edge), thick + 2 * edge, ARROW_COLOR[1], ARROW_COLOR[2], ARROW_COLOR[3], a)
+				self:Segment(faint and -3 or 4, mx - cx * size, my - cy * size, mx + cx * tip, my + cy * tip, thick,
+					ARROW_FILL[1], ARROW_FILL[2], ARROW_FILL[3], a)
 			end
 			s = s + spacing
 		end
@@ -1745,9 +1845,10 @@ end
 -- The sign at the start of the route (since 1.3.8): in the colour of the line where it begins, the arrow inside pointing
 -- the way the line runs as it leaves the sign: from where it crosses the edge of the sign to where it is a sign's
 -- radius further out (in canvas coordinates, so also on the map turned north up). A bend under the sign and the small
--- zigzags of traced lines do not turn it.
-function View:PlaceStart(path, xs, ys, k)
+-- zigzags of traced lines do not turn it. walked: the start lies on the faint, walked part (since 1.3.12).
+function View:PlaceStart(path, xs, ys, k, walked)
 	local pin = self.startPin
+	pin:SetAlpha(walked and WALKED_SIGN or 1)
 	local fixed = DR.LineColor()
 	local r, g, b
 	if fixed then
@@ -1827,13 +1928,15 @@ function View:DrawLines()
 	local editingRoute = DR.Editor:IsEditing(self.key, route)
 	-- no sign at the start while the route is edited: it would cover the first point
 	local start = not editingRoute and routeStart(route, floor)
+	-- the route up to the last stop ticked off faint (since 1.3.12, an option), not while it is edited
+	local walked = DR.db.fadeWalked and not editingRoute and DR:GetWalkedT(self.key, route) or nil
 	for index, path in ipairs(route.paths) do
 		if path.floor == floor then
 			local xs, ys
 			if path.kind == "main" then
-				xs, ys = self:DrawMainPath(path, k)
+				xs, ys = self:DrawMainPath(path, k, walked)
 				if path == start and xs then
-					self:PlaceStart(path, xs, ys, k)
+					self:PlaceStart(path, xs, ys, k, walked ~= nil and walked > (path.t0 or 0))
 				end
 			else
 				xs, ys = self:DrawSidePath(path, k)
