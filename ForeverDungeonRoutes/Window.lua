@@ -389,6 +389,10 @@ local function openSettingsMenu(owner)
 			function() setting("minimapButton", not DR.db.minimapButton) end)
 		root:CreateCheckbox(L["Small display in dungeons"], function() return DR.db.showTracker end,
 			function() setting("showTracker", not DR.db.showTracker) end)
+		if DR.Weekly then -- a file of 1.3.14, which the game only finds after a start
+			root:CreateCheckbox(L["Weekly quest on the screen (level 60)"], function() return DR.Weekly:IsWanted() end,
+				function() DR.Weekly:SetWanted(not DR.Weekly:IsWanted()) end)
+		end
 		root:CreateCheckbox(L["Route list over the server channel"], function() return DR.db.listChannel end,
 			function()
 				setting("listChannel", not DR.db.listChannel)

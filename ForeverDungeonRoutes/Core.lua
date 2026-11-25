@@ -22,6 +22,9 @@ local DB_DEFAULTS = {
 	minimapAngle = 225, -- where the button sits around the minimap, degrees
 	showTracker = false, -- small display of the run inside dungeons
 	tracker = {},       -- point, relativePoint, x, y of the small display
+	showWeekly = true,  -- the weekly quest of Booty Bay on the screen (since 1.3.14, Weekly.lua; only at level 60)
+	weeklyPos = {},     -- point, relativePoint, x, y of it
+	weekly = {},        -- this week's quest, as one of the characters saw it: week = its start, quest = questID
 	best = {},          -- [dungeonKey] = fastest run in seconds
 	list = {},          -- route list: [hash] = { key, name, author, stops, seen, holders = { player, ... }, text }
 	published = {},     -- own routes in the route list: [dungeonKey] = { [routeId] = true }
@@ -54,6 +57,8 @@ local CHAR_DEFAULTS = {
 	progress = {},      -- [dungeonKey] = { routeId = id, done = { [stopIndex] = true }, time = epoch,
 	                    --   started = epoch (entered), finished = epoch (last boss) }
 	markers = {},       -- the own marker (since 1.3.2): [dungeonKey] = { floor = uiMapID, x = 0..1, y = 0..1 }
+	-- weeklyDone (since 1.3.14): the weekly quest turned in, week = its start, quest = questID
+	-- weeklyHidden: the week in which the X hid the weekly quest, true where the game did not tell the week
 }
 
 -- Settings of 0.3.0 that are gone since the addon draws its own map, and of the minimap ping

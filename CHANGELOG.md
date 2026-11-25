@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.3.14
+
+The weekly quest of Booty Bay, very small on the screen.
+
+- New for characters of level 60: a very small display of the weekly quest of Pix Xizzix in Booty Bay ("In Demand").
+  It shows which quest it is this week, whether you have accepted it and which of its three dungeons are done; with
+  all three items it says to turn in, after that "done". The mouse on it names the items and their bosses.
+- Drag it where you like. The X hides it until next week; a right-click on the X switches it off. The gear button or
+  a right-click on the button at the minimap switches it on again.
+- Quest and items are named by the game, in your language. Which quest it is this week, the addon learns from the
+  quest window in Booty Bay or when you accept it; one of your characters is enough. Until then it shows "?".
+- One new file: quit and restart the game once after the update (/reload is not enough).
+
 ## 1.3.13
 
 Closing the big map brings the small map back, Maraudon gets a route over both sides, and the thinnest route line is

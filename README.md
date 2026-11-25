@@ -130,6 +130,9 @@ replace them.
   map always shows in full (since 1.3.10).
 - Small display in dungeons (optional): dungeon, bosses down, run time, the next boss with its room
   and your room in a small box, for when the map stays closed.
+- The weekly quest of Booty Bay on the screen (since 1.3.14, level 60): a very small display of which quest Pix
+  Xizzix has this week, whether you have accepted it and which of its three dungeons are done. Drag it where you
+  like; the X hides it until next week, a right-click on the X switches it off.
 - Route from the last run: the addon notes where the bosses fell; one click makes a route of it.
 - Route editor: paths, side paths, stops and notes; drag to move, undo. Editing a standard route
   creates a copy.
@@ -164,7 +167,7 @@ By hand:
 ## Use
 
 - The button at the minimap or `/fdr` opens or closes the map. Drag the button to move it around
-  the minimap; right-click it for the small display and the route list channel. There is also a
+  the minimap; right-click it for the small display, the weekly quest and the route list channel. There is also a
   key binding (Key Bindings, section AddOns).
 - With a display addon for LibDataBroker (Titan Panel, ChocolateBar, ElvUI datatexts and the like) the addon
   also shows up in its bar: a click and a right-click work there as on the minimap button. The display brings
@@ -226,7 +229,8 @@ By hand:
   click on the entrance sets the map pin.
 - The gear button holds the settings: stop list, rooms glow on the map, your group on the map,
   map from the game's minimap, tick off bosses automatically, what shows on entering a dungeon (small map, route map or
-  nothing), button at the minimap, small display in dungeons, route list over the server channel,
+  nothing), button at the minimap, small display in dungeons, weekly quest on the screen, route list over the server
+  channel,
   route line (width, colour, arrows, since 1.3.12 fading up to the last stop ticked off), text size of
   the stop list, window style (gilded, dark, parchment, classic), opacity of the window and, since 1.3.9,
   the background of the small map on its own (the map pictures and the ground behind them; route, stops

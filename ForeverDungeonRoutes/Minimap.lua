@@ -36,6 +36,11 @@ local function options(_, root)
 		DR.db.showTracker = not DR.db.showTracker
 		DR:Fire("SETTINGS_CHANGED", "showTracker")
 	end)
+	if DR.Weekly then -- a file of 1.3.14, which the game only finds after a start
+		root:CreateCheckbox(L["Weekly quest on the screen (level 60)"], function() return DR.Weekly:IsWanted() end, function()
+			DR.Weekly:SetWanted(not DR.Weekly:IsWanted())
+		end)
+	end
 	root:CreateCheckbox(L["Route list over the server channel"], function() return DR.db.listChannel end, function()
 		DR.db.listChannel = not DR.db.listChannel
 		DR:Fire("SETTINGS_CHANGED", "listChannel")
