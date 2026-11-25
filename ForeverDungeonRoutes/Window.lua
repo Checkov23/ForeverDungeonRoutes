@@ -26,6 +26,9 @@ DR.Window = Window
 
 local frame, view, sidebar
 local mini             -- the small map (see "Small map" below)
+-- Since 1.3.13 (a wish on CurseForge: Escape closes the big map, and the small one was gone with it): the window was
+-- opened from the small map, so closing it in the dungeon brings that back; toMini while the small map itself opens.
+local backToMini, toMini = false, false
 local restoreMiniGeometry
 local shown = {}       -- key, floor
 local following = true
@@ -1290,6 +1293,11 @@ local function build()
 	frame:SetAlpha(DR.db.alpha or 1)
 	frame:SetScript("OnHide", function()
 		DR:Fire("WINDOW_HIDDEN")
+		-- closed by Escape, X, /fdr or the key, not hidden along with the whole screen (the frame then stays shown itself)
+		if backToMini and not toMini and not frame:IsShown() then
+			backToMini = false
+			if DR.currentKey then Window:OpenMini(DR.currentKey) end
+		end
 	end)
 	-- the run time goes on while the window is open
 	local ticker = 0
@@ -1716,6 +1724,7 @@ function Window:Open(key, floor)
 		build()
 	end
 	if self:IsMini() then
+		backToMini = true -- closing the window brings the small map back (since 1.3.13)
 		mini:Hide()
 		mapToWindow()
 	end
@@ -1744,7 +1753,9 @@ function Window:OpenMini(key)
 	if key == DR.currentKey then
 		following = true
 	end
+	toMini = true
 	frame:Hide()
+	toMini, backToMini = false, false
 	view.frame:SetParent(mini)
 	view:UpdateMapAlpha() -- the small map at the strength of its background (since 1.3.10 only here)
 	self:AnchorMiniMap()

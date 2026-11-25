@@ -30,7 +30,7 @@ local DB_DEFAULTS = {
 	runs = {},          -- last runs: [dungeonKey] = { { time = seconds, date = epoch, route = name }, ... }
 	listScale = 1,      -- text size of the stop list
 	theme = "gilded",   -- window style (Theme.lua); new installs since 0.5.18, a style chosen before stays
-	lineWidth = 4,
+	lineWidth = 3,      -- 3 to 6; since 1.3.13 the thinnest by default (until then 4, UpgradeSettings)
 	lineColor = "gradient", -- colour of the route line (since 1.3.0): "gradient" (turquoise to orange), "white",
 	                        -- "magenta" or "cyan" (MapView.lua, LINE_COLORS)
 	fadeWalked = false, -- the route line up to the last stop ticked off drawn faint (since 1.3.12, gear button "Route
@@ -81,6 +81,12 @@ function DR.UpgradeSettings(db)
 	if not db.gameMinimapFirst then
 		db.gameMinimap = true
 		db.gameMinimapFirst = true
+	end
+	-- Since 1.3.13 the route line is the thinnest by default (Oliver, 25.11.2026: the thin one shows the most and is used
+	-- most). Once for everyone who still has the old default 4, as every player has it saved; a width chosen later stays.
+	if not db.lineWidthThin then
+		if db.lineWidth == 4 then db.lineWidth = 3 end
+		db.lineWidthThin = true
 	end
 end
 

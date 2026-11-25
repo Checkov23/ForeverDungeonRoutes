@@ -1729,7 +1729,7 @@ function View:DrawMainPath(path, k, walked)
 	local xs, ys = toCanvas(self, path.pts)
 	local n = #xs
 	if n < 2 then return end
-	local width = (DR.db.lineWidth or 4) / k
+	local width = (DR.db.lineWidth or 3) / k
 	local casing = width + 3 / k
 	local cum = { 0 }
 	for i = 2, n do
@@ -1779,7 +1779,7 @@ function View:DrawMainPath(path, k, walked)
 	-- unter)"): a light chevron with a dark edge, wider than the line with its edge, so it stands out on every line colour
 	-- and map picture. Each arm runs half its width past the tip, so the two arms (nearly at right angles) meet in a point.
 	if DR.db.showArrows then
-		local w = DR.db.lineWidth or 4
+		local w = DR.db.lineWidth or 3
 		local spacing, size = 80 / k, (w + 4) / k
 		local thick, edge = math.max(2.5, w * 0.7) / k, 1 / k
 		local tip = thick / 2
@@ -1888,7 +1888,7 @@ function View:DrawSidePath(path, k)
 	local xs, ys = toCanvas(self, path.pts)
 	local n = #xs
 	if n < 2 then return end
-	local width = math.max(2, (DR.db.lineWidth or 4) - 1) / k
+	local width = math.max(2, (DR.db.lineWidth or 3) - 1) / k
 	local casing = width + 3 / k
 	local dash, gap = 7 / k, 5 / k
 	-- whitish grey beside the gradient, in the colour of the main path where the player chose one (since 1.3.0)

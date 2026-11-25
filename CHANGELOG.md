@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.3.13
+
+Closing the big map brings the small map back, Maraudon gets a route over both sides, and the thinnest route line is
+the default.
+
+- Closing the big map in a dungeon (Escape, X, /fdr or the key) brings the small map back, if it was open before. The
+  X on the small map still closes it for good (thanks for the suggestion).
+- New standard route for Maraudon, "Both sides": through the orange side (Noxxion, Razorlash, Veng the 5th Khan), then
+  on the purple side past Lord Vyletongue to Maraudos, the 4th Khan, and back, and on to the bosses inside. One run
+  with both Khans and all bosses of both sides. The purple side stays the default (thanks for the feedback).
+- The route line is thinner by default: 3 instead of 4, as the thin one shows the most. It changes once for everyone
+  whose line was at 4; pick another width behind the gear button (Route line) and it stays.
+- No new files: /reload is enough. Coming from 1.3.6 or older: quit and restart the game once (1.3.7 changed the drawn
+  maps of the new dungeons).
+
 ## 1.3.12
 
 The route can fade up to the last stop you ticked off, so the way still to go stands out.

@@ -121,7 +121,9 @@ replace them.
   dungeon.
 - Small map when you enter a dungeon: slightly transparent at the edge of the screen, it follows
   your run like the big map. Drag it by its title bar, resize it at its lower right corner; "+"
-  makes it the full route map, X closes it, and it closes when you leave. The gear button chooses
+  makes it the full route map, X closes it, and it closes when you leave. Since 1.3.13, closing the big
+  map in a dungeon (Escape, X, `/fdr` or the key) brings the small map back, if it was open before. The
+  gear button chooses
   what shows on entering a dungeon: the small map, the route map or nothing. Since 1.3.9 "Small
   map background" (gear button, Opacity) makes it see-through down to the route, for example to lay
   the route over your own minimap; the minimap stays centred on you, so drag the map along. The big
@@ -234,8 +236,9 @@ By hand:
   the top ("< ..."); a click beside the list, Escape or a second click on the same button closes it. From a button
   in the lower half of the screen (a broker bar at the bottom) the list opens upwards.
 
-Stratholme, Maraudon and Dire Maul North come with two standard routes each (living and undead
-side, purple and orange side, full clear and tribute run). In Stratholme the map picks the side by itself: on
+Stratholme and Dire Maul North come with two standard routes each (living and undead side, full clear
+and tribute run), Maraudon with three: purple side, orange side and, since 1.3.13, both sides in one
+run. In Stratholme the map picks the side by itself: on
 Crusader's Square the living side, on The Gauntlet the undead side, and a boss fight of the other side switches over
 as well. Own routes are never switched.
 
