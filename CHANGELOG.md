@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.3.16
+
+Maraudon: inside, the routes go to the Princess first.
+
+- Maraudon, all three standard routes: after Landslide the route goes over the bridge to Princess Theradras, back onto
+  the bridge and down into the water to Rotgrip, then up again and back to the fork, and on to Tinkerer Gizlock (the
+  order most groups run, thanks for the tip). Gizlock is the last stop now, on the route line instead of a side path.
+- No new files: /reload is enough. Coming from 1.3.13 or older: quit and restart the game once (1.3.14 added a file).
+
 ## 1.3.15
 
 The route of The Drowned City stays on land now.
