@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.3.15
+
+The route of The Drowned City stays on land now.
+
+- The Drowned City: from the entrance the route follows the arc of the Sunken Hollow over the hill to Zul'Alai,
+  instead of straight across the bay. From Zul'Alai it goes west through the gatehouse into the city and over the
+  bridge in the south-east, instead of across the water in the north-east. Three shorter stretches over water, at
+  Captain Dreadrise and in the north-west, follow the walkways now (thanks for the report).
+- No new files: /reload is enough. Coming from 1.3.13 or older: quit and restart the game once (1.3.14 added a file).
+
 ## 1.3.14
 
 The weekly quest of Booty Bay, very small on the screen.
