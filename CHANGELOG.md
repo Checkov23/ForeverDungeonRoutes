@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.4.0
+
+Your own position in dungeons, and the way to the Vault in Blackrock Depths.
+
+- New, experimental: inside dungeons the map shows where you stand, as a dot with a ring that follows you as you walk.
+  The game gives addons no position there, so the addon works it out from the distances the game reports to a few
+  flight masters, which it has the game track for a moment; what you track yourself (a quest, a map pin) comes back
+  right after. Only your own position, and only while the map or the small map is open. In combat the dot stays faint
+  where it was and follows you again after the fight. The gear button switches it off ("My position in dungeons
+  (experimental)"). Should a patch of the game stop this, it switches itself off.
+- Blackrock Depths: the dashed way to the Vault (Warder Stilgiss and Verek) now goes from Fineous Darkvire in the Hall
+  of Crafting through the door marked A, then on the next map level (Shadowforge City) from A along the square and
+  south to the Vault, instead of around the square from Phalanx, where there is no way (thanks for the report).
+- Two new files: quit and restart the game once after the update (/reload is not enough).
+
 ## 1.3.16
 
 Maraudon: inside, the routes go to the Princess first.

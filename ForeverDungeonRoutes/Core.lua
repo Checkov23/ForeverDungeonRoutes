@@ -9,6 +9,8 @@ local DB_DEFAULTS = {
 	showArrows = true,
 	gameMinimap = true, -- the game's minimap pictures instead of the map art (Data/Minimaps.lua); since 1.3.7 the default
 	showPlayer = true,  -- own position and group on the map, where the game reveals it (not in dungeons)
+	locate = true,      -- the own position inside dungeons from the game's distances to flight masters (since 1.4.0,
+	                    -- Locator.lua; gear button "My position in dungeons")
 	showStops = true,   -- stop list beside the map
 	showRoom = false,   -- rooms glow on the map: the player's own (gold) and, with showGroup, the group's (blue);
 	                    -- since 1.0.13 off at first, since 1.0.14 for the group too; the map follows the rooms either way,
@@ -322,6 +324,10 @@ SlashCmdList.FOREVERDUNGEONROUTES = function(input)
 		-- a text to copy for a report on CurseForge or GitHub (since 1.3.3, Window.lua)
 		DR:ShowReport()
 	elseif cmd == "pos" then
+		-- the locator first (since 1.4.0), so the position line stays the last one
+		if DR.Locator then
+			DR:Print(DR.Locator:Describe())
+		end
 		local _, _, instanceID = DR.CurrentInstance()
 		local x, y, mapInstance = DR:GetUnitWorldPosition("player")
 		local z = DR.Safe((select(3, UnitPosition("player"))))

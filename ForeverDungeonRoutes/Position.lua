@@ -5,7 +5,9 @@ local _, DR = ...
 -- Data/Floors.lua. Floors of one dungeon often overlap in the world: the floor shown keeps the
 -- position as long as it lies on it and its route is not clearly farther away than another one's.
 -- Inside dungeons the game gives addons no position (nil since patch 7.1, secret values under
--- the Midnight rules); then nothing is shown and the window follows the boss kills instead.
+-- the Midnight rules); since 1.4.0 the locator (Locator.lua) works out the player's own position
+-- there from the game's distances to flight masters, while a map is shown. Without it nothing is
+-- shown and the window follows the boss kills instead.
 
 local MARGIN = 0.02      -- a position this far outside a floor still counts as on it
 local NEAR = 0.04        -- the shown floor stays while its route is this close (map widths)
@@ -17,6 +19,10 @@ function DR:GetUnitWorldPosition(unit)
 	local x, y, _, instanceID = UnitPosition(unit)
 	x, y, instanceID = DR.Safe(x), DR.Safe(y), DR.Safe(instanceID)
 	if type(x) ~= "number" or type(y) ~= "number" then
+		-- inside instances: the player's own position from the locator, if it has a fresh one (since 1.4.0)
+		if unit == "player" and DR.Locator then
+			return DR.Locator:Get()
+		end
 		return nil
 	end
 	return x, y, instanceID

@@ -13,7 +13,7 @@
 ## Author: Checkov23
 ## X-Copyright: Copyright (c) 2026 Checkov23
 ## X-License: MIT
-## Version: 1.3.16
+## Version: 1.4.0
 ## Category: Map
 ## Category-deDE: Karte
 ## Category-frFR: Carte
@@ -39,9 +39,11 @@ Data\Rooms.lua
 Data\Pictures.lua
 Data\Minimaps.lua
 Data\Entrances.lua
+Data\TaxiNodes.lua
 Routes.lua
 Serialize.lua
 Position.lua
+Locator.lua
 Room.lua
 Entrance.lua
 Theme.lua

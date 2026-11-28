@@ -13,6 +13,7 @@ local MAX_ZOOM = 4
 local ZOOM_STEP = 1.25
 local DRAG_START = 5        -- pixels the mouse moves before a press becomes a pan
 local UPDATE_INTERVAL = 0.1 -- seconds between position updates
+local HELD_ALPHA = 0.45     -- the own place kept through a fight (Locator.lua, since 1.4.0): faint
 local ROOM_ALPHA = 0.45     -- the room the player is in: lowest opacity of its pulsing glow
 local ROOM_PULSE = 0.3      -- ... and how much brighter it gets
 local ROOM_COLOR = { 1.00, 0.80, 0.30 }
@@ -2146,6 +2147,8 @@ function View:UpdateGroup()
 		if facing then
 			player.Arrow:SetRotation(facing)
 		end
+		-- the place the locator kept from before a fight is drawn faint (since 1.4.0, Locator.lua)
+		player:SetAlpha(DR.Locator and DR.Locator:Held() and HELD_ALPHA or 1)
 		player:Show()
 		self:PlacePin(player, u, v)
 	end

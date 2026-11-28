@@ -375,6 +375,10 @@ local function openSettingsMenu(owner)
 			function() setting("showRoom", not DR.db.showRoom) end)
 		root:CreateCheckbox(L["Show your group on the map (players with this addon)"], function() return DR.db.showGroup end,
 			function() setting("showGroup", not DR.db.showGroup) end)
+		if DR.Locator then -- a file of 1.4.0, which the game only finds after a start
+			root:CreateCheckbox(L["My position in dungeons (experimental)"], function() return DR.db.locate ~= false end,
+				function() setting("locate", DR.db.locate == false) end)
+		end
 		root:CreateCheckbox(L["Map from the game's minimap"], function() return DR.db.gameMinimap end,
 			function() setting("gameMinimap", not DR.db.gameMinimap) end)
 		root:CreateCheckbox(L["Tick off bosses automatically"], function() return DR.db.autoCheck end,

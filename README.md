@@ -93,8 +93,8 @@ replace them.
   crosshair on the map explains these signs. Where the drawn map of a dungeon
   comes from a later version of the game and marks a boss that WoW: Forever does not have there, a
   note says so.
-- Where you are, as well as the game allows: WoW gives addons no position inside dungeons (since
-  patch 7.1), so there is no arrow for you or your group. But the game names the room you are in
+- Where you are: WoW gives addons no position inside dungeons (since patch 7.1), so there is no arrow
+  for you or your group; since 1.4.0 the addon works out your own position (next point). The game names the room you are in
   (the text above the minimap). The addon knows where these rooms lie: the name of your room stands
   below the map ("You are in: ..."), and the map follows you to the level of your room. Where the game
   gives a room the same name on two levels (Uldaman's Hall of the Crafters on the way down to Archaedas),
@@ -103,6 +103,13 @@ replace them.
   group's)", off at first; big rooms such as the Chapel Gardens glow faint and still instead of
   pulsing). Between named rooms the map follows your run: after a boss kill it shows the level of
   the next open boss, and when a boss fight starts the level of that boss.
+- Your position in dungeons (experimental, since 1.4.0): inside dungeons the map shows where you stand, as a
+  dot with a ring that follows you as you walk (no arrow: the game does not tell which way you face). The game
+  gives addons no position there, so the addon works it out from the distances the game reports to a few flight
+  masters: it has the game track each of them for a moment and puts back what you track yourself (a quest, a map
+  pin) right after. Only your own position, only while the map or the small map is open, and not in combat: then
+  the dot stays faint where it was. Gear button: "My position in dungeons (experimental)". A patch of the game
+  may stop this; the addon then switches it off by itself, and the map shows your room as before.
 - Your group on the map: the others in your group who also use the addon show as a small blue number
   in the room the game names for them, with a legend in the lower left corner (number, name, room;
   grey when they are on another level or the game names no room), so nothing else covers the map. On
@@ -191,7 +198,8 @@ By hand:
   it, so switching keeps everything in place.
 - Your own marker: Shift-click on the map puts a green marker there, for example where you are. Drag it
   along as you go, right-click removes it; a new run takes it away. Only you see it. WoW gives addons no
-  position inside dungeons, so this is the way to keep track of yourself on the route. Inside a dungeon a tip at the
+  position inside dungeons, so this is a way to keep track of yourself on the route where the position of 1.4.0
+  is off. Inside a dungeon a tip at the
   top of the map tells the keys until you set your first marker or click the tip away.
 - Bosses tick themselves off when they die. A click on a boss on the map or in the list ticks it
   off by hand, for your whole group. Shift-click a list entry to show it on the map, Alt-click a
@@ -265,7 +273,8 @@ Your own routes work for every dungeon: choose the dungeon and "New route".
 
 `/fdr` shows or hides the map, `/fdr send` sends the active route to your group, `/fdr way` sets the
 map pin at the entrance of the shown dungeon, `/fdr reset` clears the checkmarks and starts a new
-run, `/fdr pos` prints the position data and the room the game reports (helps with bug reports),
+run, `/fdr pos` prints the position data, the state of the position in dungeons and the room the game reports
+(helps with bug reports),
 `/fdr menu` shows the menus as in controller mode also with the mouse, until the next `/reload`.
 `/fdr report` (or "Report a problem or idea" at the bottom of the gear menu) shows a text to copy
 into a comment on CurseForge or an issue on GitHub: the versions of the addon and the game, the
@@ -299,7 +308,8 @@ The classic dungeon and raid maps are Blizzard's own map tiles; which tiles make
 comes from Blizzard's map tables (`Data/Floors.lua`). Since 1.3.3 the addon brings these tiles along
 (`tiles/`, copied unchanged from the game files) and uses them on every client: the Russian, Spanish
 (Mexico) and Italian game clients do not have them and showed the maps green. Inside dungeons the game gives addons
-no position, only the name of the room you are in. Where the rooms lie (`Data/Rooms.lua`) is
+no position, only the name of the room you are in (the own position of 1.4.0 is worked out from distances the game
+reports, see above). Where the rooms lie (`Data/Rooms.lua`) is
 generated from the game's building files: each named part of a dungeon building with its outline,
 placed on the map level where the game's own map shows it. Rooms come with all dungeons except
 Shadowfang Keep, Stormwind Stockade, Razorfen Kraul, Zul'Farrak and Dire Maul (there only the entrance
